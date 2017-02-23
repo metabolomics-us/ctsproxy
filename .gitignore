@@ -1,0 +1,28 @@
+# Can ignore specific files
+.DS_Store
+
+# Use wildcards as well
+*.iml
+*.ipr
+*.iws
+*~
+*.swp
+*.war
+*.class
+cts-test-db.*
+.eclipse
+.project
+.classpath
+.cache
+.externalToolBuilders
+
+
+# Can also ignore all directories and files in a directory.
+**/target/
+**/target-eclipse/
+**/.settings/
+**/out/
+**/.idea/
+**/*.log
+logs/
+stacktrace.log

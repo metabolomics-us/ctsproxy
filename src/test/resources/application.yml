@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: CtsRest
+
+ribbon:
+  eureka:
+    enabled: false
+
+feign.hystrix.enabled: false
+
+logging.level.edu.ucdavis.fiehnlab.cts.ctsRest: DEBUG
+
+fiehnlab:
+  cts:
+    config:
+      url: http://localhost
+      name: TestCtsWrapper
+      connectTimeoutMillis: 1000
+      readTimeoutMillis: 120000
