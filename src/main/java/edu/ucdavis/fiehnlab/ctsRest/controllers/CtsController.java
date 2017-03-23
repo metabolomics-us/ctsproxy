@@ -22,11 +22,6 @@ public class CtsController {
 	@Autowired
 	CtsClient client;
 
-	@GetMapping("/")
-	public String index() {
-		return "CTS main page";
-	}
-
 	@Cacheable("simple_convert")
 	@GetMapping("/rest/convert/{from}/{to}/{searchTerm}")
 	public List<ConversionResult> convertSimple(@PathVariable String from, @PathVariable String to, @PathVariable String searchTerm) {

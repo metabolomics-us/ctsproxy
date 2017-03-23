@@ -1,6 +1,8 @@
 spring:
   application:
     name: CtsRest
+  main:
+    web-environment: true
 
 ribbon:
   eureka:
