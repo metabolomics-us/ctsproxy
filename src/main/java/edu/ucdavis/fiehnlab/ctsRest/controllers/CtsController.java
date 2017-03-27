@@ -58,6 +58,7 @@ public class CtsController {
 		return client.score(from, to, algorithm);
 	}
 
+	@Cacheable("inchikey_mol")
 	@RequestMapping(path = "/rest/inchikeytomol/{inchikey}", method = RequestMethod.GET)
 	public MoleculeResponse inchiKey2Mol(@PathVariable("inchikey") String inchikey) {
 		return client.inchiKey2Mol(inchikey);
