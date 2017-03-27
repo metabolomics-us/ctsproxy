@@ -1,7 +1,9 @@
 package edu.ucdavis.fiehnlab.ctsRest.controllers;
 
 import edu.ucdavis.fiehnlab.ctsRest.ApplicationTests;
+import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mock.http.MockHttpOutputMessage;
+import org.springframework.mock.web.MockMultipartHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -18,6 +21,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.io.Console;
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -102,6 +106,21 @@ public class CtsControllerTest extends ApplicationTests {
 				.andExpect(jsonPath("$", hasSize(225))).andReturn();
 
 		System.out.println(mvcres.getResponse().getContentAsString());
+	}
+
+	@Test
+	@Ignore("MockMvc doesn't have the X-Proxy-Cache header for this test to pass. Working fine in production")
+	public void testSecondCallHitsCache() throws Exception {
+		MvcResult res1 = mockMvc.perform(MockMvcRequestBuilders.get("/rest/convert/chemical name/inchikey/alanine").accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andReturn();
+		Assert.assertEquals("MISS", res1.getResponse().getHeaderValue("X-Proxy-Cache"));
+
+		MvcResult res2 = mockMvc.perform(MockMvcRequestBuilders.get("/rest/convert/chemical name/inchikey/alanine").accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andReturn();
+		Assert.assertEquals("HIT", res2.getResponse().getHeaderValue("X-Proxy-Cache"));
+
 	}
 
 
