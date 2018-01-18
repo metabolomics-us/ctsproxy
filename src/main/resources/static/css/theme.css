@@ -7,8 +7,31 @@
         padding: 6px 16px 0;
     }
 
+    #wrapper {
+        height: 100%;
+    }
+
     #page-wrapper {
+        height: 100%;
         padding: 110px 10px 15px;
+    }
+
+    .ucd-logo {
+        margin: 5px;
+    }
+
+    .arrow-box {
+        margin-bottom: 15px;
+    }
+}
+
+@media (min-width: 768px) {
+    .arrow-box {
+        margin-top: 28px;
+    }
+
+    .target-box {
+        margin-top: 25px;
     }
 }
 
@@ -20,6 +43,10 @@
         border-bottom: 1px solid #e7e7e7;
         margin: 0 auto;
     }
+
+    .ucd-logo{
+        margin: 14px;
+    }
 }
 
 @media (max-width: 2047px) and (min-width: 1536px) {
@@ -29,6 +56,10 @@
         border-left: 1px solid #e7e7e7;
         border-bottom: 1px solid #e7e7e7;
         margin: 0 auto;
+    }
+
+    .ucd-logo{
+        margin: 14px;
     }
 }
 
@@ -42,15 +73,26 @@
         width: 50%;
         height: 100%;
     }
+
+    .ucd-logo{
+        margin: 14px;
+    }
+}
+
+html, body {
+    min-height: 100%;
+    height: 100%;
 }
 
 body#ctsProxy {
     background-color: #F9F4E5;
+    /* background: linear-gradient(to bottom right, #1e130c, #1e130c) */
+    /* background: linear-gradient(to bottom right, GoldenRod, Ivory, PowderBlue, Navy); */
+    /* background: linear-gradient(to bottom right, OldLace, PaleTurquoise, Navy); */
 }
 
 #page-wrapper {
     background-color: #fff;
-    min-height: 800px;
     border-radius: 5px;
 }
 
@@ -190,4 +232,23 @@ hr.horizontal-separator {
 
 .setting-selection {
     width: 150px;
+}
+
+.form-group {
+    clear: both;
+}
+
+.header-bar{
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    text-align: center;
+}
+
+.form-group label {
+    display: inline;
+}
+
+.ucd-logo{
+    color: #DFC166;
+    float: right;
 }
