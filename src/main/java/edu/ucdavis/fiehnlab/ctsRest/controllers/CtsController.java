@@ -54,7 +54,7 @@ public class CtsController {
 
 	@Cacheable("scoring")
 	@RequestMapping(path = "/rest/score/{from}/{value}/{algorithm}", method = RequestMethod.GET)
-	public String score(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("algorithm") String algorithm) {
+	public String score(@PathVariable("from") String from, @PathVariable("value") String to, @PathVariable("algorithm") String algorithm) {
 		return client.score(from, to, algorithm);
 	}
 

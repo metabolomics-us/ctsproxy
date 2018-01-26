@@ -31,11 +31,6 @@
                     </div>
                     <multiselect ng-model="main.batchQuery.to" options="main.toValues" show-search="true">
                     </multiselect>
-                    <!--<div class="checkbox">-->
-                        <!--<label>-->
-                            <!--<input type="checkbox" ng-model="main.batchQuery.showScores"> Show Scores-->
-                        <!--</label>-->
-                    <!--</div>-->
                 </div>
                 <div ng-if="main.batchResults" class="col-sm-12" style="overflow: auto;">
                     <table class="table">
@@ -47,97 +42,24 @@
                             <td>{{term}}</td>
                             <td ng-repeat="to in main.batchQuery.to">
                                 <div ng-hide="expandResults">
+                                    <span ng-if="results[to].length === 0">No results</span>
                                     <i ng-show="results[to].length > 1" ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-right" style="cursor: pointer;" aria-hidden="true"></i>
-                                    {{results[to][0]}}
+                                    <a ng-if="results[to] && !results[to][0].score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{results[to][0]}}" target="_blank">{{results[to][0]}}</a>
+                                    <a ng-if="results[to][0].score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{results[to][0].InChIKey}}" target="_blank">{{results[to][0].InChIKey}}, Score: {{results[to][0].score}}</a>
                                 </div>
                                 <div ng-show="expandResults">
                                     <i ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-down" style="cursor: pointer;" aria-hidden="true"></i>
-                                    <div ng-repeat="result in results[to]">{{result}}</div>
+                                    <div ng-repeat="result in results[to]">
+                                        <a ng-if="result && !result.score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result}}" target="_blank">{{result}}</a>
+                                        <a ng-if="result.score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result.InChIKey}}" target="_blank">{{result.InChIKey}}, Score: {{result.score}}</a>
+                                    </div>
                                 </div>
                             </td>
                         </tr>
                     </table>
+                    <button ng-if="main.batchResults" class="btn btn-primary" ng-click="exportBatch()">Download CSV</button>
                 </div>
-
-
-                <!--<div class="col-sm-12">-->
-                    <!--<div class="form-group">-->
-                        <!--<select class="form-control" ng-model="main.query.to" ng-options="to as to for to in main.toValues | orderBy"></select>-->
-                    <!--</div>-->
-                    <!--<div class="checkbox col-xs-3 text-center" ng-repeat="toValue in main.toValues | orderBy">-->
-                        <!--<label>-->
-                            <!--<input type="checkbox" ng-model="main.batchQuery.to[toValue]">-->
-                            <!--{{toValue}}-->
-                        <!--</label>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<label for="query">Query</label>-->
-                    <!--<textarea class="form-control" type="text" name="query" id="query" ng-model="query.string"></textarea>-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<label>From <select class="setting-selection" ng-model="query.types.source" ng-options="source as source for source in sources | orderBy"></select></label>-->
-                    <!--<label>To </label>-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<div class="col-xs-3" ng-repeat="option in preferredToOptions">-->
-                        <!--<input type="checkbox" value="{{option}}">-->
-                        <!--<label>{{option}}</label>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="form-group panel panel-default">-->
-                    <!--<div ng-hide="expandOptions" class="panel-body" style="padding: 6px 12px 6px 12px; min-height: 32px;">-->
-                        <!--<i ng-click="expandOptions = !expandOptions" class="pull-right fa fa-angle-right" style="cursor: pointer;" aria-hidden="true"></i>-->
-                        <!--More Options-->
-                    <!--</div>-->
-                    <!--<div ng-show="expandOptions" class="panel-body" style="padding: 6px 12px 6px 12px; min-height: 32px;">-->
-                        <!--<i ng-click="expandOptions = !expandOptions" class="pull-right fa fa-angle-down" style="cursor: pointer;" aria-hidden="true"></i>-->
-
-                        <!--<label class="col-xs-3 text-center" ng-repeat="target in targets | orderBy">-->
-                            <!--<input type="checkbox" name="selectedTargets[]" value="target.name" ng-model="target.selected">-->
-                            <!--{{target.name}}-->
-                        <!--</label>-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<div class="header-bar" ng-click="showMore = !showMore">More Options</div>-->
-                    <!--<div ng-show="showMore">-->
-                    <!--</div>-->
-                <!--</div>-->
-                <!--<div class="form-group">-->
-                    <!--<button type="submit" class="btn btn-default btn-primary" ng-click="batchConversion(query,from,toSelection)">Submit</button>-->
-                <!--</div>-->
-                <!--<div ng-if="main.results" class="col-sm-12">-->
-                    <!--<table class="table">-->
-                        <!--<tr>-->
-                            <!--<th>{{main.query.from}}</th>-->
-                            <!--<th ng-repeat-start="target in main.batchQuery.targets">{{target}}</th>-->
-                            <!--<th ng-repeat-end ng-if="main.batchQuery.showScores">Score</th>-->
-                        <!--</tr>-->
-                        <!--<tr ng-repeat="searchResult in main.batchQuery.searchResults">-->
-                            <!--<td>{{searchResult}}</td>-->
-                            <!--<td ng-hide="expandResults">-->
-                                <!--<i ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-right" style="cursor: pointer;" aria-hidden="true"></i>-->
-                                <!--{{searchResult}}-->
-                            <!--</td>-->
-                            <!--<td ng-show="expandResults">-->
-                                <!--<i ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-down" style="cursor: pointer;" aria-hidden="true"></i>-->
-                                <!--<div ng-repeat="result in main.results">{{result}}</div>-->
-                            <!--</td>-->
-                            <!--<td ng-if="main.batchQuery.showScores">lol jk</td>-->
-                        <!--</tr>-->
-                    <!--</table>-->
-                <!--</div>-->
             </fieldset>
         </form>
-        <!--<div>-->
-            <!--<h3>Conversion Results</h3>-->
-            <!--<button button="button" class="btn btn-default btn-primary" ng-click="export()">Download</button>-->
-            <!--<table class="table table-hover">-->
-                <!--<tr ng-repeat="result in response.data[0]">-->
-                    <!--<td>{{result.searchTerm}}</td><td><div ng-repeat="entry in result.result">{{entry}}</div></td>-->
-                <!--</tr>-->
-            <!--</table>-->
-        <!--</div>-->
     </div>
 </div>

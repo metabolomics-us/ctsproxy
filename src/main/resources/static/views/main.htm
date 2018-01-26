@@ -18,11 +18,6 @@
                                ng-disabled="main.loading"
                                placeholder="Enter ID for conversion">
                     </div>
-                    <!--<div class="checkbox">-->
-                        <!--<label>-->
-                            <!--<input type="checkbox" ng-model="main.query.showScores"> Show Scores-->
-                        <!--</label>-->
-                    <!--</div>-->
                 </div>
                 <div class="col-xs-12 col-sm-2 text-center arrow-box">
                     <i ng-hide="main.loading" ng-class="{ 'fa fa-arrow-down fa-2x': breakpoint.sm||breakpoint.xs, 'fa fa-arrow-right fa-2x': breakpoint.md||breakpoint.lg }" aria-hidden="true"></i>
@@ -38,21 +33,27 @@
                         <tr>
                             <th>{{main.query.from}}</th>
                             <th>{{main.query.to}}</th>
-                            <th ng-if="main.query.showScores">Score</th>
                         </tr>
                         <tr>
                             <td>{{main.query.string}}</td>
-                            <td ng-hide="expandResults">
-                                <i ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-right" style="cursor: pointer;" aria-hidden="true"></i>
-                                {{main.results[0]}}
+                            <td>
+                                <div ng-hide="expandResults">
+                                    <span ng-if="main.results.length === 0">No results</span>
+                                    <i ng-show="main.results.length > 1" ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-right" style="cursor: pointer;" aria-hidden="true"></i>
+                                    <a ng-if="main.results && !main.results[0].score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{main.results[0]}}" target="_blank">{{main.results[0]}}</a>
+                                    <a ng-if="main.results[0].score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{main.results[0].InChIKey}}" target="_blank">{{main.results[0].InChIKey}}, Score: {{main.results[0].score}}</a>
+                                </div>
+                                <div ng-show="expandResults">
+                                    <i ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-down" style="cursor: pointer;" aria-hidden="true"></i>
+                                    <div ng-repeat="result in main.results">
+                                        <a ng-if="result && !result.score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result}}" target="_blank">{{result}}</a>
+                                        <a ng-if="result.score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result.InChIKey}}" target="_blank">{{result.InChIKey}}, Score: {{result.score}}</a>
+                                    </div>
+                                </div>
                             </td>
-                            <td ng-show="expandResults">
-                                <i ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-down" style="cursor: pointer;" aria-hidden="true"></i>
-                                <div ng-repeat="result in main.results">{{result}}</div>
-                            </td>
-                            <td ng-if="main.query.showScores">lol jk</td>
                         </tr>
                     </table>
+                    <button ng-if="main.results" class="btn btn-primary" ng-click="exportSingle()">Download CSV</button>
                 </div>
             </fieldset>
         </form>

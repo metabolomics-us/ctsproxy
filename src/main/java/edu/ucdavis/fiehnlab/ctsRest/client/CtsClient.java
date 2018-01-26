@@ -21,7 +21,7 @@ public interface CtsClient {
 	List<ConversionResult> convert(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("searchTerm") String searchTerm);
 
 	@RequestMapping(path = "/service/score/{from}/{value}/{algorithm}", method = RequestMethod.GET)
-	String score(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("algorithm") String algorithm);
+	String score(@PathVariable("from") String from, @PathVariable("value") String value, @PathVariable("algorithm") String algorithm);
 
 	@RequestMapping(path = "/service/inchikeytomol/{inchikey}", method = RequestMethod.GET)
 	MoleculeResponse inchiKey2Mol(@PathVariable("inchikey") String inchikey);

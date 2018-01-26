@@ -64,13 +64,14 @@
 
                 var url = '/rest/convert/' + encodeURIComponent(query.from) + '/' + encodeURIComponent(query.to) + '/' + query.string;
 
+                if (query.to === 'InChIKey') {
+                    url = '/rest/score/' + encodeURIComponent(query.from) + '/' + query.string + '/popularity';
+                }
+
                 $http.get(url)
                     .then(function(response) {
                         vm.loading = false;
-                        vm.results = response.data[0].result;
-                        if (response.data[0].result.length === 0) {
-                            vm.results = ['No results'];
-                        }
+                        vm.results = response.data[0] ? response.data[0].result : response.data.result;
                     });
             }
         }, true);
@@ -101,12 +102,14 @@
                             if (vm.generation !== myGeneration) {
                                 return $q.reject('New request made');
                             } else {
-                                return $http.get('/rest/convert/' + encodeURIComponent(query.from) + '/' + encodeURIComponent(to) + '/' + string).then(function(response) {
-                                    if (response.data[0].result.length > 0) {
-                                        vm.batchResults[string][to] = response.data[0].result;
-                                    } else {
-                                        vm.batchResults[string][to] = ['No results'];
-                                    }
+                                var url = '/rest/convert/' + encodeURIComponent(query.from) + '/' + encodeURIComponent(to) + '/' + string;
+
+                                if (to === 'InChIKey') {
+                                    url = '/rest/score/' + encodeURIComponent(query.from) + '/' + string + '/popularity';
+                                }
+
+                                return $http.get(url).then(function(response) {
+                                    vm.batchResults[string][to] = response.data[0] ? response.data[0].result : response.data.result;
                                     if (vm.generation === myGeneration) {
                                         vm.loadingCounter += 1;
                                     }
@@ -123,85 +126,64 @@
             }
         }, true);
 
+        $scope.exportSingle = function() {
+            var header = vm.query.from + ',' + vm.query.to;
+            var data;
 
-        //$scope.fromOptions = [];
-        //$scope.from = 'Chemical Name';
-    //    $http.get('rest/fromValues')
-    //        .then(function(response) {
-    //            console.log(response);
-    //            //$scope.fromOptions = response.data;
-    //            $scope.sources = response.data;
-    //        });
+            if (vm.query.to === 'InChIKey') {
+                header += ',Score';
+                data = header +'\n'+
+                    vm.results.map(function(x) {
+                        return [vm.query.string].concat(x.InChIKey).concat(x.score).join(',');
+                    }).join('\n');
+            } else {
+                data = header +'\n'+
+                    vm.results.map(function(x) {
+                       return [vm.query.string].concat(x).join(',');
+                    }).join('\n');
+            }
 
-        //$scope.toOptions = [];
-        //$scope.batchToOptions = [];
-        //$scope.preferredToOptions = ['BioCyc','CAS','ChEBI','Chemical Name','Human Metabolome Database','InChI Code','InChIKey','KEGG','LipidMAPS','PubChem CID','ChemSpider'];
-        //$scope.to = 'InChIKey';
-        //$scope.targets = [];
-    //    $scope.toggleSelection = function(option) {
-    //        console.log('toggling',option);
-    //        var idx = $scope.toSelection.indexOf(option);
-    //
-    //        // Is currently selected
-    //        if (idx > -1) {
-    //            $scope.toSelection.splice(idx, 1);
-    //        }
-    //
-    //        // Is newly selected
-    //        else {
-    //            $scope.toSelection.push(option);
-    //        }
-    //    };
+            // Format date
+            function pad2(n) {
+                return (n < 10 ? '0' : '') + n;
+            }
 
-    //    $http.get('rest/toValues')
-    //        .then(function(response) {
-    //            response.data.forEach(function(value) {
-    //                $scope.targets.push({name: value, selected: false});
-    //            });
-    //
-    //
-    //
-    //            //console.log(response);
-    //            //$scope.toOptions = response.data;
-    //            //$scope.batchToOptions = response.data.filter(function (i) {return $scope.preferredToOptions.indexOf(i) < 0;});
-    //        });
+            var date = new Date();
+            date = date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
 
-    //    $scope.simpleConversion = function(searchTerm,from,to) {
-    //        $http.get('/rest/convert/'+from+'/'+to+'/'+searchTerm)
-    //            .then(function(response) {
-    //                console.log(response);
-    //                $scope.response = response;
-    //            });
-    //    };
+            downloadData(data, date +'.csv', 'text/csv');
+        };
 
-    //    $scope.batchConversion = function(searchTerms,from,toSelection) {
-    //        console.log(toSelection);
-    //        $scope.showMore = false;
-    //        var terms = searchTerms.split('\n');
-    //        toSelection.forEach(function (to,toIndex) {
-    //            terms.forEach(function (term,termIndex) {
-    //                $scope.response.data[termIndex][toIndex] = {'searchTerm':term,'result':['Loading...']};
-    //                $http.get('/rest/convert/'+from+'/'+to+'/'+term)
-    //                    .then(function(response) {
-    //                        console.log(response);
-    //                        $scope.response.data[termIndex][toIndex] = response.data[0];
-    //                        if (response.data[0].result.length == 0) {
-    //                            $scope.response.data[termIndex][toIndex].result = ['None found'];
-    //                        }
-    //                    }, function(response) {
-    //                        console.log(response);
-    //                        $scope.response.data[termIndex][toIndex].result = ['Error'];
-    //                    });
-    //            });
-    //        });
-    //    };
+        $scope.exportBatch = function() {
+            var header = vm.query.from;
 
-        $scope.export = function() {
-            var header = 'Search Term,Results';
+            vm.batchQuery.to.forEach(function(to) {
+                header += ',' + to;
+
+                if (to === 'InChIKey') {
+                    header += ',Score';
+                }
+            });
 
             var data = header +'\n'+
-                $scope.response.data.map(function(x) {
-                    return [x.searchTerm].concat(x.result).join(',');
+                Object.keys(vm.batchResults).map(function(searchTerm) {
+                    return searchTerm + ',' + vm.batchQuery.to.map(function(target) {
+                        var results = vm.batchResults[searchTerm][target];
+
+                        if (results.length && results[0].InChIKey) {
+                            var inchis = [],
+                                scores = [];
+
+                            results.forEach(function(result) {
+                                inchis.push(result.InChIKey);
+                                scores.push(result.score);
+                            });
+
+                            return '"' + inchis.join(',') + '","' + scores.join(',') + '"';
+                        }
+
+                        return '"' + results.join(',') + '"';
+                    }).join(',');
                 }).join('\n');
 
             // Format date
@@ -221,7 +203,7 @@
          * @param filename
          * @param mimetype
          */
-        var downloadData = function(data, filename, mimetype) {
+        function downloadData(data, filename, mimetype) {
             var hiddenElement = document.createElement('a');
 
             hiddenElement.href = 'data:'+ mimetype +',' + encodeURI(data);
