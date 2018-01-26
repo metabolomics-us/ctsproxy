@@ -6,9 +6,9 @@
         .controller('MainController', MainController);
 
 
-    MainController.$inject = ['$scope', '$http', '$q', 'FileUploader'];
+    MainController.$inject = ['$scope', '$timeout', '$http', '$q', 'FileUploader'];
 
-    function MainController($scope, $http, $q, FileUploader) {
+    function MainController($scope, $timeout, $http, $q, FileUploader) {
         var vm = this;
 
         vm.query = {
@@ -194,7 +194,7 @@
             var date = new Date();
             date = date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
 
-            downloadData(data, date +'.csv', 'text/csv');
+            $timeout(function() { downloadData(data, date +'.csv', 'text/csv'); }, 100);
         };
 
         /**
