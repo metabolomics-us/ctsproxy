@@ -53,9 +53,20 @@
                             </td>
                         </tr>
                     </table>
-                    <button ng-if="main.results" class="btn btn-primary" ng-click="exportSingle()">Download CSV</button>
                 </div>
             </fieldset>
+        </form>
+
+        <form ng-if="main.results" class="form-inline">
+            <button class="btn btn-primary btn-download" ng-click="exportSimplified(main.exportType)"><i class="fa fa-download" aria-hidden="true"></i> Download Style 1</button>
+            <button class="btn btn-primary btn-download" ng-click="export(main.exportType)"><i class="fa fa-download" aria-hidden="true"></i> Download Style 2</button>
+            as
+            <div class="form-group">
+                <select class="form-control" ng-model="main.exportType">
+                    <option value="csv">CSV</option>
+                    <option value="txt">TXT</option>
+                </select>
+            </div>
         </form>
     </div>
 </div>

@@ -238,7 +238,7 @@ hr.horizontal-separator {
     clear: both;
 }
 
-.header-bar{
+.header-bar {
     border: 1px solid #ccc;
     border-radius: 5px;
     text-align: center;
@@ -248,7 +248,11 @@ hr.horizontal-separator {
     display: inline;
 }
 
-.ucd-logo{
+.ucd-logo {
     color: #DFC166;
     float: right;
+}
+
+.btn-download {
+    margin: 0 2px;
 }

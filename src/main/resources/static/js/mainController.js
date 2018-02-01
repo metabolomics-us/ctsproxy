@@ -6,9 +6,9 @@
         .controller('MainController', MainController);
 
 
-    MainController.$inject = ['$scope', '$timeout', '$http', '$q', 'FileUploader'];
+    MainController.$inject = ['$scope', '$timeout', '$http', '$q', 'translation', 'FileUploader'];
 
-    function MainController($scope, $timeout, $http, $q, FileUploader) {
+    function MainController($scope, $timeout, $http, $q, translation, FileUploader) {
         var vm = this;
 
         vm.query = {
@@ -24,6 +24,7 @@
         }
 
         vm.generation = 0;
+        vm.exportType = 'csv';
 
         vm.fromValues = [];
         vm.toValues = [];
@@ -47,14 +48,14 @@
         //////////
 
         function activate() {
-            $http.get('rest/fromValues')
-                .then(function(response){
-                    vm.fromValues = response.data;
+            translation.getFromValues()
+                .then(function(data){
+                    vm.fromValues = data;
                 });
 
-            $http.get('rest/toValues')
-                .then(function(response){
-                    vm.toValues = response.data;
+            translation.getToValues()
+                .then(function(data){
+                    vm.toValues = data;
                 });
         }
 
@@ -62,16 +63,10 @@
             if (query.string !== '') {
                 vm.loading = true;
 
-                var url = '/rest/convert/' + encodeURIComponent(query.from) + '/' + encodeURIComponent(query.to) + '/' + query.string;
-
-                if (query.to === 'InChIKey') {
-                    url = '/rest/score/' + encodeURIComponent(query.from) + '/' + query.string + '/popularity';
-                }
-
-                $http.get(url)
-                    .then(function(response) {
+                translation.convert(query.from, query.to, query.string)
+                    .then(function(data) {
                         vm.loading = false;
-                        vm.results = response.data[0] ? response.data[0].result : response.data.result;
+                        vm.results = data.result;
                     });
             }
         }, true);
@@ -98,22 +93,16 @@
                         vm.batchResults[string][to] = {};
                         vm.loadingTotal += 1;
                         promise = promise.then(function() {
-
                             if (vm.generation !== myGeneration) {
                                 return $q.reject('New request made');
                             } else {
-                                var url = '/rest/convert/' + encodeURIComponent(query.from) + '/' + encodeURIComponent(to) + '/' + string;
-
-                                if (to === 'InChIKey') {
-                                    url = '/rest/score/' + encodeURIComponent(query.from) + '/' + string + '/popularity';
-                                }
-
-                                return $http.get(url).then(function(response) {
-                                    vm.batchResults[string][to] = response.data[0] ? response.data[0].result : response.data.result;
-                                    if (vm.generation === myGeneration) {
-                                        vm.loadingCounter += 1;
-                                    }
-                                });
+                                return translation.convert(query.from, to, string)
+                                    .then(function(data) {
+                                        vm.batchResults[string][to] = data.result;
+                                        if (vm.generation === myGeneration) {
+                                            vm.loadingCounter += 1;
+                                        }
+                                    });
                             }
                         });
                     });
@@ -126,22 +115,140 @@
             }
         }, true);
 
-        $scope.exportSingle = function() {
-            var header = vm.query.from + ',' + vm.query.to;
-            var data;
+        /**
+         * Create a file for export with the format:
+         * From | To | Term | Result | Score
+         *
+         * @param filetype
+         */
+        $scope.exportSimplified = function(filetype) {
+            var data = 'From,To,Term,Result,Score';
 
-            if (vm.query.to === 'InChIKey') {
-                header += ',Score';
-                data = header +'\n'+
-                    vm.results.map(function(x) {
-                        return [vm.query.string].concat(x.InChIKey).concat(x.score).join(',');
-                    }).join('\n');
-            } else {
-                data = header +'\n'+
-                    vm.results.map(function(x) {
-                       return [vm.query.string].concat(x).join(',');
-                    }).join('\n');
+            data += '\n' + vm.results.map(function(result) {
+                if (vm.query.to === 'InChIKey') {
+                    return vm.query.from + ',' + vm.query.to + ',' + vm.query.string + ',' + result.InChIKey + ',' + result.score;
+                } else {
+                    return vm.query.from + ',' + vm.query.to + ',' + vm.query.string + ',"' + result + '"';
+                }
+            }).join('\n');
+
+            function pad2(n) {
+                return (n < 10 ? '0' : '') + n;
             }
+
+            var date = new Date();
+            date = date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
+
+            $timeout(function() { downloadData(data, date + '.' + filetype, 'text/' + filetype); }, 100);
+        };
+
+        /**
+         * Create a file for export with the format:
+         * From | To | Term | Result | Score
+         *
+         * @param filetype
+         */
+        $scope.exportBatchSimplified = function(filetype) {
+            var data = 'From,To,Term,Result,Score';
+
+            for (var searchTerm in vm.batchResults) {
+                for (var target in vm.batchResults[searchTerm]) {
+                    var resultList = vm.batchResults[searchTerm][target];
+
+                    data += '\n' + resultList.map(function(result) {
+                        /**
+                         * InChIKey is an object with properties InChIKey and score
+                         * Everything else is a string
+                         */
+
+                        return target === 'InChIKey' ?
+                            vm.query.from + ',' + target + ',' + searchTerm + ',' + result.InChIKey + ',' + result.score :
+                            vm.query.from + ',' + target + ',' + searchTerm + ',"' + result + '"';
+                    }).join('\n');
+                }
+            }
+
+            function pad2(n) {
+                return (n < 10 ? '0' : '') + n;
+            }
+
+            var date = new Date();
+            date = date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
+
+            $timeout(function() { downloadData(data, date + '.' + filetype, 'text/' + filetype); }, 100);
+        };
+
+        /**
+         * Create a file for export with the format:
+         * Search Term | Target Term | Score
+         *
+         * @param filetype
+         */
+        $scope.export = function(filetype) {
+            var data = vm.query.from + ',' + vm.query.to + ',Score';
+
+            data += '\n' + vm.results.map(function(result) {
+                if (vm.query.to === 'InChIKey') {
+                    return vm.query.string + ',' + result.InChIKey + ',' + result.score;
+                } else {
+                    return vm.query.string + ',"' + result + '"';
+                }
+            }).join('\n');
+
+            function pad2(n) {
+                return (n < 10 ? '0' : '') + n;
+            }
+
+            var date = new Date();
+            date = date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
+
+            $timeout(function() { downloadData(data, date + '.' + filetype, 'text/' + filetype); }, 100);
+        };
+
+        /**
+         *
+         */
+        $scope.exportBatch = function(filetype) {
+            var header = vm.query.from;
+
+            vm.batchQuery.to.forEach(function(to) {
+                header += ',' + to;
+
+                if (to === 'InChIKey') {
+                    header += ',Score';
+                }
+            });
+
+            var data = header +'\n'+
+                Object.keys(vm.batchResults).map(function(searchTerm) {
+                    var includeRow = true;
+                    var rows = [];
+
+                    for (var rowIndex = 0; includeRow === true; rowIndex++) {
+                        includeRow = false;
+
+                        var row = searchTerm + ',' + vm.batchQuery.to.map(function(target) {
+                            var result = vm.batchResults[searchTerm][target][rowIndex];
+                            if (result) {
+                                includeRow = true;
+
+                                return target === 'InChIKey' ?
+                                    result.InChIKey + ',' + result.score :
+                                    '"' + result + '"';
+                            } else {
+                                return target === 'InChIKey' ?
+                                    ',' :
+                                    '';
+                            }
+                        }).join(',');
+
+                        if (includeRow) {
+                            rows.push(row);
+                        }
+                    }
+
+                    return rows.join('\n');
+                }).join('\n');
 
             // Format date
             function pad2(n) {
@@ -151,18 +258,20 @@
             var date = new Date();
             date = date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
 
-            downloadData(data, date +'.csv', 'text/csv');
+            $timeout(function() { downloadData(data, date + '.' + filetype, 'text/' + filetype); }, 100);
         };
 
-        $scope.exportBatch = function() {
+        /**
+         *
+         *
+         */
+        $scope.exportBatchOneToOne = function(filetype) {
             var header = vm.query.from;
 
             vm.batchQuery.to.forEach(function(to) {
-                header += ',' + to;
-
-                if (to === 'InChIKey') {
-                    header += ',Score';
-                }
+                header += (to === 'InChIKey') ?
+                    ',' + to + ',' + 'Score' :
+                    ',' + to;
             });
 
             var data = header +'\n'+
@@ -179,10 +288,10 @@
                                 scores.push(result.score);
                             });
 
-                            return '"' + inchis.join(',') + '","' + scores.join(',') + '"';
+                            return '"' + inchis.join('\n') + '","' + scores.join('\n') + '"';
                         }
 
-                        return '"' + results.join(',') + '"';
+                        return '"' + results.join('\n') + '"';
                     }).join(',');
                 }).join('\n');
 
@@ -194,8 +303,8 @@
             var date = new Date();
             date = date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
 
-            $timeout(function() { downloadData(data, date +'.csv', 'text/csv'); }, 100);
-        };
+            $timeout(function() { downloadData(data, date + '.' + filetype, 'text/' + filetype); }, 100);
+        }
 
         /**
          * Emulate the downloading of a file given its contents and name

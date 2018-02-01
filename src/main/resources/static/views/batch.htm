@@ -36,30 +36,56 @@
                     <table class="table">
                         <tr>
                             <th>{{main.batchQuery.from}}</th>
-                            <th ng-repeat="to in main.batchQuery.to">{{to}}</th>
+                            <th ng-repeat-start="to in main.batchQuery.to">{{to}}</th>
+                            <th ng-repeat-end ng-if="to === 'InChIKey'">Score</th>
                         </tr>
                         <tr ng-repeat="(term, results) in main.batchResults">
                             <td>{{term}}</td>
-                            <td ng-repeat="to in main.batchQuery.to">
+                            <td ng-repeat-start="to in main.batchQuery.to">
                                 <div ng-hide="expandResults">
                                     <span ng-if="results[to].length === 0">No results</span>
                                     <i ng-show="results[to].length > 1" ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-right" style="cursor: pointer;" aria-hidden="true"></i>
                                     <a ng-if="results[to] && !results[to][0].score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{results[to][0]}}" target="_blank">{{results[to][0]}}</a>
-                                    <a ng-if="results[to][0].score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{results[to][0].InChIKey}}" target="_blank">{{results[to][0].InChIKey}}, Score: {{results[to][0].score}}</a>
+                                    <a ng-if="results[to][0].score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{results[to][0].InChIKey}}" target="_blank">{{results[to][0].InChIKey}}</a>
                                 </div>
                                 <div ng-show="expandResults">
                                     <i ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-down" style="cursor: pointer;" aria-hidden="true"></i>
-                                    <div ng-repeat="result in results[to]">
+                                    <div ng-repeat="result in results[to] track by $index">
                                         <a ng-if="result && !result.score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result}}" target="_blank">{{result}}</a>
-                                        <a ng-if="result.score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result.InChIKey}}" target="_blank">{{result.InChIKey}}, Score: {{result.score}}</a>
+                                        <a ng-if="result.score" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result.InChIKey}}" target="_blank">{{result.InChIKey}}</a>
+                                    </div>
+                                </div>
+                            </td>
+                            <td ng-repeat-end ng-if="to === 'InChIKey'">
+                                <div ng-hide="expandResults">
+                                    <span ng-if="results[to].length === 0">No results</span>
+                                    <!--<i ng-show="results[to].length > 1" ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-right" style="cursor: pointer;" aria-hidden="true"></i>-->
+                                    <a href="https://pubchem.ncbi.nlm.nih.gov/compound/{{results[to][0].InChIKey}}" target="_blank">{{results[to][0].score}}</a>
+                                </div>
+                                <div ng-show="expandResults">
+                                    <!--<i ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-down" style="cursor: pointer;" aria-hidden="true"></i>-->
+                                    <div ng-repeat="result in results[to]">
+                                        <a href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result.InChIKey}}" target="_blank">{{result.score}}</a>
                                     </div>
                                 </div>
                             </td>
                         </tr>
                     </table>
-                    <button ng-if="main.batchResults" class="btn btn-primary" ng-click="exportBatch()">Download CSV</button>
                 </div>
             </fieldset>
+        </form>
+
+        <form ng-if="main.batchResults" class="form-inline">
+            <button class="btn btn-primary btn-download" ng-click="exportBatchSimplified(main.exportType)"><i class="fa fa-download" aria-hidden="true"></i> Download Style 1</button>
+            <button class="btn btn-primary btn-download" ng-click="exportBatch(main.exportType)"><i class="fa fa-download" aria-hidden="true"></i> Download Style 2</button>
+            <button class="btn btn-primary btn-download" ng-click="exportBatchOneToOne(main.exportType)"><i class="fa fa-download" aria-hidden="true"></i> Download Style 3</button>
+            as
+            <div class="form-group">
+                <select class="form-control" ng-model="main.exportType">
+                    <option value="csv">CSV</option>
+                    <option value="txt">TXT</option>
+                </select>
+            </div>
         </form>
     </div>
 </div>
