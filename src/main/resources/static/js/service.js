@@ -2,7 +2,7 @@
  * Created by matthewmueller on 3/16/17.
  */
 
-var app = angular.module('cts', ['ngRoute', 'ngBreakpoint', 'angularFileUpload', 'btorfs.multiselect']);
+var app = angular.module('cts', ['ngRoute', 'ngBreakpoint', 'angularFileUpload', 'btorfs.multiselect', 'ui.bootstrap']);
 
 app.config(function($routeProvider,$locationProvider) {
     $locationProvider.hashPrefix("");

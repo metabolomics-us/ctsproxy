@@ -29,6 +29,10 @@
         vm.fromValues = [];
         vm.toValues = [];
 
+        vm.resultCount = 0;
+        vm.resultPage = 1;
+        vm.pageCount = 1;
+
         vm.uploader = new FileUploader();
 
         vm.uploader.onAfterAddingFile = function(file) {
@@ -72,8 +76,8 @@
         }, true);
 
         $scope.$watch(function() { return vm.batchQuery; }, function(query, oldQuery) {
-            if (query.string !== '' && query.to.length !== 0 && (
-                query.string !== oldQuery.string || query.to.length !== oldQuery.to.length || query.from !== oldQuery.from)) {
+            if (query.string !== '' && query.to.length !== 0 &&
+                (query.string !== oldQuery.string || query.to.length !== oldQuery.to.length || query.from !== oldQuery.from)) {
 
                 vm.generation += 1;
                 vm.loading = true;
@@ -83,7 +87,7 @@
 
                 var myGeneration = vm.generation;
 
-                var queryStrings = query.string.replace(/\n/g, ',').split(',');
+                var queryStrings = query.string.replace(/\n/g, ',').split(',').filter(Boolean);
 
                 var promise = $q.all(null);
 
@@ -110,6 +114,10 @@
 
                 promise.then(function() {
                     vm.loading = false;
+                    vm.resultCount = Object.keys(vm.batchResults).length;
+                    vm.pageCount = Math.ceil(vm.resultCount / 10);
+
+                    console.log(vm.resultCount + ' results', vm.pageCount + ' pages');
                 });
 
             }
@@ -206,7 +214,9 @@
         };
 
         /**
+         * Search Term | Target 1 | ... | Target n | Score
          *
+         * @param filetype
          */
         $scope.exportBatch = function(filetype) {
             var header = vm.query.from;
@@ -262,8 +272,12 @@
         };
 
         /**
+         * Search Term_|_Target 1_|_..._|_Target n_|_Score_
+         *             | Result\n | ... | Result\n | ...
+         * Term 1      | ...      | ... | ...      | ...
+         * ____________|_Result___|_..._|_...______|_...___
          *
-         *
+         * @param filetype
          */
         $scope.exportBatchOneToOne = function(filetype) {
             var header = vm.query.from;

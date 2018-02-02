@@ -86,9 +86,6 @@ html, body {
 
 body#ctsProxy {
     background-color: #F9F4E5;
-    /* background: linear-gradient(to bottom right, #1e130c, #1e130c) */
-    /* background: linear-gradient(to bottom right, GoldenRod, Ivory, PowderBlue, Navy); */
-    /* background: linear-gradient(to bottom right, OldLace, PaleTurquoise, Navy); */
 }
 
 #page-wrapper {
