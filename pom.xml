@@ -6,7 +6,6 @@
 		<artifactId>fiehnlab-pom</artifactId>
 		<groupId>edu.ucdavis.fiehnlab</groupId>
 		<version>1.0.18-SNAPSHOT</version>
-		<relativePath/>
 	</parent>
 
 	<modelVersion>4.0.0</modelVersion>
