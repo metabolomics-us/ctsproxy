@@ -36,7 +36,7 @@
 
         function convert(from, to, string) {
             return (to === 'InChIKey') ?
-                $http.get('/rest/score/' + encodeURIComponent(from) + '/' + string + '/popularity')
+                $http.get('/rest/score/' + encodeURIComponent(from) + '/' + string + '/biological')
                     .then(function(response){
                         return response.data;
                     }) :

@@ -6,9 +6,9 @@
         .controller('MainController', MainController);
 
 
-    MainController.$inject = ['$scope', '$timeout', '$http', '$q', 'translation', 'FileUploader'];
+    MainController.$inject = ['$scope', '$timeout', '$http', '$q', 'translation', 'download', 'FileUploader'];
 
-    function MainController($scope, $timeout, $http, $q, translation, FileUploader) {
+    function MainController($scope, $timeout, $http, $q, translation, download, FileUploader) {
         var vm = this;
 
         vm.query = {
@@ -24,7 +24,9 @@
         }
 
         vm.generation = 0;
+        vm.exportStyle = 'simplified'
         vm.exportType = 'csv';
+        vm.topHit = false;
 
         vm.fromValues = [];
         vm.toValues = [];
@@ -87,7 +89,8 @@
 
                 var myGeneration = vm.generation;
 
-                var queryStrings = query.string.replace(/\n/g, ',').split(',').filter(Boolean);
+                var queryStrings = query.string.split('\n').filter(Boolean);
+//                var queryStrings = query.string.replace(/\n/g, ',').split(',').filter(Boolean);
 
                 var promise = $q.all(null);
 
@@ -98,7 +101,7 @@
                         vm.loadingTotal += 1;
                         promise = promise.then(function() {
                             if (vm.generation !== myGeneration) {
-                                return $q.reject('New request made');
+                                return $q.reject('Request reset');
                             } else {
                                 return translation.convert(query.from, to, string)
                                     .then(function(data) {
@@ -118,10 +121,16 @@
                     vm.pageCount = Math.ceil(vm.resultCount / 10);
 
                     console.log(vm.resultCount + ' results', vm.pageCount + ' pages');
+                }).catch(function(error) {
+                    console.error(error);
                 });
 
             }
         }, true);
+
+        $scope.callDownloadService = function() {
+            $timeout(function() { download.export(vm.batchQuery, vm.batchResults, vm.exportStyle, vm.topHit, vm.exportType); }, 100);
+        }
 
         /**
          * Create a file for export with the format:

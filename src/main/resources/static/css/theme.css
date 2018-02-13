@@ -253,3 +253,7 @@ hr.horizontal-separator {
 .btn-download {
     margin: 0 2px;
 }
+
+textarea {
+    max-width: 100%;
+}

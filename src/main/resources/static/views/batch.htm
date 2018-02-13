@@ -76,15 +76,24 @@
         </div>
 
         <form ng-if="main.batchResults" class="form-inline">
-            <button uib-tooltip="From | To | Term | Result | Score" class="btn btn-primary btn-download" ng-click="exportBatchSimplified(main.exportType)"><i class="fa fa-download" aria-hidden="true"></i> Download Style 1</button>
-            <button uib-tooltip="[Search Term] | [Target 1] | ... | [Target n] | Score" class="btn btn-primary btn-download" ng-click="exportBatch(main.exportType)"><i class="fa fa-download" aria-hidden="true"></i> Download Style 2</button>
-            <button uib-tooltip="[Search Term] | [Target 1] | ... | [Target n] | Score" class="btn btn-primary btn-download" ng-click="exportBatchOneToOne(main.exportType)"><i class="fa fa-download" aria-hidden="true"></i> Download Style 3</button>
+            <button class="btn btn-primary btn-download" ng-click="callDownloadService()"><i class="fa fa-download" aria-hidden="true"></i> Download</button>
+            <div class="form-group">
+                <select class="form-control" ng-model="main.exportStyle">
+                    <option value="simplified">Style 1 (From | To | Term | Result | Score)</option>
+                    <option value="standard">Style 2 ({{main.batchQuery.from}} | [Target 1] | ... | [Target n] | Score)</option>
+                </select>
+            </div>
             as
             <div class="form-group">
                 <select class="form-control" ng-model="main.exportType">
                     <option value="csv">CSV</option>
                     <option value="txt">TXT</option>
                 </select>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="main.topHit"> Top Hit Only
+                </label>
             </div>
         </form>
     </div>
