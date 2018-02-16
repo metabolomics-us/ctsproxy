@@ -88,23 +88,23 @@
                         inchiList = [],
                         scoreList = [];
 
+                        if (resultList.length < 1) {
+                            return '';
+                        }
+
                     if (target === 'InChIKey') {
                         resultList.forEach(function(result) {
                             inchiList.push(result.InChIKey);
                             scoreList.push(result.score);
                         });
 
-                        if (topHit) {
-                            return (resultList.length > 0) ? '"' + resultList[0].InChIKey + '",' + resultList[0].score : ',';
-                        } else {
-                            return '"' + inchiList.join('\n') + '","' + scoreList.join('\n') + '"';
-                        }
+                        return (topHit) ?
+                            '"' + resultList[0].InChIKey + '",' + resultList[0].score :
+                            '"' + inchiList.join('\n') + '","' + scoreList.join('\n') + '"';
                     } else {
-                        if (topHit) {
-                            return (resultList.length > 0) ? '"' + resultList[0] + '"' : '';
-                        } else {
-                            return '"' + resultList.join('\n') + '"';
-                        }
+                        return (topHit) ?
+                            '"' + resultList[0] + '"' :
+                            '"' + resultList.join('\n') + '"';
                     }
                 }).join(',');
             }).join('\n');
