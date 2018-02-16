@@ -47,14 +47,16 @@
                 for (var target in results[searchTerm]) {
                     var resultList = results[searchTerm][target];
 
+                    if (resultList.length < 1) {
+                        break;
+                    }
+
                     data += '\n';
 
                     if (topHit) {
-                        data += (resultList.length > 0) ?
-                            (target === 'InChIKey') ?
-                                query.from + ',' + target + ',"' + searchTerm + '","' + resultList[0].InChIKey + '",' + resultList[0].score :
-                                query.from + ',' + target + ',"' + searchTerm + '","' + resultList[0] + '"' :
-                            '';
+                        data += (target === 'InChIKey') ?
+                            query.from + ',' + target + ',"' + searchTerm + '","' + resultList[0].InChIKey + '",' + resultList[0].score :
+                            query.from + ',' + target + ',"' + searchTerm + '","' + resultList[0] + '"';
                     } else {
                         data += resultList.map(function(result) {
                             return (target === 'InChIKey') ?
@@ -71,7 +73,7 @@
         function process(query, results, topHit) {
 
             var source = query.from,
-                targets = query.to,
+                targets = (typeof query.to === 'string') ? [query.to] : query.to,
                 searchTerms = Object.keys(results),
                 data = source + ',';
 
@@ -99,7 +101,7 @@
                         }
                     } else {
                         if (topHit) {
-                            return (resultList.length > 0) ? resultList[0] : '';
+                            return (resultList.length > 0) ? '"' + resultList[0] + '"' : '';
                         } else {
                             return '"' + resultList.join('\n') + '"';
                         }

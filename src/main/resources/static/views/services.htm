@@ -1,0 +1,110 @@
+<div class="row">
+    <div class="col-xs-12">
+        <h3>Services</h3>
+        <p>Advanced users can access the CTS directly via REST endpoints. These include:</p>
+        <!--<ul>-->
+            <!--<li><a ng-click="scrollTo('convert')">Convert IDs</a></li>-->
+            <!--<li><a ng-click="scrollTo('score')">Get scored InChIKeys</a></li>-->
+            <!--<li><a ng-click="scrollTo('values')">Get all valid IDs</a></li>-->
+            <!--<li><a ng-click="scrollTo('moltoinchi')">InChIKey to MOL</a></li>-->
+            <!--<li><a ng-click="scrollTo('countbio')">Count biological</a></li>-->
+        <!--</ul>-->
+
+        <a id="convert"></a>
+        <h4>Convert</h4>
+        <p>Convert an input string ("string") from one identifier ("from") to another ("to").</p>
+        <p>REST endpoint:</p>
+        <pre><code>/rest/convert/[from]/[to]/[string]</code></pre>
+        <p>Sample call:</p>
+        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/convert/InChIKey/Chemical%20Name/QNAYBMKLOCPYGJ-REOHCLBHSA-N</code></pre>
+        <p>Expected result:</p>
+        <pre><code>[
+    {
+        "fromIdentifier": "InChIKey",
+        "searchTerm": "QNAYBMKLOCPYGJ-REOHCLBHSA-N",
+        "toIdentifier": "Chemical Name",
+        "result":
+        [
+            "L-Alanine"
+        ]
+    }
+]       </code></pre>
+        <hr />
+
+        <a id="score"></a>
+        <h4>Score</h4>
+        <p>Get scored InChIKeys for a string ("string") of a given identifier type ("from") using your choice of algorithm ("algorithm", either biological or popularity).</p>
+        <p>REST endpoint:</p>
+        <pre><code>/rest/score/[from]/[string]/[algorithm]</code></pre>
+        <p>Sample call:</p>
+        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/score/Chemical%20Name/threonine/biological</code></pre>
+        <p>Expected result:</p>
+        <pre><code>{
+    "searchTerm": "threonine",
+    "from": "chemical name",
+    "result":
+    [
+        {
+            "InChIKey": "AYFVYJQAPQTCCC-GBXIJSLDSA-N",
+            "score": 1
+        },
+        {
+            "InChIKey": "AYFVYJQAPQTCCC-STHAYSLISA-N",
+            "score": 0.86
+        },
+        {
+            "InChIKey": "AYFVYJQAPQTCCC-UHFFFAOYSA-N",
+            "score": 0
+        }
+    ]
+}</code></pre>
+        <hr />
+
+        <a id="values"></a>
+        <h4>Values</h4>
+        <p>Fetch a list of valid IDs for conversion.</p>
+        <p>REST endpoints:</p>
+        <pre><code>/rest/fromValues</code></pre>
+        <pre><code>/rest/toValues</code></pre>
+        <p>Sample calls:</p>
+        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/fromValues</code></pre>
+        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/toValues</code></pre>
+        <p>Expected results:</p>
+        <pre><code>["ABI Chem","ChEMBL","Chemical Name","InChIKey","MICAD","MLSMR","MMDB","PubChem CID","PubChem SID", ...]</code></pre>
+        <pre><code>["ABI Chem","ChEMBL","Chemical Name","InChI Code","InChIKey","MICAD","MLSMR","MMDB","PubChem CID","PubChem SID", ...]</code></pre>
+        <hr />
+
+        <a id="expandformula"></a>
+        <h4>Expand formula</h4>
+        <p>Expands a chemical formula.</p>
+        <p>REST endpoint:</p>
+        <pre><code>/rest/expandformula/[formula]</code></pre>
+        <p>Sample call:</p>
+        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/expandformula/H20</code></pre>
+        <p>Expected result:</p>
+        <pre><code>{
+    "formula": "H2O",
+    "result": "HHO"
+}</code></pre>
+        <hr />
+
+        <a id="inchikeytomol"></a>
+        <h4>InChIKey to MOL</h4>
+        <p>Describe.</p>
+        <pre><code>/rest/inchikeytomol/[inchikey]</code></pre>
+        <p>Sample call:</p>
+        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/inchikeytomol/[inchikey]</code></pre>
+        <p>Expected result:</p>
+        <pre><code></code></pre>
+        <hr />
+
+        <a id="countbio"></a>
+        <h4>Count biological</h4>
+        <p>Describe.</p>
+        <pre><code>/rest/countBiological/[inchikey]</code></pre>
+        <p>Sample call:</p>
+        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/countBiological/[inchikey]</code></pre>
+        <p>Expected result:</p>
+        <pre><code></code></pre>
+    </div>
+</div>

@@ -28,7 +28,7 @@
                         <select class="form-control" ng-model="main.query.to" ng-options="to as to for to in main.toValues | orderBy"></select>
                     </div>
                 </div>
-                <div ng-if="main.results" class="col-xs-12 col-sm-12">
+                <div ng-if="main.results" class="col-xs-12">
                     <table class="table">
                         <tr>
                             <th>{{main.query.from}}</th>
@@ -39,26 +39,26 @@
                             <td>{{main.query.string}}</td>
                             <td>
                                 <div ng-hide="expandResults">
-                                    <span ng-if="main.results.length === 0">No results</span>
-                                    <i ng-show="main.results.length > 1" ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-right" style="cursor: pointer;" aria-hidden="true"></i>
-                                    <a ng-if="main.results && !main.results[0].InChIKey" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{main.results[0]}}" target="_blank">{{main.results[0]}}</a>
-                                    <a ng-if="main.results[0].InChIKey" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{main.results[0].InChIKey}}" target="_blank">{{main.results[0].InChIKey}}</a>
+                                    <span ng-if="main.results[main.query.string][main.query.to].length === 0">No results</span>
+                                    <i ng-show="main.results[main.query.string][main.query.to].length > 1" ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-right" style="cursor: pointer;" aria-hidden="true"></i>
+                                    <a ng-if="main.results[main.query.string][main.query.to].length > 0 && main.query.to !== 'InChIKey'" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{main.results[main.query.string][main.query.to][0]}}" target="_blank">{{main.results[main.query.string][main.query.to][0]}}</a>
+                                    <a ng-if="main.query.to === 'InChIKey'" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{main.results[main.query.string][main.query.to][0].InChIKey}}" target="_blank">{{main.results[main.query.string][main.query.to][0].InChIKey}}</a>
                                 </div>
                                 <div ng-show="expandResults">
                                     <i ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-down" style="cursor: pointer;" aria-hidden="true"></i>
-                                    <div ng-repeat="result in main.results">
-                                        <a ng-if="result && !result.InChIKey" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result}}" target="_blank">{{result}}</a>
-                                        <a ng-if="result.InChIKey" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result.InChIKey}}" target="_blank">{{result.InChIKey}}</a>
+                                    <div ng-repeat="result in main.results[main.query.string][main.query.to] track by $index">
+                                        <a ng-if="result && main.query.to !== 'InChIKey'" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result}}" target="_blank">{{result}}</a>
+                                        <a ng-if="main.query.to === 'InChIKey'" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result.InChIKey}}" target="_blank">{{result.InChIKey}}</a>
                                     </div>
                                 </div>
                             </td>
                             <td ng-if="main.query.to === 'InChIKey'">
                                 <div ng-hide="expandResults">
-                                    <span ng-if="main.results.length === 0">No results</span>
-                                    {{main.results[0].score}}
+                                    <span ng-if="main.results[main.query.string][main.query.to].length === 0">No results</span>
+                                    {{main.results[main.query.string][main.query.to][0].score}}
                                 </div>
                                 <div ng-show="expandResults">
-                                    <div ng-repeat="result in main.results">
+                                    <div ng-repeat="result in main.results[main.query.string][main.query.to]">
                                         {{result.score}}
                                     </div>
                                 </div>
@@ -70,14 +70,24 @@
         </form>
 
         <form ng-if="main.results" class="form-inline">
-            <button class="btn btn-primary btn-download" ng-click="exportSimplified(main.exportType)"><i class="fa fa-download" aria-hidden="true"></i> Download Style 1</button>
-            <button class="btn btn-primary btn-download" ng-click="export(main.exportType)"><i class="fa fa-download" aria-hidden="true"></i> Download Style 2</button>
+            <button class="btn btn-primary btn-download" ng-click="singleDownloadService()"><i class="fa fa-download" aria-hidden="true"></i> Download</button>
+            <div class="form-group">
+                <select class="form-control" ng-model="main.exportStyle">
+                    <option value="simplified">Style 1 (From | To | Term | Result | Score)</option>
+                    <option value="standard">Style 2 ({{main.query.from}} | {{main.query.to}} | Score)</option>
+                </select>
+            </div>
             as
             <div class="form-group">
                 <select class="form-control" ng-model="main.exportType">
                     <option value="csv">CSV</option>
                     <option value="txt">TXT</option>
                 </select>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" ng-model="main.topHit"> Top Hit Only
+                </label>
             </div>
         </form>
     </div>

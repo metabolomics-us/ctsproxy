@@ -6,9 +6,9 @@
         .controller('MainController', MainController);
 
 
-    MainController.$inject = ['$scope', '$timeout', '$http', '$q', 'translation', 'download', 'FileUploader'];
+    MainController.$inject = ['$scope', '$timeout', '$http', '$q', '$location', 'translation', 'download', 'FileUploader'];
 
-    function MainController($scope, $timeout, $http, $q, translation, download, FileUploader) {
+    function MainController($scope, $timeout, $http, $q, $location, translation, download, FileUploader) {
         var vm = this;
 
         vm.query = {
@@ -72,7 +72,9 @@
                 translation.convert(query.from, query.to, query.string)
                     .then(function(data) {
                         vm.loading = false;
-                        vm.results = data.result;
+                        vm.results = {};
+                        vm.results[query.string] = {};
+                        vm.results[query.string][query.to] = data.result;
                     });
             }
         }, true);
@@ -88,10 +90,7 @@
                 vm.batchResults = {};
 
                 var myGeneration = vm.generation;
-
                 var queryStrings = query.string.split('\n').filter(Boolean);
-//                var queryStrings = query.string.replace(/\n/g, ',').split(',').filter(Boolean);
-
                 var promise = $q.all(null);
 
                 angular.forEach(queryStrings, function(string) {
@@ -109,6 +108,11 @@
                                         if (vm.generation === myGeneration) {
                                             vm.loadingCounter += 1;
                                         }
+                                    }).catch(function(error) {
+                                        vm.batchResults[string][to] = [];
+                                        console.error(error);
+
+                                        return;
                                     });
                             }
                         });
@@ -119,8 +123,6 @@
                     vm.loading = false;
                     vm.resultCount = Object.keys(vm.batchResults).length;
                     vm.pageCount = Math.ceil(vm.resultCount / 10);
-
-                    console.log(vm.resultCount + ' results', vm.pageCount + ' pages');
                 }).catch(function(error) {
                     console.error(error);
                 });
@@ -128,224 +130,17 @@
             }
         }, true);
 
-        $scope.callDownloadService = function() {
-            $timeout(function() { download.export(vm.batchQuery, vm.batchResults, vm.exportStyle, vm.topHit, vm.exportType); }, 100);
+        $scope.batchDownloadService = function() {
+            $timeout(function() {
+                download.export(vm.batchQuery, vm.batchResults, vm.exportStyle, vm.topHit, vm.exportType);
+            }, 100);
         }
 
-        /**
-         * Create a file for export with the format:
-         * From | To | Term | Result | Score
-         *
-         * @param filetype
-         */
-        $scope.exportSimplified = function(filetype) {
-            var data = 'From,To,Term,Result,Score';
-
-            data += '\n' + vm.results.map(function(result) {
-                if (vm.query.to === 'InChIKey') {
-                    return vm.query.from + ',' + vm.query.to + ',' + vm.query.string + ',' + result.InChIKey + ',' + result.score;
-                } else {
-                    return vm.query.from + ',' + vm.query.to + ',' + vm.query.string + ',"' + result + '"';
-                }
-            }).join('\n');
-
-            function pad2(n) {
-                return (n < 10 ? '0' : '') + n;
-            }
-
-            var date = new Date();
-            date = date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
-
-            $timeout(function() { downloadData(data, date + '.' + filetype, 'text/' + filetype); }, 100);
-        };
-
-        /**
-         * Create a file for export with the format:
-         * From | To | Term | Result | Score
-         *
-         * @param filetype
-         */
-        $scope.exportBatchSimplified = function(filetype) {
-            var data = 'From,To,Term,Result,Score';
-
-            for (var searchTerm in vm.batchResults) {
-                for (var target in vm.batchResults[searchTerm]) {
-                    var resultList = vm.batchResults[searchTerm][target];
-
-                    data += '\n' + resultList.map(function(result) {
-                        /**
-                         * InChIKey is an object with properties InChIKey and score
-                         * Everything else is a string
-                         */
-
-                        return target === 'InChIKey' ?
-                            vm.query.from + ',' + target + ',' + searchTerm + ',' + result.InChIKey + ',' + result.score :
-                            vm.query.from + ',' + target + ',' + searchTerm + ',"' + result + '"';
-                    }).join('\n');
-                }
-            }
-
-            function pad2(n) {
-                return (n < 10 ? '0' : '') + n;
-            }
-
-            var date = new Date();
-            date = date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
-
-            $timeout(function() { downloadData(data, date + '.' + filetype, 'text/' + filetype); }, 100);
-        };
-
-        /**
-         * Create a file for export with the format:
-         * Search Term | Target Term | Score
-         *
-         * @param filetype
-         */
-        $scope.export = function(filetype) {
-            var data = vm.query.from + ',' + vm.query.to + ',Score';
-
-            data += '\n' + vm.results.map(function(result) {
-                if (vm.query.to === 'InChIKey') {
-                    return vm.query.string + ',' + result.InChIKey + ',' + result.score;
-                } else {
-                    return vm.query.string + ',"' + result + '"';
-                }
-            }).join('\n');
-
-            function pad2(n) {
-                return (n < 10 ? '0' : '') + n;
-            }
-
-            var date = new Date();
-            date = date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
-
-            $timeout(function() { downloadData(data, date + '.' + filetype, 'text/' + filetype); }, 100);
-        };
-
-        /**
-         * Search Term | Target 1 | ... | Target n | Score
-         *
-         * @param filetype
-         */
-        $scope.exportBatch = function(filetype) {
-            var header = vm.query.from;
-
-            vm.batchQuery.to.forEach(function(to) {
-                header += ',' + to;
-
-                if (to === 'InChIKey') {
-                    header += ',Score';
-                }
-            });
-
-            var data = header +'\n'+
-                Object.keys(vm.batchResults).map(function(searchTerm) {
-                    var includeRow = true;
-                    var rows = [];
-
-                    for (var rowIndex = 0; includeRow === true; rowIndex++) {
-                        includeRow = false;
-
-                        var row = searchTerm + ',' + vm.batchQuery.to.map(function(target) {
-                            var result = vm.batchResults[searchTerm][target][rowIndex];
-                            if (result) {
-                                includeRow = true;
-
-                                return target === 'InChIKey' ?
-                                    result.InChIKey + ',' + result.score :
-                                    '"' + result + '"';
-                            } else {
-                                return target === 'InChIKey' ?
-                                    ',' :
-                                    '';
-                            }
-                        }).join(',');
-
-                        if (includeRow) {
-                            rows.push(row);
-                        }
-                    }
-
-                    return rows.join('\n');
-                }).join('\n');
-
-            // Format date
-            function pad2(n) {
-                return (n < 10 ? '0' : '') + n;
-            }
-
-            var date = new Date();
-            date = date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
-
-            $timeout(function() { downloadData(data, date + '.' + filetype, 'text/' + filetype); }, 100);
-        };
-
-        /**
-         * Search Term_|_Target 1_|_..._|_Target n_|_Score_
-         *             | Result\n | ... | Result\n | ...
-         * Term 1      | ...      | ... | ...      | ...
-         * ____________|_Result___|_..._|_...______|_...___
-         *
-         * @param filetype
-         */
-        $scope.exportBatchOneToOne = function(filetype) {
-            var header = vm.query.from;
-
-            vm.batchQuery.to.forEach(function(to) {
-                header += (to === 'InChIKey') ?
-                    ',' + to + ',' + 'Score' :
-                    ',' + to;
-            });
-
-            var data = header +'\n'+
-                Object.keys(vm.batchResults).map(function(searchTerm) {
-                    return searchTerm + ',' + vm.batchQuery.to.map(function(target) {
-                        var results = vm.batchResults[searchTerm][target];
-
-                        if (results.length && results[0].InChIKey) {
-                            var inchis = [],
-                                scores = [];
-
-                            results.forEach(function(result) {
-                                inchis.push(result.InChIKey);
-                                scores.push(result.score);
-                            });
-
-                            return '"' + inchis.join('\n') + '","' + scores.join('\n') + '"';
-                        }
-
-                        return '"' + results.join('\n') + '"';
-                    }).join(',');
-                }).join('\n');
-
-            // Format date
-            function pad2(n) {
-                return (n < 10 ? '0' : '') + n;
-            }
-
-            var date = new Date();
-            date = date.getFullYear() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
-
-            $timeout(function() { downloadData(data, date + '.' + filetype, 'text/' + filetype); }, 100);
+        $scope.singleDownloadService = function() {
+            $timeout(function() {
+                download.export(vm.query, vm.results, vm.exportStyle, vm.topHit, vm.exportType);
+            }, 100);
         }
-
-        /**
-         * Emulate the downloading of a file given its contents and name
-         * @param data
-         * @param filename
-         * @param mimetype
-         */
-        function downloadData(data, filename, mimetype) {
-            var hiddenElement = document.createElement('a');
-
-            hiddenElement.href = 'data:'+ mimetype +',' + encodeURI(data);
-            hiddenElement.target = '_blank';
-            hiddenElement.download = filename;
-
-            document.body.appendChild(hiddenElement);
-            hiddenElement.click();
-            document.body.removeChild(hiddenElement);
-        };
     }
 
 })();
