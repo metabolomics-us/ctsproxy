@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>CTS Proxy</title>
-    <link href="css/theme.css" rel="stylesheet">
 
     <!--Angular-->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.3/angular.min.js"></script>
@@ -22,20 +21,16 @@
     <!--UI Bootstrap-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js" integrity="sha256-tyfWW2LtJQNI+l3F0h6xDV/ij6Mfn8lwSKHWOsmEgXM=" crossorigin="anonymous"></script>
     <link href="css/font-awesome.min.css" rel="stylesheet">
+
+    <link href="css/theme.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
 </head>
 <body id="ctsProxy" ng-app="cts" breakpoint>
 
     <div id="wrapper" ng-controller="MainController as main" ng-cloak>
-        <div id="header" class="navbar-fixed-top">
-            <h1 ng-if="breakpoint.sm || breakpoint.md || breakpoint.lg" class="site-name">Chemical Translation Service</h1>
-            <h1 ng-if="breakpoint.xs" class="site-name">CTS</h1>
-            <div class="ucd-logo"><strong>UC DAVIS</strong></div>
-            <ul class="menu">
-                <li><a href="#/"><i class="fa fa-file-o" aria-hidden="true"></i> SINGLE CONVERSION</a></li>
-                <li><a href="#/batch"><i class="fa fa-files-o" aria-hidden="true"></i> BATCH CONVERSION</a></li>
-                <li><a href="#/services"><i class="fa fa-question-circle" aria-hidden="true"></i> SERVICES</a></li>
-            </ul>
-        </div>
+        <nav-bar></nav-bar>
+
+        <!--<div class="ucd-logo"><strong>UC DAVIS</strong></div>-->
 
         <div id="page-wrapper">
             <ng-view></ng-view>
@@ -44,8 +39,11 @@
 
     <script type="text/javascript" src="js/service.js"></script>
     <script type="text/javascript" src="js/mainController.js"></script>
+    <script type="text/javascript" src="navigation/navBarDirective.js"></script>
+    <script type="text/javascript" src="results/resultTableDirective.js"></script>
     <script type="text/javascript" src="js/translationService.js"></script>
-    <script type="text/javascript" src="js/downloadService.js"></script>
+    <script type="text/javascript" src="download/downloadService.js"></script>
+    <script type="text/javascript" src="download/downloadDirective.js"></script>
     <script type="text/javascript" src="js/resultFilter.js"></script>
 
 </body>

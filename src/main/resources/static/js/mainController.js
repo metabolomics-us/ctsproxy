@@ -1,14 +1,13 @@
 (function() {
     'use strict';
 
-    angular
-        .module('cts')
+    angular.module('cts')
         .controller('MainController', MainController);
 
 
-    MainController.$inject = ['$scope', '$timeout', '$http', '$q', '$location', 'translation', 'download', 'FileUploader'];
+    MainController.$inject = ['$scope', '$timeout', '$http', '$q', '$location', '$anchorScroll', 'translation', 'download', 'FileUploader'];
 
-    function MainController($scope, $timeout, $http, $q, $location, translation, download, FileUploader) {
+    function MainController($scope, $timeout, $http, $q, $location, $anchorScroll, translation, download, FileUploader) {
         var vm = this;
 
         vm.query = {
@@ -140,6 +139,12 @@
             $timeout(function() {
                 download.export(vm.query, vm.results, vm.exportStyle, vm.topHit, vm.exportType);
             }, 100);
+        }
+
+        $scope.scrollTo = function(id) {
+            $location.hash(id);
+
+            $anchorScroll();
         }
     }
 
