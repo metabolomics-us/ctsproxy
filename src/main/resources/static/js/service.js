@@ -15,6 +15,7 @@ angular.module('cts', ['ngRoute', 'ngBreakpoint', 'angularFileUpload', 'btorfs.m
                 templateUrl: "views/services.htm"
             });
 
+        $locationProvider.html5Mode(true);
         $locationProvider.hashPrefix("");
     }).run(['$anchorScroll', function($anchorScroll) {
         $anchorScroll.yOffset = 60;

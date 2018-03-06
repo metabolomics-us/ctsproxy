@@ -146,6 +146,16 @@
 
             $anchorScroll();
         }
+
+        $scope.toggleShortcutBox = function() {
+            if (document.getElementById('shortcut-box-content').style.right == '0px') {
+                document.getElementById('shortcut-box-content').style.right = '-300px';
+                document.getElementById('shortcut-box-tab').style.right = '-1px';
+            } else {
+                document.getElementById('shortcut-box-content').style.right = '0px';
+                document.getElementById('shortcut-box-tab').style.right = '299px';
+            }
+        }
     }
 
 })();
