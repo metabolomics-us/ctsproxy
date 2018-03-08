@@ -31,8 +31,8 @@ public class SwaggerConfig {
               "Connects the new web GUI to the old CTS API.",
               "2.6.15",
               "",
-              new Contact("Diego Pedrosa", "http://cts.fiehnlab.ucdavis.edu", "dpedrosa@ucdavis.edu"),
-              "LGPL", "https://bitbucket.org/fiehnlab/fiehnlab-cts/src/5f2bb96ec81e6249efdf477729368bcf16cacd97/COPYING.LESSER?at=master",
-              Collections.emptyList());
+              "",
+              "",
+              "");
     }
 }

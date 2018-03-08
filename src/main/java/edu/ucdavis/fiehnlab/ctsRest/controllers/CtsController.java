@@ -83,27 +83,27 @@ public class CtsController {
 
     /******* POST REQUESTS ********/
 
-//    @Cacheable("mol2inchi")
-//    @RequestMapping(path = "/rest/moltoinchi", method= RequestMethod.POST, produces = "application/json")
-//    InchiPairResponse mol2Inchi(String mol) {
-//        return client.mol2Inchi(mol);
-//    }
-//
-//    @Cacheable("smiles2inchi")
-//    @RequestMapping(path = "/rest/smilestoinchi", method = RequestMethod.POST, produces = "application/json")
-//    String smiles2Inchi(@Param("smiles") String smilesCode) {
-//	    return client.smiles2Inchi(smilesCode);
-//    }
-//
-//    @Cacheable("inchi2inchikey")
-//    @RequestMapping(path = "/rest/inchicodetoinchikey", method = RequestMethod.POST, produces = "application/json")
-//    Code2KeyResponse inchiCode2InchiKey(@Param("inchicode") String inchi) {
-//	    return client.inchiCode2InchiKey(inchi);
-//    }
-//
-//    @Cacheable("inchi2mol")
-//    @RequestMapping(path = "/rest/inchicodetomol", method = RequestMethod.POST, produces = "application/json")
-//    MoleculeResponse inchiCode2Mol(@Param("inchicode") String inchi) {
-//	    return client.inchi2Mol(inchi);
-//    }
+    @Cacheable("mol2inchi")
+    @RequestMapping(path = "/rest/moltoinchi", method= RequestMethod.POST, produces = "application/json")
+    InchiPairResponse mol2Inchi(String mol) {
+        return client.mol2Inchi(mol);
+    }
+
+    @Cacheable("smiles2inchi")
+    @RequestMapping(path = "/rest/smilestoinchi", method = RequestMethod.POST, produces = "application/json")
+    String smiles2Inchi(@Param("smiles") String smilesCode) {
+	    return client.smiles2Inchi(smilesCode);
+    }
+
+    @Cacheable("inchi2inchikey")
+    @RequestMapping(path = "/rest/inchicodetoinchikey", method = RequestMethod.POST, produces = "application/json")
+    Code2KeyResponse inchiCode2InchiKey(@Param("inchicode") String inchi) {
+	    return client.inchiCode2InchiKey(inchi);
+    }
+
+    @Cacheable("inchi2mol")
+    @RequestMapping(path = "/rest/inchicodetomol", method = RequestMethod.POST, produces = "application/json")
+    MoleculeResponse inchiCode2Mol(@Param("inchicode") String inchi) {
+	    return client.inchi2Mol(inchi);
+    }
 }
