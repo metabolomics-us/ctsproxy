@@ -82,12 +82,12 @@ public class CtsClientTest {
 		assertTrue(res.contains("ChemSpider"));
 	}
 
-	@Test
-	public void testChemifyQuery() {
-		String res = client.chemifyQuery("alanine");
-
-		assertNotNull(res);
-	}
+//	@Test
+//	public void testChemifyQuery() {
+//		String res = client.chemifyQuery("alanine");
+//
+//		assertNotNull(res);
+//	}
 
 	@Test
 	public void testBiologicalCount() {
@@ -159,7 +159,7 @@ public class CtsClientTest {
 
 	@Test
 	public void testMol2Inchi() {
-		InchiPairResponse res = client.mol2Inchi("{\"mol\":\"" + fullMol + "\"}");
+        InchiPairResponse res = client.mol2Inchi("{\"mol\":\"" + fullMol + "\"}");
 
 		assertNotNull(res);
 		assertEquals(inchikey, res.inchikey);
