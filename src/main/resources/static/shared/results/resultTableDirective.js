@@ -11,7 +11,6 @@
             scope.pageSize = 10;
 
             scope.$watch('ngModel', function(newVal) {
-                console.log('model changed', newVal);
                 scope.resultCount = Object.keys(newVal).length;
                 scope.pageCount = Math.ceil(scope.resultCount / scope.pageSize);
             }, true);
