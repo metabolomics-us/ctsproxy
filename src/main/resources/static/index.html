@@ -13,17 +13,17 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <!--Angular File Upload-->
-    <script src="node_modules/angular-file-upload/dist/angular-file-upload.min.js"></script>
+    <script src="assets/js/angular-file-upload/dist/angular-file-upload.min.js"></script>
     <!--Angular Breakpoint-->
-    <script src="node_modules/angular-breakpoint/dist/angular-breakpoint.min.js"></script>
+    <script src="assets/js/angular-breakpoint/dist/angular-breakpoint.min.js"></script>
     <!--Angular Bootstrap Multiselect-->
-    <script src="bower_components/angular-bootstrap-multiselect/dist/angular-bootstrap-multiselect.min.js"></script>
+    <script src="assets/js/angular-bootstrap-multiselect/dist/angular-bootstrap-multiselect.min.js"></script>
     <!--UI Bootstrap-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/2.5.0/ui-bootstrap-tpls.min.js" integrity="sha256-tyfWW2LtJQNI+l3F0h6xDV/ij6Mfn8lwSKHWOsmEgXM=" crossorigin="anonymous"></script>
-    <link href="css/font-awesome.min.css" rel="stylesheet">
 
-    <link href="css/theme.css" rel="stylesheet">
-    <link href="css/main.css" rel="stylesheet">
+    <link href="assets/css/font-awesome.min.css" rel="stylesheet">
+    <link href="assets/css/theme.css" rel="stylesheet">
+    <link href="assets/css/main.css" rel="stylesheet">
     <base href="/">
 </head>
 <body id="ctsProxy" ng-app="cts" breakpoint>
@@ -36,15 +36,17 @@
         </div>
     </div>
 
-    <script type="text/javascript" src="js/service.js"></script>
-    <script type="text/javascript" src="js/mainController.js"></script>
-    <script type="text/javascript" src="navigation/navBarDirective.js"></script>
-    <script type="text/javascript" src="navigation/shortcutBoxDirective.js"></script>
-    <script type="text/javascript" src="results/resultTableDirective.js"></script>
-    <script type="text/javascript" src="js/translationService.js"></script>
-    <script type="text/javascript" src="download/downloadService.js"></script>
-    <script type="text/javascript" src="download/downloadDirective.js"></script>
-    <script type="text/javascript" src="js/resultFilter.js"></script>
+    <script type="text/javascript" src="app.module.js"></script>
+    <script type="text/javascript" src="app.routes.js"></script>
+
+    <script type="text/javascript" src="shared/download/downloadService.js"></script>
+    <script type="text/javascript" src="shared/download/downloadDirective.js"></script>
+    <script type="text/javascript" src="shared/main/mainController.js"></script>
+    <script type="text/javascript" src="shared/navigation/navigationDirective.js"></script>
+    <script type="text/javascript" src="shared/results/resultTableDirective.js"></script>
+    <script type="text/javascript" src="shared/results/resultTableFilter.js"></script>
+    <script type="text/javascript" src="shared/sidebar/sidebarDirective.js"></script>
+    <script type="text/javascript" src="shared/translation/translationService.js"></script>
 
 </body>
 </html>

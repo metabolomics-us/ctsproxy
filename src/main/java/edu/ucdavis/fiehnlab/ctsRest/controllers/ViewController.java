@@ -11,6 +11,7 @@ public class ViewController {
     *
     * */
     @RequestMapping({
+            "/",
             "/batch",
             "/services"
     })
