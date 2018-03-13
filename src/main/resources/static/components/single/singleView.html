@@ -1,6 +1,11 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12">
+            <div ng-if="main.errors.length > 0" class="alert alert-danger alert-dismissible" style="margin-top: 20px;">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <div><strong>Error {{main.errors[0].status}}</strong></div>
+                <div>{{main.errors[0].error}}</div>
+            </div>
             <h2>Simple Conversion</h2>
             <p>Enter your query string and select your source and target types. Enter to submit.</p>
         </div>
@@ -47,5 +52,7 @@
                 <download-results export-style="main.exportStyle" export-type="main.exportType" top-hit="main.topHit" download-fn="singleDownloadService()"></download-results>
             </div>
         </div>
+
+        <div class="col-xs-12">Issues? Let us know on <a href="https://bitbucket.org/fiehnlab/ctsproxy/issues?status=new&status=open">BitBucket</a>.</div>
     </div>
 </div>
