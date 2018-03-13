@@ -2,6 +2,9 @@ package edu.ucdavis.fiehnlab.ctsRest.client;
 
 import edu.ucdavis.fiehnlab.config.CtsClientConfiguration;
 import edu.ucdavis.fiehnlab.ctsRest.model.*;
+import feign.Body;
+import feign.Headers;
+import feign.Param;
 import org.springframework.cloud.netflix.feign.FeignClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +24,7 @@ public interface CtsClient {
 	List<ConversionResult> convert(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("searchTerm") String searchTerm);
 
 	@RequestMapping(path = "/service/score/{from}/{value}/{algorithm}", method = RequestMethod.GET)
-	String score(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("algorithm") String algorithm);
+	String score(@PathVariable("from") String from, @PathVariable("value") String value, @PathVariable("algorithm") String algorithm);
 
 	@RequestMapping(path = "/service/inchikeytomol/{inchikey}", method = RequestMethod.GET)
 	MoleculeResponse inchiKey2Mol(@PathVariable("inchikey") String inchikey);
@@ -41,8 +44,8 @@ public interface CtsClient {
 	@RequestMapping(path = "/service/countBiological/{inchikey}", method = RequestMethod.GET)
 	Map<String, Integer> compoundBiologicalCount(@PathVariable("inchikey") String inchikey);
 
-	@RequestMapping(path = "/chemify/rest/identify/{name}", method = RequestMethod.GET)
-	String chemifyQuery(@PathVariable("name") String name);
+//	@RequestMapping(path = "/chemify/rest/identify/{name}", method = RequestMethod.GET)
+//	String chemifyQuery(@PathVariable("name") String name);
 
 	@RequestMapping(path = "/service/conversion/fromValues", method = RequestMethod.GET)
 	List<String> getSourceIdNames();
@@ -50,15 +53,26 @@ public interface CtsClient {
 	@RequestMapping(path = "/service/conversion/toValues", method = RequestMethod.GET)
 	List<String> getTargetIdNames();
 
-	@RequestMapping(path = "/service/moltoinchi", method = RequestMethod.POST, consumes = "application/json")
-	InchiPairResponse mol2Inchi(String mol);
+	@RequestMapping(path = "/service/extidScore/{extidName}", method = RequestMethod.GET)
+    ExtidScoreResponse getExtidCount(@PathVariable("extidName") String extidName);
 
-	@RequestMapping(path = "/service/inchitomol", method = RequestMethod.POST, consumes = "application/json")
-	MoleculeResponse inchi2Mol(String inchicode);
+    @Body("{\"mol\": \"{mol}\"}")
+    @RequestMapping(path = "/service/moltoinchi", method = RequestMethod.POST)
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    InchiPairResponse mol2Inchi(String mol);
 
-	@RequestMapping(path = "/service/smilestoinchi", method = RequestMethod.POST, consumes = "application/json")
-	String smiles2Inchi(String smilesCode);
+    @Body("{\"inchicode\": \"{inchicode}\"}")
+	@RequestMapping(path = "/service/inchitomol", method = RequestMethod.POST)
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+	MoleculeResponse inchi2Mol(@Param("inchicode") String inchicode);
 
-	@RequestMapping(path = "/service/inchicodetoinchikey", method = RequestMethod.POST, consumes = "application/json")
-	Code2KeyResponse inchiCode2InchiKey(String inchiCode);
+    @Body("{\"smiles\": \"{smiles}\"}")
+	@RequestMapping(path = "/service/smilestoinchi", method = RequestMethod.POST)
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+	String smiles2Inchi(@Param("smiles") String smiles);
+
+    @Body("{\"inchicode\": \"{inchicode}\"}")
+	@RequestMapping(path = "/service/inchicodetoinchikey", method = RequestMethod.POST)
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+	Code2KeyResponse inchiCode2InchiKey(@Param("inchicode") String inchicode);
 }

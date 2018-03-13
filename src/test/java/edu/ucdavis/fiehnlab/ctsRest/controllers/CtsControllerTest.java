@@ -64,9 +64,9 @@ public class CtsControllerTest extends ApplicationTests {
 
 	@Test
 	public void getIndex() throws Exception {
-		mockMvc.perform(get("/").accept(MediaType.APPLICATION_JSON))
+		mockMvc.perform(get("/").accept(MediaType.TEXT_HTML))
 				.andExpect(status().isOk())
-				.andExpect(content().string(equalTo("CTS main page")));
+				.andExpect(content().string(equalTo("")));
 	}
 
 	@Test

@@ -1,6 +1,8 @@
 spring:
   application:
     name: CtsRest
+  main:
+    web-environment: true
 
 ribbon:
   eureka:
@@ -17,3 +19,14 @@ fiehnlab:
       name: CtsWrapper
       connectTimeoutMillis: 1000
       readTimeoutMillis: 120000
+
+zuul:
+  debug:
+    request: true
+
+  routes:
+    oldcts:
+      path: /service/**
+      url: http://cts.fiehnlab.ucdavis.edu
+      stripPrefix: false
+

@@ -1,0 +1,57 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <h2>Batch Conversion</h2>
+            <p>Convert any number of identifiers. Separate entries with line breaks, and select your target identifiers from the dropdown.</p>
+            <p>You can also upload your source data as a text file.</p>
+            <p>To begin conversion, click anywhere outside the input box.</p>
+        </div>
+
+        <div class="col-sm-12">
+            <div class="row">
+                <form name="batchQueryForm">
+                    <fieldset>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                        <textarea class="form-control"
+                                  type="text"
+                                  name="query"
+                                  id="query"
+                                  rows="6"
+                                  ng-model="main.batchQuery.string"
+                                  ng-model-options="{ updateOn: 'blur' }"
+                                  ng-disabled="main.loading"
+                                  placeholder="Enter IDs for conversion"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <input type="file" nv-file-select uploader="main.uploader" />
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <select class="form-control" ng-model="main.batchQuery.from" ng-options="from as from for from in main.fromValues | orderBy"></select>
+                            </div>
+                            <div class="form-group text-center">
+                                <i ng-hide="main.loading" class="fa fa-arrow-down fa-2x" aria-hidden="true"></i>
+                                <i ng-show="main.loading" class="fa fa-spinner fa-pulse fa-2x" aria-hidden="true"></i>
+                                <div ng-show="main.loading">{{main.loadingCounter}} of {{main.loadingTotal}}</div>
+                            </div>
+                            <multiselect ng-model="main.batchQuery.to" options="main.toValues" show-search="true">
+                            </multiselect>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+
+            <div ng-if="main.batchResults" class="col-sm-12" style="overflow: auto;">
+                <result-table source-column="main.batchQuery.from" columns="main.batchQuery.to" ng-model="main.batchResults"></result-table>
+            </div>
+
+            <div ng-if="main.batchResults" class="col-xs-12">
+                <div class="well">
+                    <download-results export-style="main.exportStyle" export-type="main.exportType" top-hit="main.topHit" download-fn="batchDownloadService()"></download-results>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
