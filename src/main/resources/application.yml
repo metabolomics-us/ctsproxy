@@ -27,6 +27,6 @@ zuul:
   routes:
     oldcts:
       path: /service/**
-      url: http://cts.fiehnlab.ucdavis.edu
+      url: http://oldcts.fiehnlab.ucdavis.edu
       stripPrefix: false
 
