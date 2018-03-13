@@ -29,6 +29,7 @@
 
         vm.fromValues = [];
         vm.toValues = [];
+        vm.errors = [];
 
         vm.uploader = new FileUploader();
 
@@ -51,12 +52,20 @@
         function activate() {
             translation.getFromValues()
                 .then(function(data){
-                    vm.fromValues = data;
+                    if (data.error) {
+                        vm.errors.push(data);
+                    } else {
+                        vm.fromValues = data;
+                    }
                 });
 
             translation.getToValues()
                 .then(function(data){
-                    vm.toValues = data;
+                if (data.error) {
+                        vm.errors.push(data);
+                    } else {
+                        vm.toValues = data;
+                    }
                 });
         }
 
