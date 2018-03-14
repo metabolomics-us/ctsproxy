@@ -29,6 +29,7 @@
 
         vm.fromValues = [];
         vm.toValues = [];
+        vm.queryStrings = [];
         vm.errors = [];
 
         vm.uploader = new FileUploader();
@@ -94,10 +95,10 @@
                 vm.batchResults = {};
 
                 var myGeneration = vm.generation;
-                var queryStrings = query.string.split('\n').filter(Boolean);
+                vm.queryStrings = query.string.split('\n').filter(Boolean);
                 var promise = $q.all(null);
 
-                angular.forEach(queryStrings, function(string) {
+                angular.forEach(vm.queryStrings, function(string) {
                     vm.batchResults[string] = {};
                     angular.forEach(query.to, function(to) {
                         vm.batchResults[string][to] = {};

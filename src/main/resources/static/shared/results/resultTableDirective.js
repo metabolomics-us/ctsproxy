@@ -10,7 +10,7 @@
             scope.page = 1;
             scope.pageSize = 10;
 
-            scope.$watch('ngModel', function(newVal) {
+            scope.$watch('ordering', function(newVal) {
                 scope.resultCount = Object.keys(newVal).length;
                 scope.pageCount = Math.ceil(scope.resultCount / scope.pageSize);
             }, true);
@@ -21,6 +21,7 @@
             scope: {
                 sourceColumn: '=',
                 columns: '=',
+                ordering: '=',
                 ngModel: '='
             },
             replace: true,

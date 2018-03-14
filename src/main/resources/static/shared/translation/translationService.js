@@ -25,6 +25,7 @@
                 .then(function(response){
                     return response.data;
                 }, function(error) {
+                    console.error(error);
                     return error.data;
                 });
         }
@@ -34,6 +35,7 @@
                 .then(function(response){
                     return response.data;
                 }, function(error) {
+                    console.error(error);
                     return error.data;
                 });
         }
@@ -47,12 +49,14 @@
                         }
                         return response.data;
                     }, function(error){
+                        console.error(error);
                         return error.data;
                     }):
                 $http.get('/rest/convert/' + encodeURIComponent(from) + '/' + encodeURIComponent(to) + '/' + string)
                     .then(function(response){
                         return response.data[0];
                     }, function(error){
+                        console.error(error);
                         return error.data;
                     });
         }

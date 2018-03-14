@@ -5,6 +5,7 @@
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <div><strong>Error {{main.errors[0].status}}</strong></div>
                 <div>{{main.errors[0].error}}</div>
+                <div>{{main.errors[0].path}}</div>
             </div>
             <h2>Simple Conversion</h2>
             <p>Enter your query string and select your source and target types. Enter to submit.</p>
@@ -44,7 +45,7 @@
         </div>
 
         <div ng-if="main.results" class="col-xs-12">
-            <result-table source-column="main.query.from" columns="[main.query.to]" ng-model="main.results"></result-table>
+            <result-table source-column="main.query.from" columns="[main.query.to]" ordering="[main.query.string]" ng-model="main.results"></result-table>
         </div>
 
         <div ng-if="main.results" class="col-xs-12">
