@@ -17,10 +17,10 @@
 
         //////////
 
-        function exportFn(query, results, style, topHit, type) {
+        function exportFn(query, queryStrings, results, style, topHit, type) {
             var data = (style === 'simplified') ?
-                processSimplified(query, results, topHit) :
-                process(query, results, topHit);
+                processSimplified(query, queryStrings, results, topHit) :
+                process(query, queryStrings, results, topHit);
 
             function pad2(n) {
                 return (n < 10 ? '0' : '') + n;
@@ -40,10 +40,12 @@
             document.body.removeChild(hiddenElement);
         }
 
-        function processSimplified(query, results, topHit) {
+        function processSimplified(query, queryStrings, results, topHit) {
             var data = 'From,To,Term,Result,Score';
 
-            for (var searchTerm in results) {
+            for (var i = 0; i < queryStrings.length; i++) {
+                var searchTerm = queryStrings[i];
+
                 for (var target in results[searchTerm]) {
                     var resultList = results[searchTerm][target];
 
@@ -70,11 +72,11 @@
             return data;
         }
 
-        function process(query, results, topHit) {
+        function process(query, queryStrings, results, topHit) {
 
             var source = query.from,
                 targets = (typeof query.to === 'string') ? [query.to] : query.to,
-                searchTerms = Object.keys(results),
+                searchTerms = queryStrings,
                 data = source + ',';
 
             data += targets.map(function(target) {

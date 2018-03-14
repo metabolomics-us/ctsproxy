@@ -135,13 +135,13 @@
 
         $scope.batchDownloadService = function() {
             $timeout(function() {
-                download.export(vm.batchQuery, vm.batchResults, vm.exportStyle, vm.topHit, vm.exportType);
+                download.export(vm.batchQuery, vm.queryStrings, vm.batchResults, vm.exportStyle, vm.topHit, vm.exportType);
             }, 100);
         }
 
         $scope.singleDownloadService = function() {
             $timeout(function() {
-                download.export(vm.query, vm.results, vm.exportStyle, vm.topHit, vm.exportType);
+                download.export(vm.query, [vm.query.string], vm.results, vm.exportStyle, vm.topHit, vm.exportType);
             }, 100);
         }
 
