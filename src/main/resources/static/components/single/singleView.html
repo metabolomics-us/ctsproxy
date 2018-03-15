@@ -4,8 +4,7 @@
             <div ng-if="main.errors.length > 0" class="alert alert-danger alert-dismissible" style="margin-top: 20px;">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <div><strong>Error {{main.errors[0].status}}</strong></div>
-                <div>{{main.errors[0].error}}</div>
-                <div>{{main.errors[0].path}}</div>
+                <div>When calling {{main.errors[0].config.url}}</div>
             </div>
             <h2>Simple Conversion</h2>
             <p>Enter your query string and select your source and target types. Enter to submit.</p>

@@ -4,7 +4,7 @@
             <div ng-if="main.errors.length > 0" class="alert alert-danger alert-dismissible" style="margin-top: 20px;">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <div><strong>Error {{main.errors[0].status}}</strong></div>
-                <div>{{main.errors[0].error}}</div>
+                <div>When calling {{main.errors[0].config.url}}</div>
             </div>
             <h2>Batch Conversion</h2>
             <p>Convert any number of identifiers. Separate entries with line breaks, and select your target identifiers from the dropdown.</p>

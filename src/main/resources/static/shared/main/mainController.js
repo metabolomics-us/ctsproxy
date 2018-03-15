@@ -52,27 +52,26 @@
 
         function activate() {
             translation.getFromValues()
-                .then(function(data){
-                    if (data.error) {
-                        vm.errors.push(data);
-                    } else {
-                        vm.fromValues = data;
-                    }
+                .then(function(data) {
+                    vm.fromValues = data;
+                }, function(err) {
+                    vm.errors.push(err);
+                    console.error(err);
                 });
 
             translation.getToValues()
-                .then(function(data){
-                if (data.error) {
-                        vm.errors.push(data);
-                    } else {
-                        vm.toValues = data;
-                    }
+                .then(function(data) {
+                    vm.toValues = data;
+                }, function(err) {
+                    vm.errors.push(err);
+                    console.error(err);
                 });
         }
 
         $scope.$watch(function() { return vm.query; }, function(query) {
             if (query.string !== '') {
                 vm.loading = true;
+                vm.errors = [];
 
                 translation.convert(query.from, query.to, query.string)
                     .then(function(data) {
@@ -80,6 +79,9 @@
                         vm.results = {};
                         vm.results[query.string] = {};
                         vm.results[query.string][query.to] = data.result;
+                    }).catch(function(err) {
+                        vm.loading = false;
+                        vm.errors.push(err);
                     });
             }
         }, true);
@@ -90,6 +92,7 @@
 
                 vm.generation += 1;
                 vm.loading = true;
+                vm.errors = [];
                 vm.loadingCounter = 0;
                 vm.loadingTotal = 0;
                 vm.batchResults = {};
@@ -113,9 +116,9 @@
                                         if (vm.generation === myGeneration) {
                                             vm.loadingCounter += 1;
                                         }
-                                    }).catch(function(error) {
+                                    }).catch(function(err) {
                                         vm.batchResults[string][to] = [];
-                                        console.error(error);
+                                        vm.errors.push(err);
 
                                         return;
                                     });
@@ -126,8 +129,8 @@
 
                 promise.then(function() {
                     vm.loading = false;
-                }).catch(function(error) {
-                    console.error(error);
+                }).catch(function(err) {
+                    console.log(err);
                 });
 
             }
