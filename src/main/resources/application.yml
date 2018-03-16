@@ -15,7 +15,7 @@ logging.level.edu.ucdavis.fiehnlab.cts.ctsRest: DEBUG
 fiehnlab:
   cts:
     config:
-      url: http://oldcts.fiehnlab.ucdavis.edu
+      url: http://cts
       name: CtsWrapper
       connectTimeoutMillis: 1000
       readTimeoutMillis: 120000
@@ -27,6 +27,6 @@ zuul:
   routes:
     oldcts:
       path: /service/**
-      url: http://oldcts.fiehnlab.ucdavis.edu
+      url: http://cts
       stripPrefix: false
 
