@@ -7,7 +7,7 @@
                 <div>When calling {{main.errors[0].config.url}}</div>
             </div>
             <h2>Simple Conversion</h2>
-            <p>Enter your query string and select your source and target types. Enter to submit.</p>
+            <p>Welcome to the CTS. To begin, enter your query in the box below, select your source and destination IDs, and click the Convert button.</p>
         </div>
 
         <div class="col-sm-12">
@@ -30,8 +30,11 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-2 text-center arrow-box">
-                            <i ng-hide="main.loading" ng-class="{ 'fa fa-arrow-down fa-2x': breakpoint.sm||breakpoint.xs, 'fa fa-arrow-right fa-2x': breakpoint.md||breakpoint.lg }" aria-hidden="true"></i>
-                            <i ng-show="main.loading" class="fa fa-spinner fa-pulse fa-2x" aria-hidden="true"></i>
+                            <button type="button" class="btn btn-default" ng-click="convertSingle(main.query)">
+                                Convert
+                                <i ng-hide="main.loading" ng-class="{ 'fa fa-arrow-down': breakpoint.sm||breakpoint.xs, 'fa fa-arrow-right': breakpoint.md||breakpoint.lg }" aria-hidden="true"></i>
+                                <i ng-show="main.loading" class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+                            </button>
                         </div>
                         <div class="col-xs-12 col-sm-5 target-box">
                             <div class="form-group">
