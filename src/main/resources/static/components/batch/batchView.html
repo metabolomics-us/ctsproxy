@@ -7,9 +7,7 @@
                 <div>When calling {{main.errors[0].config.url}}</div>
             </div>
             <h2>Batch Conversion</h2>
-            <p>Convert any number of input strings to any number of output ID types.</p>
-            <p>To begin, enter your inputs in the box below. Each input string should be on its own line. Select your source and destination IDs, and click the Convert button.</p>
-            <p>If you have your input IDs saved to a file, you can also use the upload button below.</p>
+            <p>To convert multiple identifiers, enter them in the box below or upload them as a text file. IDs should be separated by line breaks. Select your source and target types, and click the Convert button. You may select multiple target types.</p>
         </div>
 
         <div class="col-sm-12">
@@ -44,8 +42,10 @@
                                     <div ng-show="main.loading">{{main.loadingCounter}} of {{main.loadingTotal}}</div>
                                 </button>
                             </div>
-                            <multiselect ng-model="main.batchQuery.to" options="main.toValues" show-search="true">
-                            </multiselect>
+                            <div class="form-group">
+                                <multiselect ng-model="main.batchQuery.to" options="main.toValues" show-search="true">
+                                </multiselect>
+                            </div>
                         </div>
                     </fieldset>
                 </form>

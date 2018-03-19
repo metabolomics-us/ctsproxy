@@ -1,13 +1,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-12">
-            <div ng-if="main.errors.length > 0" class="alert alert-danger alert-dismissible" style="margin-top: 20px;">
+            <div ng-if="amain.errors.length > 0" class="alert alert-danger alert-dismissible" style="margin-top: 20px;">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <div><strong>Error {{main.errors[0].status}}</strong></div>
                 <div>When calling {{main.errors[0].config.url}}</div>
             </div>
             <h2>Simple Conversion</h2>
-            <p>Welcome to the CTS. To begin, enter your query in the box below, select your source and destination IDs, and click the Convert button.</p>
+            <p>To convert a single identifier, enter it in the box below, select source and target types, and hit the Convert button.</p>
         </div>
 
         <div class="col-sm-12">

@@ -40,7 +40,7 @@
 
         function convert(from, to, string) {
             return (to === 'InChIKey') ?
-                $http.get('/rest/score/' + encodeURIComponent(from) + '/' + encodeURIComponent(string) + '/biological')
+                $http.get('/rest/score/' + encodeURIComponent(from) + '/' + string + '/biological')
                     .then(function(response) {
                         if (response.data && response.data.result && response.data.result[0].value === 'no scoring done') {
                             return { result: [] };
@@ -49,7 +49,7 @@
                     }, function(err) {
                         return $q.reject(err);
                     }):
-                $http.get('/rest/convert/' + encodeURIComponent(from) + '/' + encodeURIComponent(to) + '/' + encodeURIComponent(string))
+                $http.get('/rest/convert/' + encodeURIComponent(from) + '/' + encodeURIComponent(to) + '/' + string)
                     .then(function(response) {
                         return response.data[0];
                     }, function(err) {
