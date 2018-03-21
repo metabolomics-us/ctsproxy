@@ -68,7 +68,7 @@
                 });
         }
 
-        $scope.$watch(function() { return vm.query; }, function(query) {
+        $scope.convertSingle = function(query) {
             if (query.string !== '') {
                 vm.loading = true;
                 vm.errors = [];
@@ -84,11 +84,10 @@
                         vm.errors.push(err);
                     });
             }
-        }, true);
+        };
 
-        $scope.$watch(function() { return vm.batchQuery; }, function(query, oldQuery) {
-            if (query.string !== '' && query.to.length !== 0 &&
-                (query.string !== oldQuery.string || query.to.length !== oldQuery.to.length || query.from !== oldQuery.from)) {
+        $scope.convertBatch = function(query) {
+            if (query.string !== '' && query.to.length !== 0) {
 
                 vm.generation += 1;
                 vm.loading = true;
@@ -134,7 +133,7 @@
                 });
 
             }
-        }, true);
+        };
 
         $scope.batchDownloadService = function() {
             $timeout(function() {

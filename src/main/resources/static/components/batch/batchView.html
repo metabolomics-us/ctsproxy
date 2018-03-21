@@ -7,9 +7,7 @@
                 <div>When calling {{main.errors[0].config.url}}</div>
             </div>
             <h2>Batch Conversion</h2>
-            <p>Convert any number of identifiers. Separate entries with line breaks, and select your target identifiers from the dropdown.</p>
-            <p>You can also upload your source data as a text file.</p>
-            <p>To begin conversion, click anywhere outside the input box.</p>
+            <p>To convert multiple identifiers, enter them in the box below or upload them as a text file. IDs should be separated by line breaks. Select your source and target types, and click the Convert button. You may select multiple target types.</p>
         </div>
 
         <div class="col-sm-12">
@@ -37,12 +35,17 @@
                                 <select class="form-control" ng-model="main.batchQuery.from" ng-options="from as from for from in main.fromValues | orderBy"></select>
                             </div>
                             <div class="form-group text-center">
-                                <i ng-hide="main.loading" class="fa fa-arrow-down fa-2x" aria-hidden="true"></i>
-                                <i ng-show="main.loading" class="fa fa-spinner fa-pulse fa-2x" aria-hidden="true"></i>
-                                <div ng-show="main.loading">{{main.loadingCounter}} of {{main.loadingTotal}}</div>
+                                <button type="button" class="btn btn-default" ng-click="convertBatch(main.batchQuery)">
+                                    Convert
+                                    <i ng-hide="main.loading" class="fa fa-arrow-down" aria-hidden="true"></i>
+                                    <i ng-show="main.loading" class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+                                    <div ng-show="main.loading">{{main.loadingCounter}} of {{main.loadingTotal}}</div>
+                                </button>
                             </div>
-                            <multiselect ng-model="main.batchQuery.to" options="main.toValues" show-search="true">
-                            </multiselect>
+                            <div class="form-group">
+                                <multiselect ng-model="main.batchQuery.to" options="main.toValues" show-search="true">
+                                </multiselect>
+                            </div>
                         </div>
                     </fieldset>
                 </form>

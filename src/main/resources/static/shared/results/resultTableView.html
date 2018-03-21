@@ -5,7 +5,7 @@
             <th ng-repeat-start="col in columns">{{col}}</th>
             <th ng-repeat-end ng-if="col === 'InChIKey'">Score</th>
         </tr>
-        <tr ng-repeat="term in ordering | limitBatchResults: 10: (page - 1) * 10">
+        <tr ng-repeat="term in ordering | limitBatchResults: pageSize: (page - 1) * pageSize">
             <td>{{term}}</td>
             <td ng-repeat-start="to in columns">
                 <div ng-hide="expandResults">
@@ -35,5 +35,5 @@
             </td>
         </tr>
     </table>
-    <ul uib-pagination total-items="resultCount" ng-model="page" max-size="5" class="pagination-sm" boundary-links="true" force-ellipses="true" num-page="pageCount"></ul>
+    <ul ng-show="pageCount > 1" uib-pagination total-items="resultCount" ng-model="page" max-size="5" class="pagination-sm" boundary-links="true" force-ellipses="true" num-page="pageCount"></ul>
 </div>
