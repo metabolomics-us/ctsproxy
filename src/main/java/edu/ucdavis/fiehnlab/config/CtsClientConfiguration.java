@@ -3,7 +3,6 @@ package edu.ucdavis.fiehnlab.config;
 import com.google.common.cache.CacheBuilder;
 import feign.Logger;
 import feign.Request;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.guava.GuavaCache;
 import org.springframework.cache.support.SimpleCacheManager;
@@ -17,7 +16,6 @@ import java.util.concurrent.TimeUnit;
  * Created by diego on 2/16/2017.
  */
 @Configuration
-@EnableAutoConfiguration
 @EnableCaching
 public class CtsClientConfiguration {
 	@Bean

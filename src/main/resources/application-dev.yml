@@ -1,0 +1,32 @@
+spring:
+  application:
+    name: CtsRest
+  main:
+    web-environment: true
+
+ribbon:
+  eureka:
+    enabled: false
+
+feign.hystrix.enabled: false
+
+logging.level.edu.ucdavis.fiehnlab.cts.ctsRest: DEBUG
+
+fiehnlab:
+  cts:
+    config:
+      url: http://oldcts.fiehnlab.ucdavis.edu
+      name: CtsWrapper
+      connectTimeoutMillis: 1000
+      readTimeoutMillis: 120000
+
+zuul:
+  debug:
+    request: true
+
+  routes:
+    oldcts:
+      path: /service/**
+      url: http://oldcts.fiehnlab.ucdavis.edu
+      stripPrefix: false
+

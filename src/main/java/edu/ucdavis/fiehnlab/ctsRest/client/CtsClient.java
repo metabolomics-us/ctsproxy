@@ -56,22 +56,18 @@ public interface CtsClient {
 	@RequestMapping(path = "/service/extidScore/{extidName}", method = RequestMethod.GET)
     ExtidScoreResponse getExtidCount(@PathVariable("extidName") String extidName);
 
-    @Body("{\"mol\": \"{mol}\"}")
     @RequestMapping(path = "/service/moltoinchi", method = RequestMethod.POST)
     @Headers("Content-Type: application/x-www-form-urlencoded")
     InchiPairResponse mol2Inchi(String mol);
 
-    @Body("{\"inchicode\": \"{inchicode}\"}")
 	@RequestMapping(path = "/service/inchitomol", method = RequestMethod.POST)
     @Headers("Content-Type: application/x-www-form-urlencoded")
 	MoleculeResponse inchi2Mol(@Param("inchicode") String inchicode);
 
-    @Body("{\"smiles\": \"{smiles}\"}")
 	@RequestMapping(path = "/service/smilestoinchi", method = RequestMethod.POST)
     @Headers("Content-Type: application/x-www-form-urlencoded")
 	String smiles2Inchi(@Param("smiles") String smiles);
 
-    @Body("{\"inchicode\": \"{inchicode}\"}")
 	@RequestMapping(path = "/service/inchicodetoinchikey", method = RequestMethod.POST)
     @Headers("Content-Type: application/x-www-form-urlencoded")
 	Code2KeyResponse inchiCode2InchiKey(@Param("inchicode") String inchicode);
