@@ -13,7 +13,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.mock.http.MockHttpOutputMessage;
-import org.springframework.mock.web.MockMultipartHttpServletRequest;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -21,7 +20,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.io.Console;
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.equalTo;
@@ -37,96 +35,107 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(value = "${fiehnlab.cts.config.name}")
 @EnableFeignClients
 public class CtsControllerTest extends ApplicationTests {
-	private HttpMessageConverter mappingJackson2HttpMessageConverter;
+    private HttpMessageConverter mappingJackson2HttpMessageConverter;
 
-	@Autowired
-	private WebApplicationContext webApplicationContext;
+    @Autowired
+    private WebApplicationContext webApplicationContext;
 
-	@Autowired
-	void setConverters(HttpMessageConverter<?>[] converters) {
+//    @Autowired
+//    private TranslationService translator;
 
-		for (HttpMessageConverter<?> hmc : converters) {
-			if (hmc instanceof MappingJackson2HttpMessageConverter) {
-				this.mappingJackson2HttpMessageConverter = hmc;
-				break;
-			}
-		}
+    @Autowired
+    void setConverters(HttpMessageConverter<?>[] converters) {
 
-		assertNotNull("the JSON message converter must not be null", this.mappingJackson2HttpMessageConverter);
-	}
+        for (HttpMessageConverter<?> hmc : converters) {
+            if (hmc instanceof MappingJackson2HttpMessageConverter) {
+                this.mappingJackson2HttpMessageConverter = hmc;
+                break;
+            }
+        }
 
-	private MockMvc mockMvc;
+        assertNotNull("the JSON message converter must not be null", this.mappingJackson2HttpMessageConverter);
+    }
 
-	@Before
-	public void setUp() {
-		mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
-	}
+    private MockMvc mockMvc;
 
-	@Test
-	public void getIndex() throws Exception {
-		mockMvc.perform(get("/").accept(MediaType.TEXT_HTML))
-				.andExpect(status().isOk())
-				.andExpect(content().string(equalTo("")));
-	}
+    @Before
+    public void setUp() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
 
-	@Test
-	public void getSimpleConversion() throws Exception {
-		MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/rest/convert/chemical name/inchikey/ethanol").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$[0].fromIdentifier").value("chemical name"))
-				.andExpect(jsonPath("$[0].toIdentifier").value("inchikey"))
-				.andExpect(jsonPath("$[0].searchTerm").value("ethanol"))
-				.andExpect(jsonPath("$[0].result").value("LFQSCWFLJHTTHZ-UHFFFAOYSA-N")).andReturn();
+    @Test
+    public void getIndex() throws Exception {
+        mockMvc.perform(get("/").accept(MediaType.TEXT_HTML))
+            .andExpect(status().isOk())
+            .andExpect(content().string(equalTo("")));
+    }
 
-		System.out.println(res.getResponse().getContentAsString());
-	}
+    @Test
+    public void getSimpleConversion() throws Exception {
+        MvcResult res = mockMvc.perform(MockMvcRequestBuilders.get("/rest/convert/chemical name/inchikey/ethanol").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$[0].fromIdentifier").value("chemical name"))
+            .andExpect(jsonPath("$[0].toIdentifier").value("inchikey"))
+            .andExpect(jsonPath("$[0].searchTerm").value("ethanol"))
+            .andExpect(jsonPath("$[0].result").value("LFQSCWFLJHTTHZ-UHFFFAOYSA-N")).andReturn();
 
-	@Test
-	public void getFormulaExpansion() throws Exception {
-		MvcResult mvcres = mockMvc.perform(MockMvcRequestBuilders.get("/rest/expandformula/C2H6O").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.result").value("CCHHHHHHO")).andReturn();
+        System.out.println(res.getResponse().getContentAsString());
+    }
 
-		System.out.println(mvcres.getResponse().getContentAsString());
-	}
+    @Test
+    public void getFormulaExpansion() throws Exception {
+        MvcResult mvcres = mockMvc.perform(MockMvcRequestBuilders.get("/rest/expandformula/C2H6O").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.result").value("CCHHHHHHO")).andReturn();
 
-	@Test
-	public void testGetFromValues() throws Exception {
-		MvcResult mvcres = mockMvc.perform(MockMvcRequestBuilders.get("/rest/fromValues").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", hasSize(224))).andReturn();
+        System.out.println(mvcres.getResponse().getContentAsString());
+    }
 
-		System.out.println(mvcres.getResponse().getContentAsString());
-	}
+    @Test
+    public void testGetFromValues() throws Exception {
+        MvcResult mvcres = mockMvc.perform(MockMvcRequestBuilders.get("/rest/fromValues").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(224))).andReturn();
 
-	@Test
-	public void testGetToValues() throws Exception {
-		MvcResult mvcres = mockMvc.perform(MockMvcRequestBuilders.get("/rest/toValues").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$", hasSize(225))).andReturn();
+        System.out.println(mvcres.getResponse().getContentAsString());
+    }
 
-		System.out.println(mvcres.getResponse().getContentAsString());
-	}
+    @Test
+    public void testGetToValues() throws Exception {
+        MvcResult mvcres = mockMvc.perform(MockMvcRequestBuilders.get("/rest/toValues").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$", hasSize(225))).andReturn();
 
-	@Test
-	@Ignore("MockMvc doesn't have the X-Proxy-Cache header for this test to pass. Working fine in production")
-	public void testSecondCallHitsCache() throws Exception {
-		MvcResult res1 = mockMvc.perform(MockMvcRequestBuilders.get("/rest/convert/chemical name/inchikey/alanine").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andReturn();
-		Assert.assertEquals("MISS", res1.getResponse().getHeaderValue("X-Proxy-Cache"));
+        System.out.println(mvcres.getResponse().getContentAsString());
+    }
 
-		MvcResult res2 = mockMvc.perform(MockMvcRequestBuilders.get("/rest/convert/chemical name/inchikey/alanine").accept(MediaType.APPLICATION_JSON))
-				.andExpect(status().isOk())
-				.andReturn();
-		Assert.assertEquals("HIT", res2.getResponse().getHeaderValue("X-Proxy-Cache"));
+    @Test
+    @Ignore("MockMvc doesn't have the X-Proxy-Cache header for this test to pass. Working fine in production")
+    public void testSecondCallHitsCache() throws Exception {
+        MvcResult res1 = mockMvc.perform(MockMvcRequestBuilders.get("/rest/convert/chemical name/inchikey/alanine").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andReturn();
+        Assert.assertEquals("MISS", res1.getResponse().getHeaderValue("X-Proxy-Cache"));
 
-	}
+        MvcResult res2 = mockMvc.perform(MockMvcRequestBuilders.get("/rest/convert/chemical name/inchikey/alanine").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andReturn();
+        Assert.assertEquals("HIT", res2.getResponse().getHeaderValue("X-Proxy-Cache"));
 
+    }
 
-	private String json(Object o) throws IOException {
-		MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
-		this.mappingJackson2HttpMessageConverter.write(o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
-		return mockHttpOutputMessage.getBodyAsString();
-	}
+    @Test
+    public void testInchikey2Smiles() throws Exception {
+
+        MvcResult smiles = mockMvc.perform(get("/rest/convert/inchikey/smiles/LFQSCWFLJHTTHZ-UHFFFAOYSA-N").accept(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.smiles").value("CCO"))
+            .andReturn();
+    }
+
+    private String json(Object o) throws IOException {
+        MockHttpOutputMessage mockHttpOutputMessage = new MockHttpOutputMessage();
+        this.mappingJackson2HttpMessageConverter.write(o, MediaType.APPLICATION_JSON, mockHttpOutputMessage);
+        return mockHttpOutputMessage.getBodyAsString();
+    }
 }
