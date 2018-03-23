@@ -1,4 +1,4 @@
-package edu.ucdavis.fiehnlab.config;
+package edu.ucdavis.fiehnlab.ctsRest.config;
 
 import com.google.common.cache.CacheBuilder;
 import feign.Logger;
@@ -8,6 +8,7 @@ import org.springframework.cache.guava.GuavaCache;
 import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Collection;
@@ -19,7 +20,8 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 @EnableCaching
 @EnableFeignClients
-public class CtsClientConfiguration {
+@ComponentScan(basePackages = "edu.ucdavis.fiehnlab.wcmc.utilities.casetojson.config")
+public class CtsClientAutoConfiguration {
     @Bean
     Logger.Level logger() {
         return Logger.Level.FULL;

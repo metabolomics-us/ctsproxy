@@ -1,8 +1,7 @@
 package edu.ucdavis.fiehnlab.ctsRest.client;
 
-import edu.ucdavis.fiehnlab.config.CtsClientConfiguration;
+import edu.ucdavis.fiehnlab.ctsRest.config.CtsClientAutoConfiguration;
 import edu.ucdavis.fiehnlab.ctsRest.model.*;
-import feign.Body;
 import feign.Headers;
 import feign.Param;
 import org.springframework.cloud.netflix.feign.FeignClient;
@@ -18,7 +17,7 @@ import java.util.Map;
  * Created by diego on 2/16/2017.
  */
 @Service
-@FeignClient(name = "${fiehnlab.cts.config.name}", url = "${fiehnlab.cts.config.url}", configuration = CtsClientConfiguration.class)
+@FeignClient(name = "${fiehnlab.cts.config.name}", url = "${fiehnlab.cts.config.url}", configuration = CtsClientAutoConfiguration.class)
 public interface CtsClient {
     @RequestMapping(path = "/service/convert/{from}/{to}/{searchTerm}", method = RequestMethod.GET)
     List<ConversionResult> convert(@PathVariable("from") String from, @PathVariable("to") String to, @PathVariable("searchTerm") String searchTerm);

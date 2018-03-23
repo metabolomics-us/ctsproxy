@@ -1,0 +1,4 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  edu.ucdavis.fiehnlab.ctsRest.config.CtsClientAutoConfiguration,\
+  edu.ucdavis.fiehnlab.ctsRest.config.SwaggerConfig,\
+  edu.ucdavis.fiehnlab.wcmc.utilities.casetojson.config.CaseClassToJSONSerializationAutoConfiguration

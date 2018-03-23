@@ -7,9 +7,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.cloud.netflix.feign.EnableFeignClients;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.io.UnsupportedEncodingException;
@@ -23,7 +20,6 @@ import static org.junit.Assert.*;
  */
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@EnableFeignClients
 public class CtsClientTest {
 
 	private String inchikey = "MYMOFIZGZYHOMD-UHFFFAOYSA-N";
@@ -196,9 +192,4 @@ public class CtsClientTest {
 		assertTrue(res.size() > 0);
 		assertArrayEquals(new String[]{"5950", "7311724", "57383916", "602", "71080", "7311725", "51283"}, res.get(0).results.toArray());
 	}
-}
-
-@Configuration
-class TestConfig {
-
 }

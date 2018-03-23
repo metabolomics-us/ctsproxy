@@ -35,7 +35,7 @@ class TranslationService() {
 
     AtomContainerManipulator.percieveAtomTypesAndConfigureAtoms(container)
     AtomContainerManipulator.removeHydrogens(container)
-    CDKHydrogenAdder.getInstance(SilentChemObjectBuilder).addImplicitHydrogens(container)
+    CDKHydrogenAdder.getInstance(SilentChemObjectBuilder.getInstance()).addImplicitHydrogens(container)
 
     val sg = SmilesGenerator.absolute()
 
