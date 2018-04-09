@@ -23,9 +23,9 @@
         }
 
         vm.generation = 0;
-        vm.exportStyle = 'simplified'
+        vm.exportStyle = 'table'
         vm.exportType = 'csv';
-        vm.topHit = false;
+        vm.topHit = true;
 
         vm.fromValues = [];
         vm.toValues = [];
@@ -74,11 +74,11 @@
                 vm.errors = [];
 
                 translation.convert(query.from, query.to, query.string)
-                    .then(function(data) {
+                    .then(function(result) {
                         vm.loading = false;
                         vm.results = {};
                         vm.results[query.string] = {};
-                        vm.results[query.string][query.to] = data.result;
+                        vm.results[query.string][query.to] = result;
                     }).catch(function(err) {
                         vm.loading = false;
                         vm.errors.push(err);
@@ -110,8 +110,8 @@
                                 return $q.reject('Request reset');
                             } else {
                                 return translation.convert(query.from, to, string)
-                                    .then(function(data) {
-                                        vm.batchResults[string][to] = data.result;
+                                    .then(function(result) {
+                                        vm.batchResults[string][to] = result;
                                         if (vm.generation === myGeneration) {
                                             vm.loadingCounter += 1;
                                         }

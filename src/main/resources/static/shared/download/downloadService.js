@@ -18,9 +18,9 @@
         //////////
 
         function exportFn(query, queryStrings, results, style, topHit, type) {
-            var data = (style === 'simplified') ?
-                processSimplified(query, queryStrings, results, topHit) :
-                process(query, queryStrings, results, topHit);
+            var data = (style === 'list') ?
+                processList(query, queryStrings, results, topHit) :
+                processTable(query, queryStrings, results, topHit);
 
             function pad2(n) {
                 return (n < 10 ? '0' : '') + n;
@@ -40,44 +40,48 @@
             document.body.removeChild(hiddenElement);
         }
 
-        function processSimplified(query, queryStrings, results, topHit) {
-            var data = 'From,To,Term,Result,Score';
+        function processList(query, searchTerms, results, topHit) {
+            var header = 'From,To,Term,Result',
+                body = '',
+                scored = false;
 
-            for (var i = 0; i < queryStrings.length; i++) {
-                var searchTerm = queryStrings[i];
+            for (var i = 0; i < searchTerms.length; i++) {
+                var searchTerm = searchTerms[i];
 
                 for (var target in results[searchTerm]) {
                     var resultList = results[searchTerm][target];
 
-                    if (resultList.length < 1) {
-                        break;
+                    if (target === 'InChIKey') {
+                        scored = true;
                     }
 
-                    data += '\n';
+                    body += '\n';
 
                     if (topHit) {
-                        data += (target === 'InChIKey') ?
-                            query.from + ',' + target + ',"' + searchTerm + '","' + resultList[0].InChIKey + '",' + resultList[0].score :
-                            query.from + ',' + target + ',"' + searchTerm + '","' + resultList[0] + '"';
+                        body += (target === 'InChIKey') ?
+                            query.from + ',' + target + ',"' + searchTerm + '","' + resultList[0].value + '",' + resultList[0].score :
+                            query.from + ',' + target + ',"' + searchTerm + '","' + resultList[0].value + '"';
                     } else {
-                        data += resultList.map(function(result) {
+                        body += resultList.map(function(result) {
                             return (target === 'InChIKey') ?
-                                query.from + ',' + target + ',"' + searchTerm + '","' + result.InChIKey + '",' + result.score :
-                                query.from + ',' + target + ',"' + searchTerm + '","' + result + '"';
+                                query.from + ',' + target + ',"' + searchTerm + '","' + result.value + '",' + result.score :
+                                query.from + ',' + target + ',"' + searchTerm + '","' + result.value + '"';
                         }).join('\n');
                     }
                 }
             }
 
-            return data;
+            if (scored) {
+                header += ',Score';
+            }
+
+            return header + body;
         }
 
-        function process(query, queryStrings, results, topHit) {
+        function processTable(query, searchTerms, results, topHit) {
 
-            var source = query.from,
-                targets = (typeof query.to === 'string') ? [query.to] : query.to,
-                searchTerms = queryStrings,
-                data = source + ',';
+            var targets = (typeof query.to === 'string') ? [query.to] : query.to,
+                data = query.from + ',';
 
             data += targets.map(function(target) {
                 return (target === 'InChIKey') ? target + ',Score' : target
@@ -86,28 +90,29 @@
             data += searchTerms.map(function(searchTerm) {
                 return '"' + searchTerm +  '",' + targets.map(function(target) {
 
-                    var resultList = results[searchTerm][target],
-                        inchiList = [],
+                    var resultList = [],
                         scoreList = [];
 
-                        if (resultList.length < 1) {
-                            return '';
-                        }
+                    results[searchTerm][target].forEach(function(result) {
+                        resultList.push(result.value);
 
-                    if (target === 'InChIKey') {
-                        resultList.forEach(function(result) {
-                            inchiList.push(result.InChIKey);
+                        if (typeof result.score !== 'undefined') {
                             scoreList.push(result.score);
-                        });
+                        }
+                    });
 
-                        return (topHit) ?
-                            '"' + resultList[0].InChIKey + '",' + resultList[0].score :
-                            '"' + inchiList.join('\n') + '","' + scoreList.join('\n') + '"';
-                    } else {
-                        return (topHit) ?
-                            '"' + resultList[0] + '"' :
-                            '"' + resultList.join('\n') + '"';
+                    var text = topHit ?
+                        '"' + resultList[0] + '"' :
+                        '"' + resultList.join('\n') + '"';
+
+                    if (scoreList.length > 0) {
+                        text += topHit ?
+                            ',"' + scoreList[0] + '"' :
+                            ',"' + scoreList.join('\n') + '"';
                     }
+
+                    return text;
+
                 }).join(',');
             }).join('\n');
 

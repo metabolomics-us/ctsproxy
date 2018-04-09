@@ -12,7 +12,7 @@
 
         <div class="col-sm-12">
             <div class="row">
-                <form name="queryForm">
+                <form name="queryForm" ng-submit="convertSingle(main.query)">
                     <fieldset>
                         <div class="col-xs-12 col-sm-5">
                             <div class="form-group">
@@ -30,7 +30,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-2 text-center arrow-box">
-                            <button type="button" class="btn btn-default" ng-click="convertSingle(main.query)">
+                            <button type="submit" class="btn btn-default">
                                 Convert
                                 <i ng-hide="main.loading" ng-class="{ 'fa fa-arrow-down': breakpoint.sm||breakpoint.xs, 'fa fa-arrow-right': breakpoint.md||breakpoint.lg }" aria-hidden="true"></i>
                                 <i ng-show="main.loading" class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
