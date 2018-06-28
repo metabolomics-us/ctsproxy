@@ -1,0 +1,16 @@
+<div>
+    <div id="shortcut-box-tab" class="shortcut-box" ng-click="toggleShortcutBox()">
+        <i class="fa fa-bars"></i>
+    </div>
+    <div id="shortcut-box-content" class="shortcut-box">
+        <ul>
+            <li><a ng-click="scrollTo('convert')">Convert from one ID to another</a></li>
+            <li><a ng-click="scrollTo('score')">Get a list of scored InChIKeys</a></li>
+            <li><a ng-click="scrollTo('from')">Get a list of valid source IDs</a></li>
+            <li><a ng-click="scrollTo('to')">Get a list of valid target IDs</a></li>
+            <li><a ng-click="scrollTo('expand')">Expand a chemical formula</a></li>
+            <li><a ng-click="scrollTo('inchiKeyToMol')">Convert an InChIKey to a molecule definition (MDL/SDF)</a></li>
+            <li><a ng-click="scrollTo('countBio')">Count biological IDs</a></li>
+        </ul>
+    </div>
+</div>

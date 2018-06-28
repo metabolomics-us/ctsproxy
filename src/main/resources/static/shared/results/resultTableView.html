@@ -1,0 +1,39 @@
+<div>
+    <table class="table">
+        <tr>
+            <th>{{sourceColumn}}</th>
+            <th ng-repeat-start="col in columns">{{col}}</th>
+            <th ng-repeat-end ng-if="col === 'InChIKey'">Score</th>
+        </tr>
+        <tr ng-repeat="(term, results) in ngModel | limitBatchResults: 10: (page - 1) * 10">
+            <td>{{term}}</td>
+            <td ng-repeat-start="to in columns">
+                <div ng-hide="expandResults">
+                    <span ng-if="results[to].length === 0">No results</span>
+                    <i ng-show="results[to].length > 1" ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-right" style="cursor: pointer;" aria-hidden="true"></i>
+                    <a ng-if="results[to] && !results[to][0].InChIKey" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{results[to][0]}}" target="_blank">{{results[to][0]}}</a>
+                    <a ng-if="results[to][0].InChIKey" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{results[to][0].InChIKey}}" target="_blank">{{results[to][0].InChIKey}}</a>
+                </div>
+                <div ng-show="expandResults">
+                    <i ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-down" style="cursor: pointer;" aria-hidden="true"></i>
+                    <div ng-repeat="result in results[to] track by $index">
+                        <a ng-if="result && !result.InChIKey" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result}}" target="_blank">{{result}}</a>
+                        <a ng-if="result.InChIKey" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result.InChIKey}}" target="_blank">{{result.InChIKey}}</a>
+                    </div>
+                </div>
+            </td>
+            <td ng-repeat-end ng-if="to === 'InChIKey'">
+                <div ng-hide="expandResults">
+                    <span ng-if="results[to].length === 0">No results</span>
+                    {{results[to][0].score}}
+                </div>
+                <div ng-show="expandResults">
+                    <div ng-repeat="result in results[to]">
+                        {{result.score}}
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </table>
+    <ul uib-pagination total-items="resultCount" ng-model="page" max-size="5" class="pagination-sm" boundary-links="true" force-ellipses="true" num-page="pageCount"></ul>
+</div>

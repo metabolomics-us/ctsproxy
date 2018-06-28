@@ -1,0 +1,301 @@
+<div class="container-fluid">
+    <div class="row">
+        <shortcut-box></shortcut-box>
+        <div class="col-xs-12">
+            <a id="top"></a>
+            <h2>Services</h2>
+        </div>
+        <div class="col-xs-12">
+            <p>Here you can find an overview of additional services the CTS offers.</p>
+        </div>
+        <div class="col-xs-12">
+            <a id="convert" ng-click="scrollTo('top')">Back to top</a>
+            <h3>Convert from one ID to another</h3>
+            <table class="table table-bordered">
+                <tr>
+                    <td>Title</td>
+                    <td>Convert</td>
+                </tr>
+                <tr>
+                    <td>URL</td>
+                    <td><code>/rest/convert/{from}/{to}/{query}</code></td>
+                </tr>
+                <tr>
+                    <td>Method</td>
+                    <td>GET</td>
+                </tr>
+                <tr>
+                    <td>URL Params</td>
+                    <td>
+                        <p><code>from=[string]</code></p>
+                        <p>The source ID type (for valid IDs, see <code>/rest/fromValues</code>)</p>
+                        <p><code>to=[string]</code></p>
+                        <p>The target ID type (for valid IDs, see <code>/rest/toValues</code>)</p>
+                        <p><code>query=[string]</code></p>
+                        <p>The id to convert</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sample Call</td>
+                    <td>
+                        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/convert/InChIKey/Chemical%20Name/QNAYBMKLOCPYGJ-REOHCLBHSA-N</code></pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sample Response</td>
+                    <td><pre><code>[
+    {
+        "fromIdentifier": "InChIKey",
+        "searchTerm": "QNAYBMKLOCPYGJ-REOHCLBHSA-N",
+        "toIdentifier": "Chemical Name",
+        "result":
+        [
+            "L-Alanine"
+        ]
+    }
+]</code></pre>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-xs-12">
+            <a id="score" ng-click="scrollTo('top')">Back to top</a>
+            <h3>Get a list of scored InChIKeys</h3>
+            <table class="table table-bordered">
+                <tr>
+                    <td>Title</td>
+                    <td>Score</td>
+                </tr>
+                <tr>
+                    <td>URL</td>
+                    <td><code>/rest/score/{from}/{query}/{algorithm}</code></td>
+                </tr>
+                <tr>
+                    <td>Method</td>
+                    <td>GET</td>
+                </tr>
+                <tr>
+                    <td>URL Params</td>
+                    <td>
+                        <p><code>from=[string]</code></p>
+                        <p>The source ID type</p>
+                        <p><code>query=[string]</code></p>
+                        <p>The ID to convert</p>
+                        <p><code>algorithm=[string]</code></p>
+                        <p>The scoring algorithm to use, either 'biological' or 'popularity'</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sample Call</td>
+                    <td>
+                        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/score/Chemical%20Name/threonine/biological</code></pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sample Response</td>
+                    <td><pre><code>{
+    "searchTerm": "threonine",
+    "from": "chemical name",
+    "result":
+    [
+        {
+            "InChIKey": "AYFVYJQAPQTCCC-GBXIJSLDSA-N",
+            "score": 1
+        },
+        {
+            "InChIKey": "AYFVYJQAPQTCCC-STHAYSLISA-N",
+            "score": 0.86
+        },
+        {
+            "InChIKey": "AYFVYJQAPQTCCC-UHFFFAOYSA-N",
+            "score": 0
+        }
+    ]
+}</code></pre>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="col-xs-12">
+            <a id="from" ng-click="scrollTo('top')">Back to top</a>
+            <h3>Get a list of valid source IDs</h3>
+            <table class="table table-bordered">
+                <tr>
+                    <td>Title</td>
+                    <td>From Values</td>
+                </tr>
+                <tr>
+                    <td>URL</td>
+                    <td><code>/rest/fromValues</code></td>
+                </tr>
+                <tr>
+                    <td>Method</td>
+                    <td>GET</td>
+                </tr>
+                <tr>
+                    <td>Sample Call</td>
+                    <td>
+                        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/fromValues</code></pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sample Response</td>
+                    <td>
+                        <pre><code>["ABI Chem","ChEMBL","Chemical Name","InChIKey","MICAD","MLSMR","MMDB","PubChem CID","PubChem SID", ...]</code></pre>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-xs-12">
+            <a id="to" ng-click="scrollTo('top')">Back to top</a>
+            <h3>Get a list of valid target IDs</h3>
+            <table class="table table-bordered">
+                <tr>
+                    <td>Title</td>
+                    <td>To Values</td>
+                </tr>
+                <tr>
+                    <td>URL</td>
+                    <td><code>/rest/toValues</code></td>
+                </tr>
+                <tr>
+                    <td>Method</td>
+                    <td>GET</td>
+                </tr>
+                <tr>
+                    <td>Sample Call</td>
+                    <td>
+                        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/toValues</code></pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sample Response</td>
+                    <td>
+                        <pre><code>["ABI Chem","ChEMBL","Chemical Name","InChI Code","InChIKey","MICAD","MLSMR","MMDB","PubChem CID","PubChem SID", ...]</code></pre>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-xs-12">
+            <a id="expand" ng-click="scrollTo('top')">Back to top</a>
+            <h3>Expand a chemical formula</h3>
+            <table class="table table-bordered">
+                <tr>
+                    <td>Title</td>
+                    <td>Expand Formula</td>
+                </tr>
+                <tr>
+                    <td>URL</td>
+                    <td><code>/rest/expandformula/{formula}</code></td>
+                </tr>
+                <tr>
+                    <td>Method</td>
+                    <td>GET</td>
+                </tr>
+                <tr>
+                    <td>URL Params</td>
+                    <td>
+                        <p><code>formula=[string]</code></p>
+                        <p>The formula to expand</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sample Call</td>
+                    <td>
+                        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/expandformula/H20</code></pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sample Response</td>
+                    <td><pre><code>{
+    "formula": "H2O",
+    "result": "HHO"
+}</code></pre>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-xs-12">
+            <a id="inchiKeyToMol" ng-click="scrollTo('top')">Back to top</a>
+            <h3>Convert an InChIKey to a molecule definition (MDL/SDF)</h3>
+            <table class="table table-bordered">
+                <tr>
+                    <td>Title</td>
+                    <td>InChIKey to Mol</td>
+                </tr>
+                <tr>
+                    <td>URL</td>
+                    <td><code>/rest/inchikeytomol/{inchikey}</code></td>
+                </tr>
+                <tr>
+                    <td>Method</td>
+                    <td>GET</td>
+                </tr>
+                <tr>
+                    <td>URL Params</td>
+                    <td>
+                        <p><code>inchikey=[string]</code></p>
+                        <p>The InChIKey to covert</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sample Call</td>
+                    <td>
+                        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/inchikeytomol/QNAYBMKLOCPYGJ-REOHCLBHSA-N</code></pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sample Response</td>
+                    <td><pre><code>{
+    "molecule": "\n  CDK     0220181839\n\n 13 12  0  0  0  0  0  0  0  0999 V2000\n    1.2990   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5981   -0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8971   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5623    1.1491    0.0000 N   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8971   -2.2500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    5.1962   -0.0000    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    1.6339    1.1491    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    0.3349   -1.8991    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    2.2632   -1.8991    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    3.0492    2.5586    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    5.0395    0.8886    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    6.4952   -0.7500    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  1  0  0  0  0 \n  3  2  1  0  0  0  0 \n  4  2  1  0  0  0  0 \n  5  3  2  0  0  0  0 \n  6  3  1  0  0  0  0 \n  2  7  1  1  0  0  0 \n  1  8  1  0  0  0  0 \n  1  9  1  0  0  0  0 \n  1 10  1  0  0  0  0 \n  4 11  1  0  0  0  0 \n  4 12  1  0  0  0  0 \n  6 13  1  0  0  0  0 \nM  END\n",
+    "message": null
+}</code></pre>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-xs-12">
+            <a id="countBio" ng-click="scrollTo('top')">Back to top</a>
+            <h3>Count biological IDs</h3>
+            <table class="table table-bordered">
+                <tr>
+                    <td>Title</td>
+                    <td>Count Biological</td>
+                </tr>
+                <tr>
+                    <td>URL</td>
+                    <td><code>/rest/countBiological/{inchikey}</code></td>
+                </tr>
+                <tr>
+                    <td>Method</td>
+                    <td>GET</td>
+                </tr>
+                <tr>
+                    <td>URL Params</td>
+                    <td>
+                        <p><code>inchikey=[string]</code></p>
+                        <p>The InChIKey to count</p>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sample Call</td>
+                    <td>
+                        <pre><code>curl http://cts.fiehnlab.ucdavis.edu/rest/countBiological/QNAYBMKLOCPYGJ-REOHCLBHSA-N</code></pre>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Sample Response</td>
+                    <td><pre><code>{
+    "KEGG": 2,
+    "BioCyc": 1,
+    "Human Metabolome Database": 1,
+    "total": 4
+}</code></pre>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
