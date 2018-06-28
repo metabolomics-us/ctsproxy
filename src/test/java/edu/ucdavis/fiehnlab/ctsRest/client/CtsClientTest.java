@@ -1,5 +1,6 @@
 package edu.ucdavis.fiehnlab.ctsRest.client;
 
+import edu.ucdavis.fiehnlab.config.CtsClientConfiguration;
 import edu.ucdavis.fiehnlab.ctsRest.model.*;
 import org.junit.After;
 import org.junit.Before;
@@ -7,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -20,10 +22,9 @@ import static org.junit.Assert.*;
  * Created by diego on 2/16/2017.
  */
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = CtsClientConfiguration.class)
 @EnableFeignClients
 public class CtsClientTest {
-
 	private String inchikey = "MYMOFIZGZYHOMD-UHFFFAOYSA-N";
 	private String inchiCode = "InChI=1S/O2/c1-2";
 	private String molDef = "  2  1  0  0  0  0  0  0  0  0999 V2000\n" +
@@ -38,6 +39,9 @@ public class CtsClientTest {
 			"    1.2990   -0.7500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\\n" +
 			"  2  1  2  0  0  0  0\\n" +
 			"M  END";
+
+    @LocalServerPort
+    int port;
 
 	@Autowired
 	private CtsClient client;

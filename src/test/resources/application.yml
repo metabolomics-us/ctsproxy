@@ -6,14 +6,16 @@ ribbon:
   eureka:
     enabled: false
 
-feign.hystrix.enabled: false
+feign:
+  hystrix:
+    enabled: false
 
 logging.level.edu.ucdavis.fiehnlab.cts.ctsRest: DEBUG
 
 fiehnlab:
   cts:
     config:
-      url: http://localhost
+      url: http://localhost:8080
       name: TestCtsWrapper
       connectTimeoutMillis: 1000
       readTimeoutMillis: 120000
