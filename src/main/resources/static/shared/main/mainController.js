@@ -19,7 +19,7 @@
         vm.batchQuery = {
             string: '',
             from: 'Chemical Name',
-            to: ['InChIKey']
+            to: []
         }
 
         vm.generation = 0;
@@ -29,8 +29,52 @@
 
         vm.fromValues = [];
         vm.toValues = [];
+        vm.singleToValues = [];
+        vm.batchToValues = [];
         vm.queryStrings = [];
         vm.errors = [];
+
+        function filterIllegal(array, from) {
+            if (from !== 'InChIKey') {
+                return array.filter(function(elem){ return elem !== 'PubChem CID' && elem !== 'Pubchem SID'; });
+            } else {
+                return array;
+            }
+        }
+
+        $scope.$watch(function() { return vm.batchQuery.from; }, function(newVal) {
+            vm.batchToValues = filterIllegal(vm.toValues, newVal);
+
+            if (newVal !== 'InChIKey') {
+
+                var batchTo = vm.batchQuery.to.slice();
+
+                var cidIndex = batchTo.findIndex(function(elem) { return elem === 'PubChem CID'; });
+
+                if (cidIndex > -1) {
+                    batchTo.splice(cidIndex, 1);
+                }
+
+                var sidIndex = batchTo.findIndex(function(elem) { return elem === 'Pubchem SID'; });
+
+                if (sidIndex > -1) {
+                    batchTo.splice(sidIndex, 1);
+                }
+
+                vm.batchQuery.to = batchTo;
+
+            }
+        });
+
+        $scope.$watch(function() { return vm.query.from; }, function(newVal) {
+            vm.singleToValues = filterIllegal(vm.toValues, newVal);
+
+            if (newVal !== 'InChIKey') {
+                if (vm.query.to === 'PubChem CID' || vm.query.to === 'Pubchem SID') {
+                    vm.query.to = 'InChIKey';
+                }
+            }
+        });
 
         vm.uploader = new FileUploader();
 
@@ -53,7 +97,7 @@
         function activate() {
             translation.getFromValues()
                 .then(function(data) {
-                    vm.fromValues = data;
+                    vm.fromValues = filterIllegal(data, '');
                 }, function(err) {
                     vm.errors.push(err);
                     console.error(err);
@@ -62,6 +106,9 @@
             translation.getToValues()
                 .then(function(data) {
                     vm.toValues = data;
+                    vm.singleToValues = filterIllegal(data, vm.query.from);
+                    vm.batchToValues = filterIllegal(data, vm.batchQuery.from);
+                    vm.batchQuery.to = ['InChIKey'];
                 }, function(err) {
                     vm.errors.push(err);
                     console.error(err);
