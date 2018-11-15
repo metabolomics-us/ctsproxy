@@ -1,0 +1,20 @@
+debug: false
+
+spring:
+  application:
+    name: CtsRest
+
+logging:
+  level:
+    org.hibernate: INFO
+    org.springframework: INFO
+    edu.ucdavis.fiehnlab.cts.ctsRest: DEBUG
+    org.springframework.web.client.RestTemplate: DEBUG
+
+fiehnlab:
+  cts:
+    config:
+      url: http://localhost:8080
+      name: TestCtsWrapper
+      connectTimeoutMillis: 1000
+      readTimeoutMillis: 120000

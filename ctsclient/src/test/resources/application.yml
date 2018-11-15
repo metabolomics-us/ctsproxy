@@ -1,0 +1,18 @@
+debug: false
+
+logging:
+  level:
+    org.springframework.web.client.RestTemplate: DEBUG
+
+cts:
+  old:
+    url: http://oldcts.fiehnlab.ucdavis.edu/service
+
+management:
+  trace:
+    http:
+      enabled: true
+      include:
+        - request-headers
+        - response-headers
+        - errors

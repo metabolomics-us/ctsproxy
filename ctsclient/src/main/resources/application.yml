@@ -1,0 +1,5 @@
+debug: false
+
+cts:
+  old:
+    url: http://oldcts.fiehnlab.ucdavis.edu/service

@@ -1,0 +1,33 @@
+debug: false
+
+spring:
+  application:
+    name: CtsRest
+  cache:
+    cache-names: simple_convert,expand_formula,from_values,to_values,bio_count,scoring,inchikey_mol,cmpd_synonyms,mol2inchi,smiles2inchi,inchi2inchikey,inchi2mol
+    caffeine:
+      spec: expireAfter:30s
+
+logging:
+  level:
+    edu.ucdavis.fiehnlab.cts.ctsRest: DEBUG
+    org.hibernate: INFO
+    org.springframework: INFO
+
+fiehnlab:
+  cts:
+    config:
+      url: http://cts.fiehnlab.ucdavis.edu
+      name: CtsProxy
+      connectTimeoutMillis: 1000
+      readTimeoutMillis: 120000
+
+zuul:
+  debug:
+    request: true
+
+  routes:
+    oldcts:
+      path: /service/**
+      url: http://oldcts.fiehnlab.ucdavis.edu
+      stripPrefix: false
