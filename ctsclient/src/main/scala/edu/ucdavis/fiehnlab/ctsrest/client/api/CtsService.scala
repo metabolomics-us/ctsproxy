@@ -14,8 +14,8 @@ trait CtsService {
   def chemifyQuery (name: String): String
   def sourceIdNames(): Seq[String]
   def targetIdNames(): Seq[String]
-  def mol2Inchi (mol: String): InchiPairResponse
+  def mol2Inchi (mol: String): InChIPairResponse
   def inchi2Mol (inchicode: String): MoleculeResponse
-  def smiles2Inchi (smilesCode: String): String
-  def inchiCode2InchiKey (inchiCode: String): InchiPairResponse
+  def smiles2Inchi (smilesCode: String): InChIResponse
+  def inchiCode2InchiKey (inchiCode: String): InChIPairResponse
 }

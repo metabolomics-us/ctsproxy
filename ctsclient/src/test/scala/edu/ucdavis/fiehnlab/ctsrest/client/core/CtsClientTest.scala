@@ -1,7 +1,7 @@
 package edu.ucdavis.fiehnlab.ctsrest.client.core
 
 import com.typesafe.scalalogging.LazyLogging
-import edu.ucdavis.fiehnlab.ctsrest.client.types.{InchiPairResponse, MoleculeResponse, ScoredInchi}
+import edu.ucdavis.fiehnlab.ctsrest.client.types.{InChIPairResponse, MoleculeResponse, ScoredInchi}
 import edu.ucdavis.fiehnlab.wcmc.utilities.casetojson.config.CaseClassToJSONSerializationAutoConfiguration
 import org.junit.runner.RunWith
 import org.scalatest.{Matchers, WordSpec}
@@ -22,7 +22,7 @@ class CtsClientTest extends WordSpec with Matchers with LazyLogging {
   new TestContextManager(this.getClass).prepareTestInstance(this)
 
   "CtsClientTest" should {
-    val mol = MoleculeResponse("\n  CDK     1005182215\n\n  9  8  0  0  0  0  0  0  0  0999 V2000\n    1.2990   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5981   -0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8971   -0.7500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    0.3349   -1.8991    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    2.2632   -1.8991    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5623    1.1491    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    1.6339    1.1491    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    5.1962   -0.0000    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  1  0  0  0  0 \n  3  2  1  0  0  0  0 \n  1  4  1  0  0  0  0 \n  1  5  1  0  0  0  0 \n  1  6  1  0  0  0  0 \n  2  7  1  0  0  0  0 \n  2  8  1  0  0  0  0 \n  3  9  1  0  0  0  0 \nM  END\n",null)
+    val mol = MoleculeResponse("\n  CDK     1005182215\n\n  9  8  0  0  0  0  0  0  0  0999 V2000\n    1.2990   -0.7500    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    2.5981   -0.0000    0.0000 C   0  0  0  0  0  0  0  0  0  0  0  0\n    3.8971   -0.7500    0.0000 O   0  0  0  0  0  0  0  0  0  0  0  0\n    0.0000    0.0000    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    0.3349   -1.8991    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    2.2632   -1.8991    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    3.5623    1.1491    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    1.6339    1.1491    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n    5.1962   -0.0000    0.0000 H   0  0  0  0  0  0  0  0  0  0  0  0\n  2  1  1  0  0  0  0 \n  3  2  1  0  0  0  0 \n  1  4  1  0  0  0  0 \n  1  5  1  0  0  0  0 \n  1  6  1  0  0  0  0 \n  2  7  1  0  0  0  0 \n  2  8  1  0  0  0  0 \n  3  9  1  0  0  0  0 \nM  END\n", null)
 
     "have a client" in {
       client != null
@@ -109,7 +109,7 @@ class CtsClientTest extends WordSpec with Matchers with LazyLogging {
     "mol2Inchi" in {
       val response = client.mol2Inchi(mol.molecule)
       logger.info(s"RESPONSE: ${response}")
-      response shouldEqual InchiPairResponse("LFQSCWFLJHTTHZ-UHFFFAOYSA-N", "InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3")
+      response shouldEqual InChIPairResponse("LFQSCWFLJHTTHZ-UHFFFAOYSA-N", "InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3")
     }
 
     "smiles2Inchi" in {
@@ -121,7 +121,7 @@ class CtsClientTest extends WordSpec with Matchers with LazyLogging {
     "inchiCode2InchiKey" in {
       val response = client.inchiCode2InchiKey("InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3")
       logger.info(s"RESPONSE: ${response}")
-      response shouldEqual InchiPairResponse("LFQSCWFLJHTTHZ-UHFFFAOYSA-N", "InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3")
+      response shouldEqual InChIPairResponse("LFQSCWFLJHTTHZ-UHFFFAOYSA-N", "InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3")
     }
   }
 }

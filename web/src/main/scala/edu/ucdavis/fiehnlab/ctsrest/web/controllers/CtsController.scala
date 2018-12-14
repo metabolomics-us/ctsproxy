@@ -78,7 +78,7 @@ class CtsController {
 
   @Cacheable(Array("mol2inchi"))
   @PostMapping(path = Array("/moltoinchi"), consumes = Array("application/json"))
-  def mol2Inchi(mol: String): InchiPairResponse = {
+  def mol2Inchi(mol: String): InChIPairResponse = {
     client.mol2Inchi(mol)
   }
 
@@ -90,7 +90,7 @@ class CtsController {
 
   @Cacheable(Array("inchi2inchikey"))
   @PostMapping(path = Array("/inchicodetoinchikey"), consumes = Array("application/json"))
-  def inchiCode2InchiKey(inchi: String): InchiPairResponse = {
+  def inchiCode2InchiKey(inchi: String): InChIPairResponse = {
     client.inchiCode2InchiKey(inchi)
   }
 

@@ -71,47 +71,41 @@ class CtsClient extends CtsService with LazyLogging {
 
   /* ---------------------------POST REQUESTS-------------------------------*/
 
-  def inchi2Mol(inchicode: String): MoleculeResponse = {
-    val entity = new HttpEntity({"inchicode" -> inchicode})
+  def inchi2Mol(inchiCode: String): MoleculeResponse = {
+    val entity = new HttpEntity(InChIConversionRequest(inchiCode))
 
-    val response = restTemplate.postForObject[MoleculeResponse](baseUrl + "/inchitomol",
-      entity,
-      classOf[MoleculeResponse],
-      entity
-    )
+    val response = restTemplate.postForObject[MoleculeResponse](s"${baseUrl}/inchitomol",
+      entity, classOf[MoleculeResponse])
 
     logger.info(s"RESPONSE: ${response}")
     response
   }
 
-  def mol2Inchi(mol: String): InchiPairResponse = {
-    val entity = new HttpEntity({"mol" -> mol})
+  def mol2Inchi(mol: String): InChIPairResponse = {
+    val entity = new HttpEntity(MOLConversionRequest(mol))
 
-    val response = restTemplate.postForObject[InchiPairResponse](baseUrl + "/moltoinchi",
-      entity,
-      classOf[InchiPairResponse])
-
-    logger.info(s"RESPONSE: ${response}")
-    response
-  }
-
-  def smiles2Inchi(smilesCode: String): String = {
-    val entity = new HttpEntity({"smiles" -> smilesCode})
-
-    val response = restTemplate.postForObject[String](baseUrl + "/smilestoinchi",
-      entity,
-      classOf[String])
+    val response = restTemplate.postForObject[InChIPairResponse](s"${baseUrl}/moltoinchi",
+      entity, classOf[InChIPairResponse])
 
     logger.info(s"RESPONSE: ${response}")
     response
   }
 
-  def inchiCode2InchiKey(inchiCode: String): InchiPairResponse = {
-    val entity = new HttpEntity({"inchicode" -> inchiCode})
+  def smiles2Inchi(smilesCode: String): InChIResponse = {
+    val entity = new HttpEntity(SMILESConversionRequest(smilesCode))
 
-    val response = restTemplate.postForObject[InchiPairResponse](baseUrl + "/inchicodetoinchikey",
-      entity,
-      classOf[InchiPairResponse])
+    val response = restTemplate.postForObject[InChIResponse](s"${baseUrl}/smilestoinchi",
+      entity, classOf[InChIResponse])
+
+    logger.info(s"RESPONSE: ${response}")
+    response
+  }
+
+  def inchiCode2InchiKey(inchiCode: String): InChIPairResponse = {
+    val entity = new HttpEntity(InChIConversionRequest(inchiCode))
+
+    val response = restTemplate.postForObject[InChIPairResponse](s"${baseUrl}/inchicodetoinchikey",
+      entity, classOf[InChIPairResponse])
 
     logger.info(s"RESPONSE: ${response}")
     response

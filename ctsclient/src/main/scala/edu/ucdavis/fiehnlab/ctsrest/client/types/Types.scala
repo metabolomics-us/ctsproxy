@@ -42,11 +42,11 @@ case class CompoundResponse(
                                externalIds: Seq[ExtId]
                            )
 
-case class ExtidCountResponse(
-                                 datasource_count: Int
-                             )
+case class ExtidCountResponse(datasource_count: Int)
 
-case class InchiPairResponse(
+case class InChIResponse(inchicode: String)
+
+case class InChIPairResponse(
                                 inchikey: String,
                                 inchicode: String
                             )
@@ -77,3 +77,9 @@ case class ExtId(
                     value: String,
                     url: String
                 )
+
+case class InChIConversionRequest(inchicode: String)
+
+case class MOLConversionRequest(mol: String)
+
+case class SMILESConversionRequest(smiles: String)
