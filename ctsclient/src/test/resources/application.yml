@@ -6,7 +6,7 @@ logging:
 
 cts:
   old:
-    url: http://oldcts.fiehnlab.ucdavis.edu/service
+    url: https://oldcts.fiehnlab.ucdavis.edu/service
 
 management:
   trace:

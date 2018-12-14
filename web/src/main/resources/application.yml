@@ -17,7 +17,7 @@ logging:
 fiehnlab:
   cts:
     config:
-      url: http://cts.fiehnlab.ucdavis.edu
+      url: https://cts.fiehnlab.ucdavis.edu
       name: CtsProxy
       connectTimeoutMillis: 1000
       readTimeoutMillis: 120000
@@ -29,5 +29,5 @@ zuul:
   routes:
     oldcts:
       path: /service/**
-      url: http://oldcts.fiehnlab.ucdavis.edu
+      url: https://oldcts.fiehnlab.ucdavis.edu
       stripPrefix: false

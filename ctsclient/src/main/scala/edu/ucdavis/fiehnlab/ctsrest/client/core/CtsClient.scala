@@ -10,7 +10,8 @@ import org.springframework.web.client.RestTemplate
 
 @Component
 class CtsClient extends CtsService with LazyLogging {
-  @Value("${cts.old.url:http://oldcts.fiehnlab.ucdavis.edu/service}")
+
+  @Value("${cts.old.url:https://oldcts.fiehnlab.ucdavis.edu/service}")
   val baseUrl = ""
 
   @Autowired
@@ -29,43 +30,43 @@ class CtsClient extends CtsService with LazyLogging {
   }
 
   def score(from: String, value: String, algorithm: String): ScoreResult = {
-    restTemplate.getForObject[ScoreResult](baseUrl + s"/score/${from}/${value}/${algorithm}", classOf[ScoreResult])
+    restTemplate.getForObject[ScoreResult](s"${baseUrl}/score/${from}/${value}/${algorithm}", classOf[ScoreResult])
   }
 
   def inchiKey2Mol(inchikey: String): MoleculeResponse = {
-    restTemplate.getForObject[MoleculeResponse](baseUrl + s"/inchikeytomol/${inchikey}", classOf[MoleculeResponse])
+    restTemplate.getForObject[MoleculeResponse](s"${baseUrl}/inchikeytomol/${inchikey}", classOf[MoleculeResponse])
   }
 
   def expandFormula(formula: String): FormulaResponse = {
-    restTemplate.getForObject[FormulaResponse](baseUrl + s"/expandFormula/${formula}", classOf[FormulaResponse])
+    restTemplate.getForObject[FormulaResponse](s"${baseUrl}/expandFormula/${formula}", classOf[FormulaResponse])
   }
 
   def compoundInfo(inchikey: String): CompoundResponse = {
-    restTemplate.getForObject[CompoundResponse](baseUrl + s"/compound/${inchikey}", classOf[CompoundResponse])
+    restTemplate.getForObject[CompoundResponse](s"${baseUrl}/compound/${inchikey}", classOf[CompoundResponse])
   }
 
   def compoundSynonyms(inchikey: String): Seq[String] = {
-    restTemplate.getForObject[Seq[String]](baseUrl + s"/synonyms/${inchikey}", classOf[Seq[String]])
+    restTemplate.getForObject[Seq[String]](s"${baseUrl}/synonyms/${inchikey}", classOf[Seq[String]])
   }
 
   def compoundExtidCount(inchikey: String): ExtidCountResponse = {
-    restTemplate.getForObject[ExtidCountResponse](baseUrl + s"/count/${inchikey}", classOf[ExtidCountResponse])
+    restTemplate.getForObject[ExtidCountResponse](s"${baseUrl}/count/${inchikey}", classOf[ExtidCountResponse])
   }
 
   def compoundBiologicalCount(inchikey: String): Map[String, Int] = {
-    restTemplate.getForObject[Map[String, Int]](baseUrl + s"/countBiological/${inchikey}", classOf[Map[String, Int]])
+    restTemplate.getForObject[Map[String, Int]](s"${baseUrl}/countBiological/${inchikey}", classOf[Map[String, Int]])
   }
 
   def sourceIdNames(): Seq[String] = {
-    restTemplate.getForObject[Seq[String]](baseUrl + "/conversion/fromValues", classOf[Seq[String]])
+    restTemplate.getForObject[Seq[String]](s"${baseUrl}/conversion/fromValues", classOf[Seq[String]])
   }
 
   def targetIdNames(): Seq[String] = {
-    restTemplate.getForObject[Seq[String]](baseUrl + "/conversion/toValues", classOf[Seq[String]])
+    restTemplate.getForObject[Seq[String]](s"${baseUrl}/conversion/toValues", classOf[Seq[String]])
   }
 
   def chemifyQuery(name: String): String = {
-    restTemplate.getForObject[String](s"http://oldcts.fiehnlab.ucdavis.edu/chemify/rest/identify/${name}", classOf[String])
+    restTemplate.getForObject[String](s"${baseUrl}/chemify/rest/identify/$name", classOf[String])
   }
 
   /* ---------------------------POST REQUESTS-------------------------------*/

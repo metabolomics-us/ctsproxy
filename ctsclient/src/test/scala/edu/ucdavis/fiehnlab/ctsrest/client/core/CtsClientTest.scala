@@ -15,6 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner
 @RunWith(classOf[SpringRunner])
 @SpringBootTest(classes = Array(classOf[CtsClientTestConfig], classOf[CaseClassToJSONSerializationAutoConfiguration]))
 class CtsClientTest extends WordSpec with Matchers with LazyLogging {
+
   @Autowired
   val client: CtsClient = null
 
