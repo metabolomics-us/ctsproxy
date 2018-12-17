@@ -1,19 +1,17 @@
 package edu.ucdavis.fiehnlab.ctsrest.web.controllers
 
-import java.util
-
 import com.typesafe.scalalogging.LazyLogging
-import edu.ucdavis.fiehnlab.ctsrest.client.types.{ConversionResult, FormulaResponse}
+import edu.ucdavis.fiehnlab.ctsrest.client.types.FormulaResponse
 import edu.ucdavis.fiehnlab.ctsrest.web.CtsProxyConfig
 import edu.ucdavis.fiehnlab.wcmc.utilities.casetojson.config.CaseClassToJSONSerializationAutoConfiguration
 import org.junit.runner.RunWith
 import org.scalatest.{Matchers, WordSpec}
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
 import org.springframework.boot.test.web.client.TestRestTemplate
 import org.springframework.boot.web.server.LocalServerPort
-import org.springframework.cache.annotation.EnableCaching
 import org.springframework.test.context.TestContextManager
 import org.springframework.test.context.junit4.SpringRunner
 
@@ -24,7 +22,7 @@ import scala.collection.JavaConverters._
   */
 @RunWith(classOf[SpringRunner])
 @SpringBootTest(value = Array("${fiehnlab.cts.config.name}"),
-  classes = Array(classOf[CtsProxyConfig], classOf[CaseClassToJSONSerializationAutoConfiguration]),
+  classes = Array(classOf[CtsProxyConfig], classOf[CaseClassToJSONSerializationAutoConfiguration], classOf[ServletWebServerFactoryAutoConfiguration]),
   webEnvironment = WebEnvironment.RANDOM_PORT)
 class CtsControllerTest extends WordSpec with Matchers with LazyLogging {
 

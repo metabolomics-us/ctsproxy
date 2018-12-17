@@ -84,7 +84,7 @@ class CtsController {
 
   @Cacheable(Array("smiles2inchi"))
   @PostMapping(path = Array("/smilestoinchi"), consumes = Array("application/json"))
-  def smiles2Inchi(smilesCode: String): String = {
+  def smiles2Inchi(smilesCode: String): InChIResponse = {
     client.smiles2Inchi(smilesCode)
   }
 

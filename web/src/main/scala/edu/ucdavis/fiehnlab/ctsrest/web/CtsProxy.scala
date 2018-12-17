@@ -14,13 +14,14 @@ import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
 import edu.ucdavis.fiehnlab.ctsrest.client.api._
 import edu.ucdavis.fiehnlab.ctsrest.client.core._
+import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration
 
 /**
   * Created by diego on 2/15/2017.
   */
 
 @EnableCaching
-@SpringBootApplication(scanBasePackageClasses = Array(classOf[CtsProxyConfig], classOf[CaseClassToJSONSerializationAutoConfiguration]))
+@SpringBootApplication(scanBasePackageClasses = Array(classOf[CtsProxyConfig], classOf[CaseClassToJSONSerializationAutoConfiguration], classOf[ServletWebServerFactoryAutoConfiguration]))
 class CtsProxy
 
 object CtsProxy extends App {
