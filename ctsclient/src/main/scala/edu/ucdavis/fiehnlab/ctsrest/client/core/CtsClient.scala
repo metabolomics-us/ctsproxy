@@ -83,7 +83,11 @@ class CtsClient extends CtsService with LazyLogging {
   }
 
   def mol2Inchi(mol: String): InChIPairResponse = {
-    val entity = new HttpEntity(MOLConversionRequest(mol))
+    // Add MOL header since the old CTS doesn't recognize it as valid otherwise
+    val entity = mol.head match {
+      case '\n' => new HttpEntity(MOLConversionRequest("MOL"+ mol))
+      case _ => new HttpEntity(MOLConversionRequest(mol))
+    }
 
     val response = restTemplate.postForObject[InChIPairResponse](s"${baseUrl}/moltoinchi",
       entity, classOf[InChIPairResponse])

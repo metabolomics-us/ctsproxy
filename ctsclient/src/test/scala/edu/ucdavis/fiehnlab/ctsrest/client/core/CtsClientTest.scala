@@ -103,7 +103,9 @@ class CtsClientTest extends WordSpec with Matchers with LazyLogging {
     "inchi2Mol" in {
       var response = client.inchi2Mol("InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3")
       logger.info(s"RESPONSE: ${response}")
-      response shouldEqual mol
+
+      // Drop header rows as CDK generated unique identifiers per conversion
+      response.molecule.split('\n').drop(2) shouldEqual mol.molecule.split('\n').drop(2)
     }
 
     "mol2Inchi" in {
@@ -113,9 +115,9 @@ class CtsClientTest extends WordSpec with Matchers with LazyLogging {
     }
 
     "smiles2Inchi" in {
-      val response = client.smiles2Inchi("[Cu+2].[O-]S(=O)(=O)[O-]")
+      val response = client.smiles2Inchi("CCO")
       logger.info(s"RESPONSE: ${response}")
-      response shouldEqual "InChI=1S/Cu.H2O4S/c;1-5(2,3)4/h;(H2,1,2,3,4)/q+2;/p-2"
+      response.inchicode shouldEqual "InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3"
     }
 
     "inchiCode2InchiKey" in {
