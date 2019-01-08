@@ -21,7 +21,8 @@ class CtsClient extends CtsService with LazyLogging {
     val response = restTemplate.getForObject[Seq[Map[String, Any]]](
       baseUrl + s"/convert/${from}/${to}/${searchTerm}",
       classOf[Seq[Map[String, Any]]]
-    ).map(item => ConversionResult(item.get("fromIdentifier").toString,
+    ).map(item => ConversionResult(
+      item.getOrElse("fromIdentifier", "undefined").toString,
       item("toIdentifier").toString,
       item("searchTerm").toString,
       item("result").asInstanceOf[Seq[String]])

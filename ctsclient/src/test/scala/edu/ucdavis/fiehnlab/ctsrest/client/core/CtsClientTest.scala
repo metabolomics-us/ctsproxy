@@ -58,7 +58,7 @@ class CtsClientTest extends WordSpec with Matchers with LazyLogging {
       response.head.fromIdentifier === "chemical name"
       response.head.searchTerm === "alanine"
       response.head.toIdentifier === "inchikey"
-      response.head.results should contain allOf ("QNAYBMKLOCPYGJ-REOHCLBHSA-N", "QNAYBMKLOCPYGJ-UHFFFAOYSA-N", "QNAYBMKLOCPYGJ-UWTATZPHSA-N", "QNAYBMKLOCPYGJ-AZXPZELESA-N")
+      response.head.results should contain allOf ("QNAYBMKLOCPYGJ-REOHCLBHSA-N", "QNAYBMKLOCPYGJ-UHFFFAOYSA-N", "QNAYBMKLOCPYGJ-UWTATZPHSA-N")
     }
 
     "score" in {
