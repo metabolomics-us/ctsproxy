@@ -5,9 +5,9 @@
         .controller('MainController', MainController);
 
 
-    MainController.$inject = ['$scope', '$timeout', '$http', '$q', '$location', '$anchorScroll', 'translation', 'download', 'FileUploader'];
+    MainController.$inject = ['$scope', '$timeout', '$http', '$q', '$location', '$anchorScroll', 'translation', 'download', 'FileUploader', 'Analytics'];
 
-    function MainController($scope, $timeout, $http, $q, $location, $anchorScroll, translation, download, FileUploader) {
+    function MainController($scope, $timeout, $http, $q, $location, $anchorScroll, translation, download, FileUploader, Analytics) {
         var vm = this;
 
         vm.query = {
@@ -83,6 +83,8 @@
                         vm.loading = false;
                         vm.errors.push(err);
                     });
+
+                Analytics.trackEvent('convert', vm.query.from, vm.query.to, 1);
             }
         };
 
@@ -132,26 +134,28 @@
                     console.log(err);
                 });
 
+                Analytics.trackEvent('convert', vm.batchQuery.from, vm.batchQuery.to.join('/'), vm.queryStrings.length);
             }
         };
 
         $scope.batchDownloadService = function() {
             $timeout(function() {
                 download.export(vm.batchQuery, vm.queryStrings, vm.batchResults, vm.exportStyle, vm.topHit, vm.exportType);
+                Analytics.trackEvent('download', vm.exportType, vm.queryStrings.length);
             }, 100);
-        }
+        };
 
         $scope.singleDownloadService = function() {
             $timeout(function() {
                 download.export(vm.query, [vm.query.string], vm.results, vm.exportStyle, vm.topHit, vm.exportType);
+                Analytics.trackEvent('download', vm.exportType, 1);
             }, 100);
-        }
+        };
 
         $scope.scrollTo = function(id) {
             $location.hash(id);
-
             $anchorScroll();
-        }
+        };
 
         $scope.toggleShortcutBox = function() {
             if (document.getElementById('shortcut-box-content').style.right == '0px') {
@@ -161,7 +165,6 @@
                 document.getElementById('shortcut-box-content').style.right = '0px';
                 document.getElementById('shortcut-box-tab').style.right = '299px';
             }
-        }
+        };
     }
-
 })();
