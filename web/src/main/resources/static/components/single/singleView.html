@@ -4,15 +4,15 @@
             <div ng-if="main.errors.length > 0" class="alert alert-danger alert-dismissible" style="margin-top: 20px;">
                 <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <div><strong>Error {{main.errors[0].status}}</strong></div>
-                <div>{{main.errors[0].error}}</div>
+                <div>When calling {{main.errors[0].config.url}}</div>
             </div>
             <h2>Simple Conversion</h2>
-            <p>Enter your query string and select your source and target types. Enter to submit.</p>
+            <p>To convert a single identifier, enter it in the box below, select source and target types, and hit the Convert button.</p>
         </div>
 
         <div class="col-sm-12">
             <div class="row">
-                <form name="queryForm">
+                <form name="queryForm" ng-submit="convertSingle(main.query)">
                     <fieldset>
                         <div class="col-xs-12 col-sm-5">
                             <div class="form-group">
@@ -30,8 +30,11 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-2 text-center arrow-box">
-                            <i ng-hide="main.loading" ng-class="{ 'fa fa-arrow-down fa-2x': breakpoint.sm||breakpoint.xs, 'fa fa-arrow-right fa-2x': breakpoint.md||breakpoint.lg }" aria-hidden="true"></i>
-                            <i ng-show="main.loading" class="fa fa-spinner fa-pulse fa-2x" aria-hidden="true"></i>
+                            <button type="submit" class="btn btn-default">
+                                Convert
+                                <i ng-hide="main.loading" ng-class="{ 'fa fa-arrow-down': breakpoint.sm||breakpoint.xs, 'fa fa-arrow-right': breakpoint.md||breakpoint.lg }" aria-hidden="true"></i>
+                                <i ng-show="main.loading" class="fa fa-spinner fa-pulse" aria-hidden="true"></i>
+                            </button>
                         </div>
                         <div class="col-xs-12 col-sm-5 target-box">
                             <div class="form-group">
@@ -44,7 +47,7 @@
         </div>
 
         <div ng-if="main.results" class="col-xs-12">
-            <result-table source-column="main.query.from" columns="[main.query.to]" ng-model="main.results"></result-table>
+            <result-table source-column="main.query.from" columns="[main.query.to]" ordering="[main.query.string]" ng-model="main.results"></result-table>
         </div>
 
         <div ng-if="main.results" class="col-xs-12">
