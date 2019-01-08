@@ -1,5 +1,7 @@
 package edu.ucdavis.fiehnlab.ctsrest.web
 
+import java.util.Collections
+
 import edu.ucdavis.fiehnlab.wcmc.utilities.casetojson.config.CaseClassToJSONSerializationAutoConfiguration
 import org.springframework.boot.autoconfigure.{EnableAutoConfiguration, SpringBootApplication}
 import org.springframework.boot.{SpringApplication, WebApplicationType}
@@ -8,7 +10,7 @@ import org.springframework.context.annotation.{Bean, Configuration, Import}
 import org.springframework.http.MediaType
 import org.springframework.web.servlet.config.annotation.{ContentNegotiationConfigurer, CorsRegistry, WebMvcConfigurer}
 import springfox.documentation.builders.{PathSelectors, RequestHandlerSelectors}
-import springfox.documentation.service.ApiInfo
+import springfox.documentation.service.{ApiInfo, Contact}
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
@@ -33,6 +35,7 @@ object CtsProxy extends App {
 @Configuration
 @Import(Array(classOf[CaseClassToJSONSerializationAutoConfiguration], classOf[ServletWebServerFactoryAutoConfiguration]))
 class CtsProxyConfig {
+
   @Bean
   def ctsClient: CtsService = new CtsClient()
 }
@@ -61,9 +64,10 @@ class SwaggerConfig {
     "Chemical Translation Service Proxy",
     "Connects the new web GUI to the old CTS API.",
     "2.6.15", "",
-    "Diego Pedrosa",
+    new Contact("Diego Pedrosa", "https://cts.fiehnlab.ucdavis.edu", ""),
     "GPLv3",
-    "https://www.gnu.org/licenses/gpl-3.0.en.html"
+    "https://www.gnu.org/licenses/gpl-3.0.en.html",
+    Collections.emptyList()
   )
 
 
