@@ -1,10 +1,10 @@
 package edu.ucdavis.fiehnlab.ctsrest.web
 
 import edu.ucdavis.fiehnlab.wcmc.utilities.casetojson.config.CaseClassToJSONSerializationAutoConfiguration
-import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.{EnableAutoConfiguration, SpringBootApplication}
 import org.springframework.boot.{SpringApplication, WebApplicationType}
 import org.springframework.cache.annotation.EnableCaching
-import org.springframework.context.annotation.{Bean, Configuration}
+import org.springframework.context.annotation.{Bean, Configuration, Import}
 import org.springframework.http.MediaType
 import org.springframework.web.servlet.config.annotation.{ContentNegotiationConfigurer, CorsRegistry, WebMvcConfigurer}
 import springfox.documentation.builders.{PathSelectors, RequestHandlerSelectors}
@@ -21,7 +21,7 @@ import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactor
   */
 
 @EnableCaching
-@SpringBootApplication(scanBasePackageClasses = Array(classOf[CtsProxyConfig], classOf[CaseClassToJSONSerializationAutoConfiguration], classOf[ServletWebServerFactoryAutoConfiguration]))
+@SpringBootApplication
 class CtsProxy
 
 object CtsProxy extends App {
@@ -31,6 +31,7 @@ object CtsProxy extends App {
 }
 
 @Configuration
+@Import(Array(classOf[CaseClassToJSONSerializationAutoConfiguration], classOf[ServletWebServerFactoryAutoConfiguration]))
 class CtsProxyConfig {
   @Bean
   def ctsClient: CtsService = new CtsClient()
@@ -69,7 +70,7 @@ class SwaggerConfig {
   @Bean
   def api: Docket = new Docket(DocumentationType.SWAGGER_2)
       .select
-      .apis(RequestHandlerSelectors.basePackage("edu.ucdavis.fiehnlab.ctsRest"))
+      .apis(RequestHandlerSelectors.basePackage("edu.ucdavis.fiehnlab.ctsrest"))
       .paths(PathSelectors.any)
       .build()
       .apiInfo(apiInfo)

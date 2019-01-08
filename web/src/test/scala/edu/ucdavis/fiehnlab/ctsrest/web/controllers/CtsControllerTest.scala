@@ -2,7 +2,7 @@ package edu.ucdavis.fiehnlab.ctsrest.web.controllers
 
 import com.typesafe.scalalogging.LazyLogging
 import edu.ucdavis.fiehnlab.ctsrest.client.types.FormulaResponse
-import edu.ucdavis.fiehnlab.ctsrest.web.CtsProxyConfig
+import edu.ucdavis.fiehnlab.ctsrest.web.{CtsProxy, CtsProxyConfig}
 import edu.ucdavis.fiehnlab.wcmc.utilities.casetojson.config.CaseClassToJSONSerializationAutoConfiguration
 import org.junit.runner.RunWith
 import org.scalatest.{Matchers, WordSpec}
@@ -21,9 +21,7 @@ import scala.collection.JavaConverters._
   * Created by diego on 2/15/2017.
   */
 @RunWith(classOf[SpringRunner])
-@SpringBootTest(value = Array("${fiehnlab.cts.config.name}"),
-  classes = Array(classOf[CtsProxyConfig], classOf[CaseClassToJSONSerializationAutoConfiguration], classOf[ServletWebServerFactoryAutoConfiguration]),
-  webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(classes = Array(classOf[CtsProxy]), webEnvironment = WebEnvironment.RANDOM_PORT)
 class CtsControllerTest extends WordSpec with Matchers with LazyLogging {
 
   @Autowired
