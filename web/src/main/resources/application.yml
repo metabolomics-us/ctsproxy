@@ -21,13 +21,3 @@ fiehnlab:
       name: CtsProxy
       connectTimeoutMillis: 1000
       readTimeoutMillis: 120000
-
-zuul:
-  debug:
-    request: true
-
-  routes:
-    oldcts:
-      path: /service/**
-      url: https://oldcts.fiehnlab.ucdavis.edu
-      stripPrefix: false
