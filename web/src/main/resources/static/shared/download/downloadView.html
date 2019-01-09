@@ -1,0 +1,24 @@
+<form>
+    <div class="form-group">
+        <label>Download Style</label>
+        <select class="form-control" ng-model="exportStyle">
+            <option value="list">List</option>
+            <option value="table">Table</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label>File Type</label>
+        <select class="form-control" ng-model="exportType">
+            <option value="csv">CSV</option>
+            <option value="txt">TXT</option>
+        </select>
+    </div>
+    <div class="checkbox">
+        <label>
+            <input type="checkbox" ng-model="topHit"> Top Hit Only
+        </label>
+    </div>
+    <button class="btn btn-primary btn-download" ng-click="downloadFn()">
+        <i class="fa fa-download" aria-hidden="true"></i> Download
+    </button>
+</form>

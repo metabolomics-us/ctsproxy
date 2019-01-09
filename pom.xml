@@ -2,94 +2,394 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<parent>
-		<artifactId>wcmc</artifactId>
-		<groupId>edu.ucdavis.fiehnlab</groupId>
-		<version>1.0-SNAPSHOT</version>
-	</parent>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.0.5.RELEASE</version>
+    </parent>
 
-	<modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-	<artifactId>ctsproxy</artifactId>
-	<version>1.0-SNAPSHOT</version>
+    <groupId>edu.ucdavis.fiehnlab</groupId>
+    <artifactId>ctsproxy</artifactId>
+    <version>1.1-SNAPSHOT</version>
+    <packaging>pom</packaging>
 
-	<properties>
-		<docker.imagePrefix/>
-		<docker.imageName>${project.name}</docker.imageName>
-	</properties>
+    <modules>
+        <module>ctsclient</module>
+        <module>web</module>
+    </modules>
 
-	<dependencies>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<!--<dependency>-->
-			<!--<groupId>org.springframework.boot</groupId>-->
-			<!--<artifactId>spring-boot-starter-actuator</artifactId>-->
-		<!--</dependency>-->
+    <properties>
+        <docker.imageName>ctsproxy</docker.imageName>
+        <springboot.version>2.0.5.RELEASE</springboot.version>
+        <scala.version>2.11</scala.version>
+        <scala.minor.version>8</scala.minor.version>
+        <jackson.version>2.9.0</jackson.version>
+    </properties>
 
-		<!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-openfeign -->
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
-			<version>1.4.3.RELEASE</version>
-		</dependency>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+            <version>${springboot.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-zuul</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context-support</artifactId>
-			<version>4.3.2.RELEASE</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <version>${springboot.version}</version>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <version>${springboot.version}</version>
+            <scope>test</scope>
+        </dependency>
 
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>2.7.0</version>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>${springboot.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.springfox</groupId>
+            <artifactId>springfox-swagger2</artifactId>
+            <version>2.8.0</version>
+        </dependency>
+
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.7.0</version>
+            <version>2.8.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.7.5</version>
+            <version>${jackson.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.jaxrs</groupId>
+            <artifactId>jackson-jaxrs-json-provider</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-xml</artifactId>
-            <version>2.6.3</version>
+            <version>${jackson.version}</version>
         </dependency>
-	</dependencies>
 
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-scala_${scala.version}</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
 
-		</plugins>
+        <dependency>
+            <groupId>org.scalactic</groupId>
+            <artifactId>scalactic_${scala.version}</artifactId>
+            <version>3.0.1</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.scalatest</groupId>
+            <artifactId>scalatest_${scala.version}</artifactId>
+            <version>3.0.1</version>
+            <scope>test</scope>
+        </dependency>
 
-	</build>
+        <dependency>
+            <groupId>com.typesafe.scala-logging</groupId>
+            <artifactId>scala-logging_${scala.version}</artifactId>
+            <version>3.9.0</version>
+        </dependency>
 
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-library</artifactId>
+            <version>${scala.version}.${scala.minor.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.scala-lang</groupId>
+            <artifactId>scala-compiler</artifactId>
+            <version>${scala.version}.${scala.minor.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.2.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.25</version>
+        </dependency>
+
+        <dependency>
+            <groupId>edu.ucdavis.fiehnlab.utilities</groupId>
+            <artifactId>casetojson</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <!-- temporary fix instead of inheriting from wcmc pom due to conflicts with spring boot 2.0.0 -->
+    <profiles>
+        <!--scala support for compiling of tests-->
+        <profile>
+            <id>scala-test</id>
+
+            <activation>
+                <file>
+                    <exists>src/test/scala</exists>
+                </file>
+            </activation>
+
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>net.alchim31.maven</groupId>
+                            <artifactId>scala-maven-plugin</artifactId>
+                            <version>3.3.1</version>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>build-helper-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>generate-sources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                </goals>
+                                <configuration>
+                                    <sources>
+                                        <source>src/main/scala</source>
+                                    </sources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>net.alchim31.maven</groupId>
+                        <artifactId>scala-maven-plugin</artifactId>
+                        <version>3.3.1</version>
+                        <executions>
+                            <execution>
+                                <id>scala-compile</id>
+                                <phase>process-resources</phase>
+                                <goals>
+                                    <goal>add-source</goal>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>scala-test-compile</id>
+                                <phase>process-test-resources</phase>
+                                <goals>
+                                    <goal>testCompile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <scalaVersion>${scala.version}.${scala.minor.version}</scalaVersion>
+                            <jvmArgs>
+                                <jvmArg>-Xms64m</jvmArg>
+                                <jvmArg>-Xmx1024m</jvmArg>
+                            </jvmArgs>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>2.12.4</version>
+                        <configuration>
+                            <skipTests>true</skipTests>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.scalatest</groupId>
+                        <artifactId>scalatest-maven-plugin</artifactId>
+                        <version>1.0</version>
+                        <configuration>
+                            <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
+                            <junitxml>.</junitxml>
+                            <filereports>scalatest.txt</filereports>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>test</id>
+                                <goals>
+                                    <goal>test</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- this profile is building a docker image for us, which can be a standalone or deployed in a docker-compose file -->
+        <profile>
+            <id>docker</id>
+
+            <!-- will activate if you have a .docker file in your project directoy-->
+            <activation>
+                <file>
+                    <exists>.docker</exists>
+                </file>
+            </activation>
+
+            <properties>
+                <docker.registry>eros.fiehnlab.ucdavis.edu</docker.registry>
+                <docker.baseImage>java</docker.baseImage>
+                <docker.imagePath>${docker.registry}/${docker.imageName}</docker.imagePath>
+                <docker.expose>8080</docker.expose>
+                <docker.jvm>-Xmx2048m</docker.jvm>
+            </properties>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-antrun-plugin</artifactId>
+                        <version>1.7</version>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <id>download-remote-resources</id>
+                                <goals>
+                                    <goal>run</goal>
+                                </goals>
+                                <configuration>
+                                    <target>
+                                        <get src="https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh"
+                                             dest="${project.build.directory}"/>
+                                        <chmod file="${project.build.directory}/wait-for-it.sh" perm="777"/>
+                                    </target>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <goals>
+                                    <goal>repackage</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>com.spotify</groupId>
+                        <artifactId>docker-maven-plugin</artifactId>
+                        <version>0.4.13</version>
+                        <configuration>
+                            <imageName>${docker.registry}/${docker.imageName}</imageName>
+                            <baseImage>${docker.baseImage}</baseImage>
+                            <entryPoint>["java","${docker.jvm}", "-jar", "/${project.build.finalName}.jar"]</entryPoint>
+                            <exposes>
+                                <expose>${docker.expose}</expose>
+                            </exposes>
+                            <!-- copy the service's jar file from target into the root directory of the image -->
+                            <resources>
+                                <resource>
+                                    <targetPath>/</targetPath>
+                                    <directory>${project.build.directory}</directory>
+                                    <include>${project.build.finalName}.jar</include>
+                                    <include>wait-for-it.sh</include>
+                                </resource>
+                            </resources>
+                            <forceTags>true</forceTags>
+
+                            <imageTags>
+                                <imageTag>${project.version}</imageTag>
+                                <imageTag>latest</imageTag>
+                            </imageTags>
+
+                            <runs>
+                                <run>chmod 777 /wait-for-it.sh</run>
+                            </runs>
+                        </configuration>
+
+                        <executions>
+                            <execution>
+                                <phase>install</phase>
+                                <goals>
+                                    <goal>build</goal>
+                                </goals>
+                            </execution>
+
+                            <execution>
+                                <id>push-image-version</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>push</goal>
+                                </goals>
+                                <configuration>
+                                    <imageName>${docker.registry}/${docker.imageName}:${project.version}</imageName>
+                                </configuration>
+                            </execution>
+                            <execution>
+                                <id>push-image-latest</id>
+                                <phase>deploy</phase>
+                                <goals>
+                                    <goal>push</goal>
+                                </goals>
+                                <configuration>
+                                    <imageName>${docker.registry}/${docker.imageName}:latest</imageName>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <repositories>
+        <repository>
+            <id>spring-releases</id>
+            <url>https://repo.spring.io/libs-release</url>
+        </repository>
+    </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>spring-releases</id>
+            <url>https://repo.spring.io/libs-release</url>
+        </pluginRepository>
+    </pluginRepositories>
 </project>
-
