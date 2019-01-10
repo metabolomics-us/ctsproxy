@@ -129,6 +129,7 @@
                     }).catch(function(err) {
                         vm.loading = false;
                         vm.errors.push(err);
+                        console.error(err);
                     });
 
                 Analytics.trackEvent('convert', vm.query.from, vm.query.to, 1);
@@ -167,8 +168,7 @@
                                     }).catch(function(err) {
                                         vm.batchResults[string][to] = [];
                                         vm.errors.push(err);
-
-                                        return;
+                                        console.error(err);
                                     });
                             }
                         });

@@ -67,12 +67,12 @@
 
                         var result = [];
 
-                        if (response.data[0] && response.data[0].result.length > 0) {
-                            response.data[0].result.forEach(function(res) {
+                        if (response.data[0] && response.data[0].results.length > 0) {
+                            response.data[0].results.forEach(function(res) {
                                 result.push({ value: res });
                             });
                         } else {
-                            result.push({ value: 'No result' })
+                            result.push({ value: 'No result' });
                         }
 
                         return result;
