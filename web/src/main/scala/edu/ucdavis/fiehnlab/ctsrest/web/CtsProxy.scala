@@ -17,6 +17,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2
 import edu.ucdavis.fiehnlab.ctsrest.client.api._
 import edu.ucdavis.fiehnlab.ctsrest.client.core._
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy
 
 /**
   * Created by diego on 2/15/2017.
@@ -24,6 +25,7 @@ import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactor
 
 @EnableCaching
 @SpringBootApplication
+@EnableZuulProxy
 class CtsProxy
 
 object CtsProxy extends App {
