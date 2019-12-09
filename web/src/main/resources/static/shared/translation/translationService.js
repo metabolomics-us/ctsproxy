@@ -10,6 +10,16 @@
     /* @ngInject */
     function translation($http, $q) {
 
+        //  'to' values that should only be converted to from InChIKey
+        var inchikeyOnlyConversions = ['PubChem CID', 'Pubchem SID'];
+
+        // 'to' values from InChIKey that use compound lookup instead of translation, along with property names
+        var additionalInChIKeyToValues = {
+            'Exact Mass': 'exactmass',
+            'Molecular Formula': 'formula',
+            'Molecular Weight': 'molweight'
+        };
+
         var service = {
             getToValues: getToValues,
             getFromValues: getFromValues,
@@ -40,15 +50,16 @@
         }
 
         function getAdditionalInChIKeyToValues() {
-            return ['Exact Mass', 'Molecular Formula', 'Molecular Weight'];
+            return Object.keys(additionalInChIKeyToValues);
         }
 
         function getInChIKeyOnlyToValues() {
-            return getAdditionalInChIKeyToValues().concat(['PubChem CID', 'Pubchem SID']);
+            return getAdditionalInChIKeyToValues().concat(inchikeyOnlyConversions);
         }
 
         function convert(from, to, string) {
             if (to === 'InChIKey') {
+                // apply scoring to find most relevant InChIKey
                 return $http.get('/rest/score/' + encodeURIComponent(from) + '/' + string + '/biological')
                     .then(function (response) {
                         var result = [];
@@ -69,33 +80,27 @@
                     },
                     function (err) {
                         return $q.reject(err);
-                    });
+                    }
+                );
             } else if (from === 'InChIKey' && getAdditionalInChIKeyToValues().indexOf(to) > -1) {
-                //
+                // use compound endpoint if querying InChIKey properties
                 return $http.get('/service/compound/' +  string)
                     .then(function (response) {
                         var result = {value: 'No result'};
 
-                        if (response.data) {
-                            if (to === 'Exact Mass' && response.data.hasOwnProperty('exactmass')) {
-                                result.value = response.data.exactmass;
-                            }
-
-                            if (to === 'Molecular Formula' && response.data.hasOwnProperty('formula')) {
-                                result.value = response.data.formula;
-                            }
-
-                            if (to === 'Molecular Weight' && response.data.hasOwnProperty('molweight')) {
-                                result.value = response.data.molweight;
-                            }
+                        // retrieve compound property for the given to value
+                        if (response.data && response.data.hasOwnProperty(additionalInChIKeyToValues[to])) {
+                            result.value = response.data[additionalInChIKeyToValues[to]];
                         }
 
                         return [result];
                     },
                     function (err) {
                         return $q.reject(err);
-                    });
+                    }
+                );
             } else {
+                // otherwise, use general conversion endpoint
                 return $http.get('/rest/convert/' + encodeURIComponent(from) + '/' + encodeURIComponent(to) + '/' + string)
                     .then(function (response) {
                         var result = [];
@@ -112,7 +117,8 @@
                     },
                     function (err) {
                         return $q.reject(err);
-                    });
+                    }
+                );
             }
         }
     }
