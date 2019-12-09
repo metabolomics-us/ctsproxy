@@ -36,7 +36,7 @@
 
         function filterIllegal(array, from) {
             if (from !== 'InChIKey') {
-                return array.filter(function(elem){ return elem !== 'PubChem CID' && elem !== 'Pubchem SID'; });
+                return array.filter(function(x) { return translation.getInChIKeyOnlyToValues().indexOf(x) === -1; });
             } else {
                 return array;
             }
@@ -46,20 +46,15 @@
             vm.batchToValues = filterIllegal(vm.toValues, newVal);
 
             if (newVal !== 'InChIKey') {
-
                 var batchTo = vm.batchQuery.to.slice();
 
-                var cidIndex = batchTo.findIndex(function(elem) { return elem === 'PubChem CID'; });
+                translation.getInChIKeyOnlyToValues().forEach(function(x) {
+                    var idx = batchTo.findIndex(function(elem) { return elem === x; });
 
-                if (cidIndex > -1) {
-                    batchTo.splice(cidIndex, 1);
-                }
-
-                var sidIndex = batchTo.findIndex(function(elem) { return elem === 'Pubchem SID'; });
-
-                if (sidIndex > -1) {
-                    batchTo.splice(sidIndex, 1);
-                }
+                    if (idx > -1) {
+                        batchTo.splice(idx, 1);
+                    }
+                });
 
                 vm.batchQuery.to = batchTo;
 
@@ -70,7 +65,7 @@
             vm.singleToValues = filterIllegal(vm.toValues, newVal);
 
             if (newVal !== 'InChIKey') {
-                if (vm.query.to === 'PubChem CID' || vm.query.to === 'Pubchem SID') {
+                if (translation.getInChIKeyOnlyToValues().indexOf(vm.query.to) > -1) {
                     vm.query.to = 'InChIKey';
                 }
             }
