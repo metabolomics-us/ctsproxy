@@ -6,7 +6,7 @@ This is the AngularJS proxy for the CTS. Once deployed, people can use this fron
 
 * Setting up
 
-`mvn clean install -DskipTests`
+        `mvn clean install`
 
 Hey congrats you did it.
 
@@ -14,9 +14,18 @@ Hey congrats you did it.
 * Dependencies
 * Database configuration
 * How to run tests
-* Deployment instructions
+
+### Swarm deployment instructions
+
+* push image to repo
+* ssh to swarm manager node
+* pull image from repo
+* update the service
+
+        `docker service update --force cts_ctsproxy`
+
 
 ### Who do I talk to? ###
 
 * Diego for back end stuff
-* Matt for front end stuff
+* Diego?? for front end stuff

@@ -10,14 +10,17 @@
             <td ng-repeat-start="to in columns">
                 <div ng-hide="expandResults">
                     <i ng-show="ngModel[term][to].length > 1" ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-right" style="cursor: pointer;" aria-hidden="true"></i>
-                    <a ng-if="ngModel[term][to][0].value !== 'No result'" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{ngModel[term][to][0].value}}" target="_blank">{{ngModel[term][to][0].value}}</a>
+                    <span ng-if="ngModel[term][to][0].value !== 'No result'">
+                        <a ng-if="to === 'InChIKey'" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{ngModel[term][to][0].value}}" target="_blank">{{ngModel[term][to][0].value}}</a>
+                        <span ng-if="to !== 'InChIKey'" >{{ngModel[term][to][0].value}}</span>
+                    </span>
                     <span ng-if="ngModel[term][to][0].value === 'No result'">No result</span>
                 </div>
                 <div ng-show="expandResults">
                     <i ng-click="expandResults = !expandResults" class="pull-right fa fa-angle-down" style="cursor: pointer;" aria-hidden="true"></i>
                     <span>
                         <div ng-repeat="result in ngModel[term][to] track by $index">
-                            <a ng-if="result.value" href="https://pubchem.ncbi.nlm.nih.gov/compound/{{result.value}}" target="_blank">{{result.value}}</a>
+                            {{result.value}}
                         </div>
                     </span>
                 </div>
