@@ -44,6 +44,8 @@ case class CompoundResponse(
 
 case class ExtidCountResponse(datasource_count: Int)
 
+case class SMILESResponse(smiles: String)
+
 case class InChIResponse(inchicode: String)
 
 case class InChIPairResponse(

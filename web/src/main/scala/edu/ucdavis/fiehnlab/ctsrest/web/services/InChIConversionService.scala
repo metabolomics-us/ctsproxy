@@ -43,7 +43,6 @@ class InChIConversionService {
    */
   private def moleculeToSMILES(molecule: IAtomContainer, flavor: Int): String = {
     try {
-      println(new SmilesGenerator(flavor).create(molecule))
       new SmilesGenerator(flavor).create(molecule)
     } catch {
       case e: Exception => new SmilesGenerator(SmiFlavor.Unique | SmiFlavor.UseAromaticSymbols).create(addHydrogens(molecule))
@@ -63,10 +62,6 @@ class InChIConversionService {
 
     val molecule: IAtomContainer = inchiToStructure.getAtomContainer
     val returnStatus = inchiToStructure.getReturnStatus
-    println(inchi)
-    println(returnStatus)
-    println(INCHI_RET.OKAY)
-    println(INCHI_RET.WARNING)
 
     if (returnStatus == INCHI_RET.OKAY || returnStatus == INCHI_RET.WARNING) {
       // generate SMILES of the given flavor

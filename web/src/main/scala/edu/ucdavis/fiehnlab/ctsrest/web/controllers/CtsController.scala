@@ -2,6 +2,7 @@ package edu.ucdavis.fiehnlab.ctsrest.web.controllers
 
 import edu.ucdavis.fiehnlab.ctsrest.client.api.CtsService
 import edu.ucdavis.fiehnlab.ctsrest.client.types._
+import edu.ucdavis.fiehnlab.ctsrest.web.services.InChIConversionService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.web.bind.annotation._
@@ -18,6 +19,10 @@ class CtsController {
 
   @Autowired
   val client: CtsService = null
+
+  @Autowired
+  val inchiConversionService: InChIConversionService = null
+
 
   @Cacheable(Array("simple_convert"))
   @GetMapping(path = Array("/convert/{from}/{to}/{searchTerm}"))
@@ -98,5 +103,19 @@ class CtsController {
   @PostMapping(path = Array("/inchicodetomol"), consumes = Array("application/json"))
   def inchiCode2Mol(inchi: String): MoleculeResponse = {
     client.inchi2Mol(inchi)
+  }
+
+  @Cacheable(Array("inchi2smiles"))
+  @PostMapping(path = Array("/inchicodetosmiles"), consumes = Array("application/json"))
+  def inchiCode2smiles(inchi: InChIConversionRequest): SMILESResponse = {
+
+    try {
+      val smiles = inchiConversionService.inchiToSmiles(inchi.inchicode)
+      SMILESResponse(smiles)
+    } catch {
+      case e: Exception =>
+        e.printStackTrace
+        SMILESResponse(null)
+    }
   }
 }
