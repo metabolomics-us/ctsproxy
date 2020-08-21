@@ -4,7 +4,7 @@ spring:
   application:
     name: CtsRest
   cache:
-    cache-names: simple_convert,expand_formula,from_values,to_values,bio_count,scoring,inchikey_mol,cmpd_synonyms,mol2inchi,smiles2inchi,inchi2inchikey,inchi2mol
+    cache-names: simple_convert,expand_formula,from_values,to_values,bio_count,scoring,inchikey_mol,cmpd_synonyms,mol2inchi,smiles2inchi,inchi2inchikey,inchi2mol,inchi2smiles
     caffeine:
       spec: expireAfter:30s
 
