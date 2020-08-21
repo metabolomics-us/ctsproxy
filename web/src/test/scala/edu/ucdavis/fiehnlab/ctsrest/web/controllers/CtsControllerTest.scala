@@ -1,7 +1,7 @@
 package edu.ucdavis.fiehnlab.ctsrest.web.controllers
 
 import com.typesafe.scalalogging.LazyLogging
-import edu.ucdavis.fiehnlab.ctsrest.client.types.FormulaResponse
+import edu.ucdavis.fiehnlab.ctsrest.client.types.{FormulaResponse, InChIConversionRequest, SMILESResponse}
 import edu.ucdavis.fiehnlab.ctsrest.web.CtsProxy
 import org.junit.runner.RunWith
 import org.scalatest.{Matchers, WordSpec}
@@ -76,6 +76,12 @@ class CtsControllerTest extends WordSpec with Matchers with LazyLogging {
 
       val response2 = restTemplate.getForEntity[Seq[String]](baseUrl + "/fromValues", classOf[Seq[String]])
       response.getHeaders.get("X-Proxy-Cache") shouldBe "HIT"
+    }
+
+    "inchiCodetosmiles" ignore {
+      val inchi = "InChI=1S/C2H6O/c1-2-3/h3H,2H2,1H3"
+      val response = restTemplate.postForEntity(baseUrl + "/inchicodetosmiles", InChIConversionRequest(inchi), classOf[SMILESResponse]).getBody
+      assert(response === "CCO")
     }
   }
 }
