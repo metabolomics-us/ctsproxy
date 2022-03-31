@@ -22,7 +22,7 @@
 
     <properties>
         <docker.imageName>ctsproxy</docker.imageName>
-        <springboot.version>2.0.5.RELEASE</springboot.version>
+        <springboot.version>2.5.12</springboot.version>
         <scala.version>2.11</scala.version>
         <scala.minor.version>8</scala.minor.version>
         <jackson.version>2.9.0</jackson.version>
