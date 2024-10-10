@@ -1,11 +1,13 @@
 package edu.ucdavis.fiehnlab.ctsrest.web
 
-import java.util.Collections
-
-import edu.ucdavis.fiehnlab.wcmc.utilities.casetojson.config.CaseClassToJSONSerializationAutoConfiguration
-import org.springframework.boot.autoconfigure.{EnableAutoConfiguration, SpringBootApplication}
+import edu.ucdavis.fiehnlab.ctsrest.casetojson.config.CaseClassToJSONSerializationAutoConfiguration
+import edu.ucdavis.fiehnlab.ctsrest.client.api._
+import edu.ucdavis.fiehnlab.ctsrest.client.core._
+import org.springframework.boot.autoconfigure.SpringBootApplication
+import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration
 import org.springframework.boot.{SpringApplication, WebApplicationType}
 import org.springframework.cache.annotation.EnableCaching
+import org.springframework.cloud.netflix.zuul.EnableZuulProxy
 import org.springframework.context.annotation.{Bean, Configuration, Import}
 import org.springframework.http.MediaType
 import org.springframework.web.servlet.config.annotation.{ContentNegotiationConfigurer, CorsRegistry, WebMvcConfigurer}
@@ -14,14 +16,12 @@ import springfox.documentation.service.{ApiInfo, Contact}
 import springfox.documentation.spi.DocumentationType
 import springfox.documentation.spring.web.plugins.Docket
 import springfox.documentation.swagger2.annotations.EnableSwagger2
-import edu.ucdavis.fiehnlab.ctsrest.client.api._
-import edu.ucdavis.fiehnlab.ctsrest.client.core._
-import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration
-import org.springframework.cloud.netflix.zuul.EnableZuulProxy
+
+import java.util.Collections
 
 /**
-  * Created by diego on 2/15/2017.
-  */
+ * Created by diego on 2/15/2017.
+ */
 
 @EnableCaching
 @SpringBootApplication
