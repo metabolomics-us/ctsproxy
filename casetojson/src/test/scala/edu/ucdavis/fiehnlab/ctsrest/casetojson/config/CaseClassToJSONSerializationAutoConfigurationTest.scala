@@ -1,6 +1,7 @@
 package edu.ucdavis.fiehnlab.ctsrest.casetojson.config
 
 import com.fasterxml.jackson.databind.ObjectMapper
+import org.scalatest.funsuite.AnyFunSuite
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration

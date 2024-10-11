@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.{DeserializationContext, DeserializationFe
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
 import org.apache.commons.io.IOUtils
+import org.apache.logging.log4j.scala.Logging
 import org.springframework.boot.autoconfigure._
 import org.springframework.context.annotation.{Bean, Configuration, Primary}
 import org.springframework.core.{Ordered => SpringOrdered}

@@ -2,9 +2,10 @@ package edu.ucdavis.fiehnlab.ctsrest.client.core
 
 import com.typesafe.scalalogging.LazyLogging
 import edu.ucdavis.fiehnlab.ctsrest.client.types.{InChIPairResponse, MoleculeResponse, ScoredInchi}
-import edu.ucdavis.fiehnlab.wcmc.utilities.casetojson.config.CaseClassToJSONSerializationAutoConfiguration
+import edu.ucdavis.fiehnlab.ctsrest.casetojson.config.CaseClassToJSONSerializationAutoConfiguration
 import org.junit.runner.RunWith
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.annotation.{Bean, Configuration}
@@ -14,7 +15,7 @@ import org.springframework.test.context.junit4.SpringRunner
 
 @RunWith(classOf[SpringRunner])
 @SpringBootTest(classes = Array(classOf[CtsClientTestConfig], classOf[CaseClassToJSONSerializationAutoConfiguration]))
-class CtsClientTest extends WordSpec with Matchers with LazyLogging {
+class CtsClientTest extends AnyWordSpec with Matchers with LazyLogging {
 
   @Autowired
   val client: CtsClient = null

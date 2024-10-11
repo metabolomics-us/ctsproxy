@@ -31,6 +31,7 @@
 
     <dependencyManagement>
         <dependencies>
+
             <dependency>
                 <groupId>edu.ucdavis.fiehnlab.ctsproxy</groupId>
                 <artifactId>ctsclient</artifactId>
@@ -193,6 +194,34 @@
     </dependencyManagement>
     <!-- temporary fix instead of inheriting from wcmc pom due to conflicts with spring boot 2.0.0 -->
     <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.openrewrite.maven</groupId>
+                        <artifactId>rewrite-maven-plugin</artifactId>
+                        <version>5.42.0</version>
+                        <configuration>
+                            <exportDatatables>true</exportDatatables>
+                            <activeRecipes>
+                                <recipe>org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2</recipe>
+                            </activeRecipes>
+                        </configuration>
+                        <dependencies>
+                            <dependency>
+                                <groupId>org.openrewrite.recipe</groupId>
+                                <artifactId>rewrite-spring</artifactId>
+                                <version>5.21.0</version>
+                            </dependency>
+                        </dependencies>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <!--scala support for compiling of tests-->
         <profile>
             <id>scala-test</id>

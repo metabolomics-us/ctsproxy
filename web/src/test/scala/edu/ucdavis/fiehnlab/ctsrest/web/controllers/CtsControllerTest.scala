@@ -4,7 +4,8 @@ import com.typesafe.scalalogging.LazyLogging
 import edu.ucdavis.fiehnlab.ctsrest.client.types.FormulaResponse
 import edu.ucdavis.fiehnlab.ctsrest.web.CtsProxy
 import org.junit.runner.RunWith
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment
@@ -20,7 +21,7 @@ import scala.collection.JavaConverters._
   */
 @RunWith(classOf[SpringRunner])
 @SpringBootTest(value = Array("${fiehnlab.cts.config.name}"), classes = Array(classOf[CtsProxy]), webEnvironment = WebEnvironment.RANDOM_PORT)
-class CtsControllerTest extends WordSpec with Matchers with LazyLogging {
+class CtsControllerTest extends AnyWordSpec with Matchers with LazyLogging {
 
   @Autowired
   val restTemplate: TestRestTemplate = null
