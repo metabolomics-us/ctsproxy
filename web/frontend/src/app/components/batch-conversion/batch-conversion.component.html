@@ -1,0 +1,124 @@
+<div class="container">
+  @if (errors().length > 0) {
+    <div class="error-banner" role="alert" aria-live="assertive">
+      <mat-icon aria-hidden="true">error</mat-icon>
+      <span>Error: {{ errors()[0] }}</span>
+    </div>
+  }
+
+  <h1>Batch Conversion</h1>
+  <p>
+    To convert multiple identifiers, enter them in the box below or upload
+    them as a text file. IDs should be separated by line breaks. Select your
+    source and target types, and click the Convert button. You may select
+    multiple target types.
+  </p>
+
+  <div class="batch-form" [attr.aria-busy]="loading()">
+    <div class="form-left">
+      <mat-form-field class="full-width">
+        <mat-label>Enter IDs for conversion</mat-label>
+        <textarea
+          matInput
+          [(ngModel)]="queryString"
+          rows="6"
+          [disabled]="loading()"
+        ></textarea>
+      </mat-form-field>
+
+      <div>
+        <label for="file-upload" class="file-label">Upload a text file</label>
+        <input id="file-upload" type="file" (change)="onFileSelected($event)"
+               accept=".txt,.csv,.tsv"
+               aria-describedby="file-formats" />
+        <span id="file-formats" class="visually-hidden">Accepted formats: .txt, .csv, .tsv</span>
+      </div>
+    </div>
+
+    <div class="form-right">
+      <mat-form-field class="full-width">
+        <mat-label>From</mat-label>
+        <mat-select [(ngModel)]="queryFrom" (selectionChange)="onFromChange()">
+          @for (val of fromValues(); track val) {
+            <mat-option [value]="val">{{ val }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="convert-btn-container">
+        <button mat-raised-button color="primary"
+          (click)="convertBatch()"
+          [disabled]="loading() || !queryString || queryTo.length === 0"
+          [attr.aria-label]="loading() ? 'Converting ' + loadingCounter() + ' of ' + loadingTotal() : 'Convert identifiers'"
+        >
+          @if (loading()) {
+            <mat-spinner diameter="20"></mat-spinner>
+            <span>{{ loadingCounter() }} of {{ loadingTotal() }}</span>
+          } @else {
+            <ng-container><mat-icon aria-hidden="true">arrow_downward</mat-icon> Convert</ng-container>
+          }
+        </button>
+      </div>
+
+      <mat-form-field class="full-width">
+        <mat-label>To (multiple)</mat-label>
+        <mat-select [(ngModel)]="queryTo" multiple>
+          @for (val of batchToValues(); track val) {
+            <mat-option [value]="val">{{ val }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <mat-progress-bar
+      mode="determinate"
+      [value]="loadingTotal() > 0 ? (loadingCounter() / loadingTotal()) * 100 : 0"
+      [attr.aria-label]="'Conversion progress: ' + loadingCounter() + ' of ' + loadingTotal() + ' completed'"
+    ></mat-progress-bar>
+    <p class="visually-hidden" aria-live="polite">
+      Converting: {{ loadingCounter() }} of {{ loadingTotal() }} completed.
+    </p>
+  }
+
+  @if (batchResults()) {
+    <div class="results-section" aria-live="polite">
+      <app-result-table
+        [sourceColumn]="queryFrom"
+        [columns]="queryTo"
+        [ordering]="queryStrings()"
+        [results]="batchResults()!"
+      ></app-result-table>
+
+      <button mat-stroked-button (click)="clearResults()" aria-label="Clear search results">
+        <mat-icon aria-hidden="true">clear</mat-icon> Clear Search
+      </button>
+    </div>
+
+    <mat-card class="download-card">
+      <mat-card-content>
+        <div class="download-options">
+          <fieldset class="radio-fieldset">
+            <legend>Format</legend>
+            <mat-radio-group [(ngModel)]="exportStyle" aria-label="Export format">
+              <mat-radio-button value="table">Table</mat-radio-button>
+              <mat-radio-button value="list">List</mat-radio-button>
+            </mat-radio-group>
+          </fieldset>
+          <fieldset class="radio-fieldset">
+            <legend>Type</legend>
+            <mat-radio-group [(ngModel)]="exportType" aria-label="Export type">
+              <mat-radio-button value="csv">CSV</mat-radio-button>
+              <mat-radio-button value="tsv">TSV</mat-radio-button>
+            </mat-radio-group>
+          </fieldset>
+          <mat-checkbox [(ngModel)]="topHit">Top hit only</mat-checkbox>
+          <button mat-raised-button (click)="download()" aria-label="Download results">
+            <mat-icon aria-hidden="true">download</mat-icon> Download
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+</div>

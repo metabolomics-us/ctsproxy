@@ -1,0 +1,280 @@
+<div class="container">
+  <h1 id="services-heading">REST Services</h1>
+  <p>
+    The CTS provides a RESTful API for chemical identifier conversions
+    and structure operations. Below is a comprehensive reference of
+    available endpoints with sample calls and responses.
+  </p>
+
+  <nav class="toc" aria-label="Table of contents">
+    <h2 id="toc-heading">Contents</h2>
+    <ul>
+      <li><a href="#convert">Convert identifiers</a></li>
+      <li><a href="#score">Score compounds</a></li>
+      <li><a href="#from-values">Source identifier types</a></li>
+      <li><a href="#to-values">Target identifier types</a></li>
+      <li><a href="#expand-formula">Expand chemical formula</a></li>
+      <li><a href="#inchikey-to-mol">InChIKey to MOL</a></li>
+      <li><a href="#mol-to-inchi">MOL to InChI</a></li>
+      <li><a href="#smiles-to-inchi">SMILES to InChI</a></li>
+      <li><a href="#inchi-to-inchikey">InChI to InChIKey</a></li>
+      <li><a href="#inchi-to-mol">InChI to MOL</a></li>
+      <li><a href="#synonyms">Compound synonyms</a></li>
+      <li><a href="#count-biological">Count biological IDs</a></li>
+    </ul>
+  </nav>
+
+  <!-- Convert -->
+  <section aria-labelledby="convert-heading">
+    <h3 id="convert"><a href="#convert" class="section-anchor">Convert from one ID to another</a></h3>
+    <table class="endpoint-table" aria-label="Convert endpoint details">
+      <tbody>
+        <tr><th scope="row">URL</th><td><code>/rest/convert/&#123;from&#125;/&#123;to&#125;/&#123;query&#125;</code></td></tr>
+        <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+        <tr><th scope="row">URL Params</th><td>
+          <p><code>from</code> &mdash; The source ID type (see <a href="#from-values">source identifier types</a>)</p>
+          <p><code>to</code> &mdash; The target ID type (see <a href="#to-values">target identifier types</a>)</p>
+          <p><code>query</code> &mdash; The identifier to convert</p>
+        </td></tr>
+        <tr><th scope="row">Sample Call</th><td>
+          <pre><code>curl https://cts.fiehnlab.ucdavis.edu/rest/convert/InChIKey/Chemical%20Name/QNAYBMKLOCPYGJ-REOHCLBHSA-N</code></pre>
+        </td></tr>
+        <tr><th scope="row">Sample Response</th><td>
+<pre><code>[
+  &#123;
+    "fromIdentifier": "InChIKey",
+    "searchTerm": "QNAYBMKLOCPYGJ-REOHCLBHSA-N",
+    "toIdentifier": "Chemical Name",
+    "result": ["L-Alanine"]
+  &#125;
+]</code></pre>
+        </td></tr>
+      </tbody>
+    </table>
+    <p class="back-to-top"><a href="#services-heading">Back to top</a></p>
+  </section>
+
+  <!-- Score -->
+  <section aria-labelledby="score">
+    <h3 id="score"><a href="#score" class="section-anchor">Get a list of scored InChIKeys</a></h3>
+    <table class="endpoint-table" aria-label="Score endpoint details">
+      <tbody>
+        <tr><th scope="row">URL</th><td><code>/rest/score/&#123;from&#125;/&#123;query&#125;/&#123;algorithm&#125;</code></td></tr>
+        <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+        <tr><th scope="row">URL Params</th><td>
+          <p><code>from</code> &mdash; The source ID type</p>
+          <p><code>query</code> &mdash; The identifier to convert</p>
+          <p><code>algorithm</code> &mdash; Scoring algorithm: <code>biological</code> or <code>popularity</code></p>
+        </td></tr>
+        <tr><th scope="row">Sample Call</th><td>
+          <pre><code>curl https://cts.fiehnlab.ucdavis.edu/rest/score/Chemical%20Name/threonine/biological</code></pre>
+        </td></tr>
+        <tr><th scope="row">Sample Response</th><td>
+<pre><code>&#123;
+  "searchTerm": "threonine",
+  "from": "chemical name",
+  "result": [
+    &#123; "InChIKey": "AYFVYJQAPQTCCC-GBXIJSLDSA-N", "score": 1 &#125;,
+    &#123; "InChIKey": "AYFVYJQAPQTCCC-STHAYSLISA-N", "score": 0.86 &#125;,
+    &#123; "InChIKey": "AYFVYJQAPQTCCC-UHFFFAOYSA-N", "score": 0 &#125;
+  ]
+&#125;</code></pre>
+        </td></tr>
+      </tbody>
+    </table>
+    <p class="back-to-top"><a href="#services-heading">Back to top</a></p>
+  </section>
+
+  <!-- From Values -->
+  <section aria-labelledby="from-values">
+    <h3 id="from-values"><a href="#from-values" class="section-anchor">Get a list of valid source IDs</a></h3>
+    <table class="endpoint-table" aria-label="From values endpoint details">
+      <tbody>
+        <tr><th scope="row">URL</th><td><code>/rest/fromValues</code></td></tr>
+        <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+        <tr><th scope="row">Sample Call</th><td>
+          <pre><code>curl https://cts.fiehnlab.ucdavis.edu/rest/fromValues</code></pre>
+        </td></tr>
+        <tr><th scope="row">Sample Response</th><td>
+          <pre><code>["ABI Chem","ChEMBL","Chemical Name","InChIKey","MICAD","MLSMR","MMDB","PubChem CID","PubChem SID", ...]</code></pre>
+        </td></tr>
+      </tbody>
+    </table>
+    <p class="back-to-top"><a href="#services-heading">Back to top</a></p>
+  </section>
+
+  <!-- To Values -->
+  <section aria-labelledby="to-values">
+    <h3 id="to-values"><a href="#to-values" class="section-anchor">Get a list of valid target IDs</a></h3>
+    <table class="endpoint-table" aria-label="To values endpoint details">
+      <tbody>
+        <tr><th scope="row">URL</th><td><code>/rest/toValues</code></td></tr>
+        <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+        <tr><th scope="row">Sample Call</th><td>
+          <pre><code>curl https://cts.fiehnlab.ucdavis.edu/rest/toValues</code></pre>
+        </td></tr>
+        <tr><th scope="row">Sample Response</th><td>
+          <pre><code>["ABI Chem","ChEMBL","Chemical Name","InChI Code","InChIKey","MICAD","MLSMR","MMDB","PubChem CID","PubChem SID", ...]</code></pre>
+        </td></tr>
+      </tbody>
+    </table>
+    <p class="back-to-top"><a href="#services-heading">Back to top</a></p>
+  </section>
+
+  <!-- Expand Formula -->
+  <section aria-labelledby="expand-formula">
+    <h3 id="expand-formula"><a href="#expand-formula" class="section-anchor">Expand a chemical formula</a></h3>
+    <table class="endpoint-table" aria-label="Expand formula endpoint details">
+      <tbody>
+        <tr><th scope="row">URL</th><td><code>/rest/expandformula/&#123;formula&#125;</code></td></tr>
+        <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+        <tr><th scope="row">URL Params</th><td>
+          <p><code>formula</code> &mdash; The chemical formula to expand</p>
+        </td></tr>
+        <tr><th scope="row">Sample Call</th><td>
+          <pre><code>curl https://cts.fiehnlab.ucdavis.edu/rest/expandformula/H20</code></pre>
+        </td></tr>
+        <tr><th scope="row">Sample Response</th><td>
+<pre><code>&#123;
+  "formula": "H2O",
+  "result": "HHO"
+&#125;</code></pre>
+        </td></tr>
+      </tbody>
+    </table>
+    <p class="back-to-top"><a href="#services-heading">Back to top</a></p>
+  </section>
+
+  <!-- InChIKey to MOL -->
+  <section aria-labelledby="inchikey-to-mol">
+    <h3 id="inchikey-to-mol"><a href="#inchikey-to-mol" class="section-anchor">Convert an InChIKey to MOL (MDL/SDF)</a></h3>
+    <table class="endpoint-table" aria-label="InChIKey to MOL endpoint details">
+      <tbody>
+        <tr><th scope="row">URL</th><td><code>/rest/inchikeytomol/&#123;inchikey&#125;</code></td></tr>
+        <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+        <tr><th scope="row">URL Params</th><td>
+          <p><code>inchikey</code> &mdash; The InChIKey to convert</p>
+        </td></tr>
+        <tr><th scope="row">Sample Call</th><td>
+          <pre><code>curl https://cts.fiehnlab.ucdavis.edu/rest/inchikeytomol/QNAYBMKLOCPYGJ-REOHCLBHSA-N</code></pre>
+        </td></tr>
+        <tr><th scope="row">Sample Response</th><td>
+<pre><code>&#123;
+  "molecule": "\\n  CDK  ...\\nM  END\\n",
+  "message": null
+&#125;</code></pre>
+        </td></tr>
+      </tbody>
+    </table>
+    <p class="back-to-top"><a href="#services-heading">Back to top</a></p>
+  </section>
+
+  <!-- MOL to InChI -->
+  <section aria-labelledby="mol-to-inchi">
+    <h3 id="mol-to-inchi"><a href="#mol-to-inchi" class="section-anchor">Convert MOL to InChI</a></h3>
+    <table class="endpoint-table" aria-label="MOL to InChI endpoint details">
+      <tbody>
+        <tr><th scope="row">URL</th><td><code>/rest/moltoinchi</code></td></tr>
+        <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+        <tr><th scope="row">Body</th><td>
+          <p>The MOL definition as the request body (plain text)</p>
+        </td></tr>
+      </tbody>
+    </table>
+    <p class="back-to-top"><a href="#services-heading">Back to top</a></p>
+  </section>
+
+  <!-- SMILES to InChI -->
+  <section aria-labelledby="smiles-to-inchi">
+    <h3 id="smiles-to-inchi"><a href="#smiles-to-inchi" class="section-anchor">Convert SMILES to InChI</a></h3>
+    <table class="endpoint-table" aria-label="SMILES to InChI endpoint details">
+      <tbody>
+        <tr><th scope="row">URL</th><td><code>/rest/smilestoinchi</code></td></tr>
+        <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+        <tr><th scope="row">Body</th><td>
+          <p>The SMILES string as the request body (plain text)</p>
+        </td></tr>
+      </tbody>
+    </table>
+    <p class="back-to-top"><a href="#services-heading">Back to top</a></p>
+  </section>
+
+  <!-- InChI to InChIKey -->
+  <section aria-labelledby="inchi-to-inchikey">
+    <h3 id="inchi-to-inchikey"><a href="#inchi-to-inchikey" class="section-anchor">Convert InChI to InChIKey</a></h3>
+    <table class="endpoint-table" aria-label="InChI to InChIKey endpoint details">
+      <tbody>
+        <tr><th scope="row">URL</th><td><code>/rest/inchicodetoinchikey</code></td></tr>
+        <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+        <tr><th scope="row">Body</th><td>
+          <p>The InChI code as the request body (plain text)</p>
+        </td></tr>
+      </tbody>
+    </table>
+    <p class="back-to-top"><a href="#services-heading">Back to top</a></p>
+  </section>
+
+  <!-- InChI to MOL -->
+  <section aria-labelledby="inchi-to-mol">
+    <h3 id="inchi-to-mol"><a href="#inchi-to-mol" class="section-anchor">Convert InChI to MOL</a></h3>
+    <table class="endpoint-table" aria-label="InChI to MOL endpoint details">
+      <tbody>
+        <tr><th scope="row">URL</th><td><code>/rest/inchicodetomol</code></td></tr>
+        <tr><th scope="row">Method</th><td><code>POST</code></td></tr>
+        <tr><th scope="row">Body</th><td>
+          <p>The InChI code as the request body (plain text)</p>
+        </td></tr>
+      </tbody>
+    </table>
+    <p class="back-to-top"><a href="#services-heading">Back to top</a></p>
+  </section>
+
+  <!-- Synonyms -->
+  <section aria-labelledby="synonyms">
+    <h3 id="synonyms"><a href="#synonyms" class="section-anchor">Get compound synonyms</a></h3>
+    <table class="endpoint-table" aria-label="Synonyms endpoint details">
+      <tbody>
+        <tr><th scope="row">URL</th><td><code>/rest/synonyms/&#123;inchikey&#125;</code></td></tr>
+        <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+        <tr><th scope="row">URL Params</th><td>
+          <p><code>inchikey</code> &mdash; The InChIKey to look up</p>
+        </td></tr>
+        <tr><th scope="row">Sample Call</th><td>
+          <pre><code>curl https://cts.fiehnlab.ucdavis.edu/rest/synonyms/QNAYBMKLOCPYGJ-REOHCLBHSA-N</code></pre>
+        </td></tr>
+      </tbody>
+    </table>
+    <p class="back-to-top"><a href="#services-heading">Back to top</a></p>
+  </section>
+
+  <!-- Count Biological -->
+  <section aria-labelledby="count-biological">
+    <h3 id="count-biological"><a href="#count-biological" class="section-anchor">Count biological IDs</a></h3>
+    <table class="endpoint-table" aria-label="Count biological endpoint details">
+      <tbody>
+        <tr><th scope="row">URL</th><td><code>/rest/countBiological/&#123;inchikey&#125;</code></td></tr>
+        <tr><th scope="row">Method</th><td><code>GET</code></td></tr>
+        <tr><th scope="row">URL Params</th><td>
+          <p><code>inchikey</code> &mdash; The InChIKey to count</p>
+        </td></tr>
+        <tr><th scope="row">Sample Call</th><td>
+          <pre><code>curl https://cts.fiehnlab.ucdavis.edu/rest/countBiological/QNAYBMKLOCPYGJ-REOHCLBHSA-N</code></pre>
+        </td></tr>
+        <tr><th scope="row">Sample Response</th><td>
+<pre><code>&#123;
+  "KEGG": 2,
+  "BioCyc": 1,
+  "Human Metabolome Database": 1,
+  "total": 4
+&#125;</code></pre>
+        </td></tr>
+      </tbody>
+    </table>
+    <p class="back-to-top"><a href="#services-heading">Back to top</a></p>
+  </section>
+
+  <p>
+    Interactive API documentation is also available at
+    <a href="/swagger-ui/index.html">Swagger UI</a>.
+  </p>
+</div>

@@ -7,8 +7,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.databind.{DeserializationContext, DeserializationFeature, JsonDeserializer, ObjectMapper, SerializationFeature}
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.scala.DefaultScalaModule
+import com.typesafe.scalalogging.LazyLogging
 import org.apache.commons.io.IOUtils
-import org.apache.logging.log4j.scala.Logging
 import org.springframework.boot.autoconfigure._
 import org.springframework.context.annotation.{Bean, Configuration, Primary}
 import org.springframework.core.{Ordered => SpringOrdered}
@@ -28,7 +28,7 @@ import java.util.stream.Collectors
  */
 @Configuration
 @AutoConfigureOrder(SpringOrdered.HIGHEST_PRECEDENCE)
-class CaseClassToJSONSerializationAutoConfiguration extends Logging {
+class CaseClassToJSONSerializationAutoConfiguration extends LazyLogging {
 
   @Bean
   def objectMapper: ObjectMapper = {
@@ -38,8 +38,6 @@ class CaseClassToJSONSerializationAutoConfiguration extends Logging {
 
     val simpleModule = new SimpleModule()
     simpleModule.addDeserializer(classOf[Double], new ForceDoubleDeserializer)
-
-    // mapper.registerModule(simpleModule)
 
     //required, in case we are provided with a list of value
     mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY)
@@ -56,9 +54,15 @@ class CaseClassToJSONSerializationAutoConfiguration extends Logging {
   @Bean
   def restTemplate(mappingJackson2HttpMessageConverter: MappingJackson2HttpMessageConverter): RestTemplate = {
     logger.info("creating custom template with Jackson for scala support")
-    val factory = new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory());
+    val factory = new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory())
     val rest: RestTemplate = new RestTemplate(factory)
-    rest.getMessageConverters.add(0, mappingJackson2HttpMessageConverter)
+    // Replace the default Jackson converter in-place rather than adding at position 0,
+    // to preserve the converter ordering (ByteArray before Jackson)
+    val converters = rest.getMessageConverters
+    val jacksonIdx = converters.indexOf(converters.stream()
+      .filter(_.isInstanceOf[MappingJackson2HttpMessageConverter]).findFirst().orElse(null))
+    if (jacksonIdx >= 0) converters.set(jacksonIdx, mappingJackson2HttpMessageConverter)
+    else converters.add(mappingJackson2HttpMessageConverter)
     rest.setErrorHandler(new ResponseErrorHandler {
 
       private val errorHandler = new DefaultResponseErrorHandler
@@ -66,7 +70,7 @@ class CaseClassToJSONSerializationAutoConfiguration extends Logging {
       override def hasError(clientHttpResponse: ClientHttpResponse): Boolean = errorHandler.hasError(clientHttpResponse)
 
       override def handleError(clientHttpResponse: ClientHttpResponse): Unit = {
-        throw new RestClientException(s"status code: ${clientHttpResponse.getStatusCode}, status text: ${clientHttpResponse.getStatusText}, body: ${IOUtils.toString(clientHttpResponse.getBody(), "utf-8")}")
+        throw new RestClientException(s"status code: ${clientHttpResponse.getStatusCode}, body: ${IOUtils.toString(clientHttpResponse.getBody, "utf-8")}")
       }
     })
 
@@ -85,7 +89,7 @@ class CaseClassToJSONSerializationAutoConfiguration extends Logging {
 }
 
 
-class LoggingInterceptor extends ClientHttpRequestInterceptor with Logging {
+class LoggingInterceptor extends ClientHttpRequestInterceptor with LazyLogging {
   @throws[IOException]
   override def intercept(req: HttpRequest, reqBody: Array[Byte], ex: ClientHttpRequestExecution): ClientHttpResponse = {
     logger.debug(s"Request body: ${new String(reqBody, StandardCharsets.UTF_8)}")
@@ -95,8 +99,6 @@ class LoggingInterceptor extends ClientHttpRequestInterceptor with Logging {
     logger.debug(s"Response body:${body}")
     response
   }
-
-
 }
 
 class ForceDoubleDeserializer extends JsonDeserializer[Double] {

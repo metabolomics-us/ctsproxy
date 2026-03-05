@@ -4,8 +4,9 @@ import com.typesafe.scalalogging.LazyLogging
 import edu.ucdavis.fiehnlab.ctsrest.client.api.CtsService
 import edu.ucdavis.fiehnlab.ctsrest.client.types._
 import org.springframework.beans.factory.annotation.{Autowired, Value}
-import org.springframework.http.HttpEntity
+import org.springframework.http.{HttpEntity, HttpHeaders, MediaType}
 import org.springframework.stereotype.Component
+import org.springframework.util.LinkedMultiValueMap
 import org.springframework.web.client.RestTemplate
 
 @Component
@@ -19,8 +20,9 @@ class CtsClient extends CtsService with LazyLogging {
 
   def convert(from: String, to: String, searchTerm: String): Seq[ConversionResult] = {
     val response = restTemplate.getForObject[Seq[Map[String, Any]]](
-      baseUrl + s"/convert/${from}/${to}/${searchTerm}",
-      classOf[Seq[Map[String, Any]]]
+      baseUrl + "/convert/{from}/{to}/{searchTerm}",
+      classOf[Seq[Map[String, Any]]],
+      from, to, searchTerm
     ).map(item => ConversionResult(
       item.getOrElse("fromIdentifier", "undefined").toString,
       item("toIdentifier").toString,
@@ -31,7 +33,7 @@ class CtsClient extends CtsService with LazyLogging {
   }
 
   def score(from: String, value: String, algorithm: String): ScoreResult = {
-    restTemplate.getForObject[ScoreResult](s"${baseUrl}/score/${from}/${value}/${algorithm}", classOf[ScoreResult])
+    restTemplate.getForObject[ScoreResult](baseUrl + "/score/{from}/{value}/{algorithm}", classOf[ScoreResult], from, value, algorithm)
   }
 
   def inchiKey2Mol(inchikey: String): MoleculeResponse = {
@@ -72,11 +74,17 @@ class CtsClient extends CtsService with LazyLogging {
 
   /* ---------------------------POST REQUESTS-------------------------------*/
 
-  def inchi2Mol(inchiCode: String): MoleculeResponse = {
-    val entity = new HttpEntity(InChIConversionRequest(inchiCode))
+  private def formEntity(params: (String, String)*): HttpEntity[LinkedMultiValueMap[String, String]] = {
+    val headers = new HttpHeaders()
+    headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED)
+    val body = new LinkedMultiValueMap[String, String]()
+    params.foreach { case (k, v) => body.add(k, v) }
+    new HttpEntity(body, headers)
+  }
 
+  def inchi2Mol(inchiCode: String): MoleculeResponse = {
     val response = restTemplate.postForObject[MoleculeResponse](s"${baseUrl}/inchitomol",
-      entity, classOf[MoleculeResponse])
+      formEntity("inchicode" -> inchiCode), classOf[MoleculeResponse])
 
     logger.info(s"RESPONSE: ${response}")
     response
@@ -84,33 +92,29 @@ class CtsClient extends CtsService with LazyLogging {
 
   def mol2Inchi(mol: String): InChIPairResponse = {
     // Add MOL header since the old CTS doesn't recognize it as valid otherwise
-    val entity = mol.head match {
-      case '\n' => new HttpEntity(MOLConversionRequest("MOL"+ mol))
-      case _ => new HttpEntity(MOLConversionRequest(mol))
+    val molValue = mol.head match {
+      case '\n' => "MOL" + mol
+      case _ => mol
     }
 
     val response = restTemplate.postForObject[InChIPairResponse](s"${baseUrl}/moltoinchi",
-      entity, classOf[InChIPairResponse])
+      formEntity("mol" -> molValue), classOf[InChIPairResponse])
 
     logger.info(s"RESPONSE: ${response}")
     response
   }
 
   def smiles2Inchi(smilesCode: String): InChIResponse = {
-    val entity = new HttpEntity(SMILESConversionRequest(smilesCode))
-
     val response = restTemplate.postForObject[InChIResponse](s"${baseUrl}/smilestoinchi",
-      entity, classOf[InChIResponse])
+      formEntity("smiles" -> smilesCode), classOf[InChIResponse])
 
     logger.info(s"RESPONSE: ${response}")
     response
   }
 
   def inchiCode2InchiKey(inchiCode: String): InChIPairResponse = {
-    val entity = new HttpEntity(InChIConversionRequest(inchiCode))
-
     val response = restTemplate.postForObject[InChIPairResponse](s"${baseUrl}/inchicodetoinchikey",
-      entity, classOf[InChIPairResponse])
+      formEntity("inchicode" -> inchiCode), classOf[InChIPairResponse])
 
     logger.info(s"RESPONSE: ${response}")
     response
