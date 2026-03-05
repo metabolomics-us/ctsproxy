@@ -10,6 +10,8 @@ export interface ConversionResultItem {
 @Injectable({ providedIn: 'root' })
 export class TranslationService {
   private readonly inchikeyOnlyConversions = ['PubChem CID', 'Pubchem SID'];
+  private readonly hiddenFromValues = ['chemspider', 'smiles'];
+  private readonly hiddenToValues = ['chemspider'];
 
   private readonly additionalInChIKeyToValues: Record<string, string> = {
     'Exact Mass': 'exactmass',
@@ -21,11 +23,13 @@ export class TranslationService {
 
   async getToValues(): Promise<string[]> {
     const data = await firstValueFrom(this.http.get<string[]>('/rest/toValues'));
-    return [...data, ...this.getAdditionalInChIKeyToValues()];
+    const filtered = data.filter((v) => !this.hiddenToValues.includes(v.toLowerCase()));
+    return [...filtered, ...this.getAdditionalInChIKeyToValues()];
   }
 
   async getFromValues(): Promise<string[]> {
-    return firstValueFrom(this.http.get<string[]>('/rest/fromValues'));
+    const data = await firstValueFrom(this.http.get<string[]>('/rest/fromValues'));
+    return data.filter((v) => !this.hiddenFromValues.includes(v.toLowerCase()));
   }
 
   getAdditionalInChIKeyToValues(): string[] {
