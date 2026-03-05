@@ -10,6 +10,20 @@
   gap: 8px;
   margin-bottom: 16px;
 }
+.info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  background: #e8f0fe;
+  border: 1px solid #b0c4de;
+  border-radius: 6px;
+  color: #1A3E68;
+  font-size: 0.9em;
+  line-height: 1.4;
+  mat-icon { flex-shrink: 0; font-size: 20px; width: 20px; height: 20px; }
+}
 .conversion-form { margin-bottom: 24px; }
 .form-row {
   display: flex;

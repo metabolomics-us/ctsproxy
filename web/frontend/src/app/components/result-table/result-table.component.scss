@@ -1,9 +1,11 @@
-.result-table-container { overflow-x: auto; }
+.result-table-container {
+  overflow-x: auto;
+  margin-bottom: 12px;
+}
 .result-table {
   min-width: 100%;
   width: max-content;
   border-collapse: collapse;
-  margin-bottom: 16px;
   table-layout: fixed;
 }
 .result-table th, .result-table td {
