@@ -1,0 +1,24 @@
+<mat-toolbar class="navbar" role="banner">
+  <span class="brand">
+    <a routerLink="/" class="brand-link">CTS <span class="brand-full">- Chemical Translation Service</span></a>
+  </span>
+  <span class="mx-4"></span>
+  <nav aria-label="Main navigation">
+    <a mat-button routerLink="/" routerLinkActive="active" #simpleLink="routerLinkActive"
+       [routerLinkActiveOptions]="{ exact: true }"
+       [attr.aria-current]="simpleLink.isActive ? 'page' : null"
+       class="nav-link">
+      <mat-icon aria-hidden="true">description</mat-icon> Simple
+    </a>
+    <a mat-button routerLink="/batch" routerLinkActive="active" #batchLink="routerLinkActive"
+       [attr.aria-current]="batchLink.isActive ? 'page' : null"
+       class="nav-link">
+      <mat-icon aria-hidden="true">file_copy</mat-icon> Batch
+    </a>
+    <a mat-button routerLink="/services" routerLinkActive="active" #servicesLink="routerLinkActive"
+       [attr.aria-current]="servicesLink.isActive ? 'page' : null"
+       class="nav-link">
+      <mat-icon aria-hidden="true">help_outline</mat-icon> REST Services
+    </a>
+  </nav>
+</mat-toolbar>

@@ -1,0 +1,93 @@
+<div class="container">
+  @if (errors().length > 0) {
+    <div class="error-banner" role="alert" aria-live="assertive">
+      <mat-icon aria-hidden="true">error</mat-icon>
+      <span>Error: {{ errors()[0] }}</span>
+    </div>
+  }
+
+  <h1>Simple Conversion</h1>
+  <p>
+    To convert a single identifier, enter it in the box below, select source
+    and target types, and hit the Convert button.
+  </p>
+
+  <form (ngSubmit)="convertSingle()" class="conversion-form" [attr.aria-busy]="loading()">
+    <div class="form-row">
+      <mat-form-field class="form-field">
+        <mat-label>From</mat-label>
+        <mat-select [(ngModel)]="queryFrom" name="from" (selectionChange)="onFromChange()">
+          @for (val of fromValues(); track val) {
+            <mat-option [value]="val">{{ val }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="form-field input-field">
+        <mat-label>Enter ID for conversion</mat-label>
+        <input matInput [(ngModel)]="queryString" name="query" [disabled]="loading()" />
+      </mat-form-field>
+
+      <button
+        mat-raised-button
+        type="submit"
+        [disabled]="loading() || !queryString"
+        class="convert-btn"
+        [attr.aria-label]="loading() ? 'Converting, please wait' : 'Convert identifier'"
+      >
+        @if (loading()) {
+          <mat-spinner diameter="20"></mat-spinner>
+        } @else {
+          <mat-icon aria-hidden="true">arrow_forward</mat-icon>
+        }
+        <span>Convert</span>
+      </button>
+
+      <mat-form-field class="form-field">
+        <mat-label>To</mat-label>
+        <mat-select [(ngModel)]="queryTo" name="to">
+          @for (val of singleToValues(); track val) {
+            <mat-option [value]="val">{{ val }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </form>
+
+  @if (results()) {
+    <div aria-live="polite">
+      <app-result-table
+        [sourceColumn]="queryFrom"
+        [columns]="[queryTo]"
+        [ordering]="[queryString]"
+        [results]="results()!"
+      ></app-result-table>
+    </div>
+
+    <mat-card class="download-card">
+      <mat-card-content>
+        <div class="download-options">
+          <fieldset class="radio-fieldset">
+            <legend>Format</legend>
+            <mat-radio-group [(ngModel)]="exportStyle" aria-label="Export format">
+              <mat-radio-button value="table">Table</mat-radio-button>
+              <mat-radio-button value="list">List</mat-radio-button>
+            </mat-radio-group>
+          </fieldset>
+          <fieldset class="radio-fieldset">
+            <legend>Type</legend>
+            <mat-radio-group [(ngModel)]="exportType" aria-label="Export type">
+              <mat-radio-button value="csv">CSV</mat-radio-button>
+              <mat-radio-button value="tsv">TSV</mat-radio-button>
+            </mat-radio-group>
+          </fieldset>
+          <mat-checkbox [(ngModel)]="topHit">Top hit only</mat-checkbox>
+          <button mat-raised-button (click)="download()" aria-label="Download results">
+            <mat-icon aria-hidden="true">download</mat-icon> Download
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  }
+
+</div>

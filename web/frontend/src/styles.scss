@@ -1,0 +1,97 @@
+@use '@angular/material' as mat;
+
+// Fiehn Lab color palette
+$navy: #1A3E68;
+$gold: #FFCD00;
+$sec-gold: #DFC166;
+$lighter-blue: #335379;
+$cream: #f9f4e5;
+$dark-text: #333;
+
+html {
+  height: 100%;
+  @include mat.theme(
+    (
+      color: (
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    )
+  );
+
+  // Override M3 system colors with Fiehn Lab palette
+  @include mat.theme-overrides(
+    (
+      primary: $navy,
+      on-primary: #fff,
+      primary-container: $lighter-blue,
+      on-primary-container: #fff,
+      secondary: $sec-gold,
+      on-secondary: $navy,
+      surface: $cream,
+      on-surface: $dark-text,
+      surface-container: #fff,
+      on-surface-variant: $dark-text,
+    )
+  );
+}
+
+body {
+  color-scheme: light;
+  background-color: $cream;
+  color: $dark-text;
+  font-family: 'Garamond', Georgia, 'Times New Roman', serif;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  height: 100%;
+}
+
+// Skip-to-content link (WCAG 2.4.1)
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 16px;
+  background: $navy;
+  color: #fff;
+  padding: 8px 16px;
+  z-index: 10000;
+  text-decoration: none;
+  font-weight: 600;
+  border-radius: 0 0 4px 4px;
+
+  &:focus {
+    top: 0;
+  }
+}
+
+// Global focus-visible outline (WCAG 2.4.7)
+*:focus-visible {
+  outline: 3px solid $gold;
+  outline-offset: 2px;
+}
+
+// Visually hidden utility (screen-reader only)
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Global link styles — underline for non-color distinction
+a {
+  color: $navy;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: $lighter-blue;
+}

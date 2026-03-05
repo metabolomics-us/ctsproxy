@@ -23,6 +23,8 @@ cts-test-db.*
 **/.settings/
 **/out/
 **/.idea/
+**/.vscode/
 **/*.log
+**/node
 logs/
 stacktrace.log

@@ -1,0 +1,21 @@
+.result-table-container { overflow-x: auto; }
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
+}
+.result-table th, .result-table td {
+  padding: 8px 12px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+.result-table th {
+  font-weight: 600;
+  background: #f9f4e5;
+  color: #1A3E68;
+  font-family: 'EB Garamond', Georgia, serif;
+  font-size: 1.05em;
+}
+.expand-btn { vertical-align: middle; }
+.result-cell { display: flex; align-items: center; gap: 4px; }
+a { color: #1A3E68; text-decoration: underline; }

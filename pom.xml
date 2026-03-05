@@ -5,14 +5,14 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.0.5.RELEASE</version>
+        <version>3.5.11</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>edu.ucdavis.fiehnlab</groupId>
     <artifactId>ctsproxy</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>2.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -23,10 +23,9 @@
 
     <properties>
         <docker.imageName>ctsproxy</docker.imageName>
-        <springboot.version>2.0.5.RELEASE</springboot.version>
-        <scala.version>2.11</scala.version>
-        <scala.minor.version>12</scala.minor.version>
-        <jackson.version>2.17.2</jackson.version>
+        <java.version>17</java.version>
+        <scala.version>2.13</scala.version>
+        <scala.minor.version>18</scala.minor.version>
     </properties>
 
     <dependencyManagement>
@@ -35,44 +34,13 @@
             <dependency>
                 <groupId>edu.ucdavis.fiehnlab.ctsproxy</groupId>
                 <artifactId>ctsclient</artifactId>
-                <version>1.1-SNAPSHOT</version>
+                <version>2.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
                 <groupId>edu.ucdavis.fiehnlab.ctsproxy</groupId>
                 <artifactId>casetojson</artifactId>
-                <version>1.1-SNAPSHOT</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter</artifactId>
-                <version>${springboot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-web</artifactId>
-                <version>${springboot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
-                <version>${springboot.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-autoconfigure</artifactId>
-                <version>${springboot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
-                <version>2.2.10.RELEASE</version>
+                <version>2.0-SNAPSHOT</version>
             </dependency>
 
             <dependency>
@@ -82,64 +50,15 @@
             </dependency>
 
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.13.2</version>
-                <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger2</artifactId>
-                <version>3.0.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.springfox</groupId>
-                <artifactId>springfox-swagger-ui</artifactId>
-                <version>2.10.0</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.fasterxml.jackson.jaxrs</groupId>
-                <artifactId>jackson-jaxrs-json-provider</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.fasterxml.jackson.dataformat</groupId>
-                <artifactId>jackson-dataformat-xml</artifactId>
-                <version>${jackson.version}</version>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+                <version>2.8.16</version>
             </dependency>
 
             <dependency>
                 <groupId>com.fasterxml.jackson.module</groupId>
                 <artifactId>jackson-module-scala_${scala.version}</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.fasterxml.jackson.datatype</groupId>
-                <artifactId>jackson-datatype-jsr310</artifactId>
-                <version>${jackson.version}</version>
+                <version>${jackson-bom.version}</version>
             </dependency>
 
             <dependency>
@@ -153,12 +72,6 @@
                 <artifactId>scalatest_${scala.version}</artifactId>
                 <version>3.2.19</version>
                 <scope>test</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-api-scala_${scala.version}</artifactId>
-                <version>13.1.0</version>
             </dependency>
 
             <dependency>
@@ -178,50 +91,10 @@
                 <artifactId>scala-compiler</artifactId>
                 <version>${scala.version}.${scala.minor.version}</version>
             </dependency>
-
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>1.5.6</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.github.ben-manes.caffeine</groupId>
-                <artifactId>caffeine</artifactId>
-                <version>3.1.8</version>
-            </dependency>
         </dependencies>
     </dependencyManagement>
-    <!-- temporary fix instead of inheriting from wcmc pom due to conflicts with spring boot 2.0.0 -->
+
     <profiles>
-        <profile>
-            <id>default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.openrewrite.maven</groupId>
-                        <artifactId>rewrite-maven-plugin</artifactId>
-                        <version>5.42.0</version>
-                        <configuration>
-                            <exportDatatables>true</exportDatatables>
-                            <activeRecipes>
-                                <recipe>org.openrewrite.java.spring.boot3.UpgradeSpringBoot_3_2</recipe>
-                            </activeRecipes>
-                        </configuration>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.openrewrite.recipe</groupId>
-                                <artifactId>rewrite-spring</artifactId>
-                                <version>5.21.0</version>
-                            </dependency>
-                        </dependencies>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
         <!--scala support for compiling of tests-->
         <profile>
             <id>scala-test</id>
@@ -238,7 +111,7 @@
                         <plugin>
                             <groupId>net.alchim31.maven</groupId>
                             <artifactId>scala-maven-plugin</artifactId>
-                            <version>3.3.1</version>
+                            <version>4.9.2</version>
                         </plugin>
                     </plugins>
                 </pluginManagement>
@@ -264,7 +137,7 @@
                     <plugin>
                         <groupId>net.alchim31.maven</groupId>
                         <artifactId>scala-maven-plugin</artifactId>
-                        <version>3.3.1</version>
+                        <version>4.9.2</version>
                         <executions>
                             <execution>
                                 <id>scala-compile</id>
@@ -294,7 +167,6 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-surefire-plugin</artifactId>
-                        <version>2.12.4</version>
                         <configuration>
                             <skipTests>true</skipTests>
                         </configuration>
@@ -302,7 +174,7 @@
                     <plugin>
                         <groupId>org.scalatest</groupId>
                         <artifactId>scalatest-maven-plugin</artifactId>
-                        <version>1.0</version>
+                        <version>2.2.0</version>
                         <configuration>
                             <reportsDirectory>${project.build.directory}/surefire-reports</reportsDirectory>
                             <junitxml>.</junitxml>
@@ -334,7 +206,7 @@
 
             <properties>
                 <docker.registry>eros.fiehnlab.ucdavis.edu</docker.registry>
-                <docker.baseImage>java</docker.baseImage>
+                <docker.baseImage>eclipse-temurin:17-jre-alpine</docker.baseImage>
                 <docker.imagePath>${docker.registry}/${docker.imageName}</docker.imagePath>
                 <docker.expose>8080</docker.expose>
                 <docker.jvm>-Xmx2048m</docker.jvm>
@@ -378,6 +250,13 @@
                         <groupId>com.spotify</groupId>
                         <artifactId>docker-maven-plugin</artifactId>
                         <version>0.4.13</version>
+                        <dependencies>
+                            <dependency>
+                                <groupId>javax.activation</groupId>
+                                <artifactId>javax.activation-api</artifactId>
+                                <version>1.2.0</version>
+                            </dependency>
+                        </dependencies>
                         <configuration>
                             <imageName>${docker.registry}/${docker.imageName}</imageName>
                             <baseImage>${docker.baseImage}</baseImage>
@@ -443,19 +322,9 @@
 
     <repositories>
         <repository>
-            <id>spring-releases</id>
-            <url>https://repo.spring.io/libs-release</url>
-        </repository>
-        <repository>
             <id>maven_central</id>
             <name>Maven Central</name>
             <url>https://repo.maven.apache.org/maven2/</url>
         </repository>
     </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>spring-releases</id>
-            <url>https://repo.spring.io/libs-release</url>
-        </pluginRepository>
-    </pluginRepositories>
 </project>

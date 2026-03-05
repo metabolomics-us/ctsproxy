@@ -9,10 +9,8 @@ cts:
     url: https://oldcts.fiehnlab.ucdavis.edu/service
 
 management:
-  trace:
-    http:
-      enabled: true
+  httpexchanges:
+    recording:
       include:
         - request-headers
         - response-headers
-        - errors
