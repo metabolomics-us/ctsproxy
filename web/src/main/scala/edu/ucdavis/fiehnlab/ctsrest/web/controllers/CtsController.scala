@@ -6,7 +6,9 @@ import edu.ucdavis.fiehnlab.ctsrest.client.types._
 import edu.ucdavis.fiehnlab.ctsrest.web.services.SmilesConversionService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
+import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation._
+import org.springframework.web.server.ResponseStatusException
 
 
 
@@ -27,6 +29,12 @@ class CtsController extends LazyLogging {
   @Cacheable(Array("simple_convert"))
   @GetMapping(path = Array("/convert/{from}/{to}/{searchTerm}"))
   def convertSimple(@PathVariable from: String, @PathVariable to: String, @PathVariable searchTerm: String): Seq[ConversionResult] = {
+    if (from.equalsIgnoreCase("SMILES") || from.equalsIgnoreCase("ChemSpider")) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, s"Conversion from '$from' is not supported")
+    }
+    if (to.equalsIgnoreCase("ChemSpider")) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, s"Conversion to '$to' is not supported")
+    }
     if (to.equalsIgnoreCase("SMILES")) {
       convertToSmiles(from, searchTerm)
     } else {
@@ -84,13 +92,13 @@ class CtsController extends LazyLogging {
   @Cacheable(Array("from_values"))
   @GetMapping(path = Array("/fromValues"))
   def fromValues: Seq[String] = {
-    client.sourceIdNames()
+    client.sourceIdNames().filterNot(v => v.equalsIgnoreCase("Chemspider") || v.equalsIgnoreCase("SMILES"))
   }
 
   @Cacheable(Array("to_values"))
   @GetMapping(path = Array("/toValues"))
   def toValues: Seq[String] = {
-    client.targetIdNames()
+    client.targetIdNames().filterNot(_.equalsIgnoreCase("Chemspider"))
   }
 
   @Cacheable(Array("bio_count"))
