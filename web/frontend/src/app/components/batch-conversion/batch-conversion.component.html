@@ -20,6 +20,11 @@
     multiple target types.
   </p>
 
+  <div class="info-box" role="note">
+    <mat-icon aria-hidden="true">info</mat-icon>
+    <span>SMILES conversions work when the source is InChIKey. For other sources, an InChIKey is looked up first.</span>
+  </div>
+
   <div class="batch-form" [attr.aria-busy]="loading()">
     <div class="form-left">
       <mat-form-field class="full-width">

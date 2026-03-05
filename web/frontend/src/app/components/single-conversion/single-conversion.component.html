@@ -18,6 +18,11 @@
     and target types, and hit the Convert button.
   </p>
 
+  <div class="info-box" role="note">
+    <mat-icon aria-hidden="true">info</mat-icon>
+    <span>SMILES conversions work when the source is InChIKey. For other sources, an InChIKey is looked up first.</span>
+  </div>
+
   <form (ngSubmit)="convertSingle()" class="conversion-form" [attr.aria-busy]="loading()">
     <div class="form-row">
       <mat-form-field class="form-field">
