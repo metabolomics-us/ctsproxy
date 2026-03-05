@@ -1,4 +1,10 @@
 <div class="container">
+  @if (inputError()) {
+    <div class="error-banner" role="alert" aria-live="assertive">
+      <mat-icon aria-hidden="true">error</mat-icon>
+      <span>{{ inputError() }}</span>
+    </div>
+  }
   @if (errors().length > 0) {
     <div class="error-banner" role="alert" aria-live="assertive">
       <mat-icon aria-hidden="true">error</mat-icon>
@@ -21,6 +27,7 @@
         <textarea
           matInput
           [(ngModel)]="queryString"
+          (ngModelChange)="onQueryStringChange()"
           rows="6"
           [disabled]="loading()"
         ></textarea>
@@ -48,7 +55,7 @@
       <div class="convert-btn-container">
         <button mat-raised-button color="primary"
           (click)="convertBatch()"
-          [disabled]="loading() || !queryString || queryTo.length === 0"
+          [disabled]="loading() || !queryString || queryTo.length === 0 || inputError()"
           [attr.aria-label]="loading() ? 'Converting ' + loadingCounter() + ' of ' + loadingTotal() : 'Convert identifiers'"
         >
           @if (loading()) {

@@ -36,6 +36,7 @@ export class SingleConversionComponent implements OnInit {
   toValues = signal<string[]>([]);
   singleToValues = signal<string[]>([]);
   errors = signal<string[]>([]);
+  inputError = signal<string | null>(null);
   loading = signal(false);
   results = signal<ResultsMap | null>(null);
 
@@ -65,6 +66,15 @@ export class SingleConversionComponent implements OnInit {
     }
   }
 
+  onQueryStringChange(): void {
+    this.queryString = this.queryString.trim();
+    if (this.queryString.includes(';')) {
+      this.inputError.set('Invalid input: chemical names must not contain ";". Please enter a single name without semicolons.');
+    } else {
+      this.inputError.set(null);
+    }
+  }
+
   onFromChange(): void {
     this.singleToValues.set(this.filterIllegal(this.toValues(), this.queryFrom));
     if (this.queryFrom !== 'InChIKey' && this.translation.getInChIKeyOnlyToValues().includes(this.queryTo)) {
@@ -73,7 +83,7 @@ export class SingleConversionComponent implements OnInit {
   }
 
   async convertSingle() {
-    if (!this.queryString) return;
+    if (!this.queryString || this.inputError()) return;
     this.loading.set(true);
     this.errors.set([]);
     try {

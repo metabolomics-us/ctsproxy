@@ -48,4 +48,28 @@ export class ResultTableComponent {
     this.pageIndex = event.pageIndex;
     this.pageSize = event.pageSize;
   }
+
+  onResizeStart(event: MouseEvent): void {
+    event.preventDefault();
+    const handle = event.target as HTMLElement;
+    const th = handle.parentElement as HTMLTableCellElement;
+    const startX = event.pageX;
+    const startWidth = th.offsetWidth;
+
+    handle.classList.add('resizing');
+
+    const onMouseMove = (e: MouseEvent) => {
+      const newWidth = Math.max(50, startWidth + (e.pageX - startX));
+      th.style.width = `${newWidth}px`;
+    };
+
+    const onMouseUp = () => {
+      handle.classList.remove('resizing');
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  }
 }

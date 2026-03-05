@@ -40,6 +40,7 @@ export class BatchConversionComponent implements OnInit {
   toValues = signal<string[]>([]);
   batchToValues = signal<string[]>([]);
   errors = signal<string[]>([]);
+  inputError = signal<string | null>(null);
   loading = signal(false);
   loadingCounter = signal(0);
   loadingTotal = signal(0);
@@ -82,19 +83,29 @@ export class BatchConversionComponent implements OnInit {
     }
   }
 
+  onQueryStringChange(): void {
+    this.queryString = this.queryString.split('\n').map(s => s.trim()).join('\n');
+    if (this.queryString.includes(';')) {
+      this.inputError.set('Invalid input: chemical names must not contain ";". Please enter one name per line without semicolons.');
+    } else {
+      this.inputError.set(null);
+    }
+  }
+
   onFileSelected(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
         this.queryString = reader.result as string;
+        this.onQueryStringChange();
       };
       reader.readAsText(file);
     }
   }
 
   async convertBatch() {
-    if (!this.queryString || this.queryTo.length === 0) return;
+    if (!this.queryString || this.queryTo.length === 0 || this.inputError()) return;
 
     this.generation++;
     const myGeneration = this.generation;

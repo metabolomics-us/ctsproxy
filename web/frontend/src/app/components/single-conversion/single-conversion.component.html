@@ -1,4 +1,10 @@
 <div class="container">
+  @if (inputError()) {
+    <div class="error-banner" role="alert" aria-live="assertive">
+      <mat-icon aria-hidden="true">error</mat-icon>
+      <span>{{ inputError() }}</span>
+    </div>
+  }
   @if (errors().length > 0) {
     <div class="error-banner" role="alert" aria-live="assertive">
       <mat-icon aria-hidden="true">error</mat-icon>
@@ -25,13 +31,13 @@
 
       <mat-form-field class="form-field input-field">
         <mat-label>Enter ID for conversion</mat-label>
-        <input matInput [(ngModel)]="queryString" name="query" [disabled]="loading()" />
+        <input matInput [(ngModel)]="queryString" name="query" [disabled]="loading()" (ngModelChange)="onQueryStringChange()" />
       </mat-form-field>
 
       <button
         mat-raised-button
         type="submit"
-        [disabled]="loading() || !queryString"
+        [disabled]="loading() || !queryString || inputError()"
         class="convert-btn"
         [attr.aria-label]="loading() ? 'Converting, please wait' : 'Convert identifier'"
       >

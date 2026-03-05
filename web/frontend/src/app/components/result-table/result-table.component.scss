@@ -1,13 +1,17 @@
 .result-table-container { overflow-x: auto; }
 .result-table {
-  width: 100%;
+  min-width: 100%;
+  width: max-content;
   border-collapse: collapse;
   margin-bottom: 16px;
+  table-layout: fixed;
 }
 .result-table th, .result-table td {
   padding: 8px 12px;
   text-align: left;
   border-bottom: 1px solid #e0e0e0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .result-table th {
   font-weight: 600;
@@ -15,7 +19,25 @@
   color: #1A3E68;
   font-family: 'EB Garamond', Georgia, serif;
   font-size: 1.05em;
+  position: relative;
+  user-select: none;
+
+  .resize-handle {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    cursor: col-resize;
+    background: #c0c0c0;
+
+    &:hover, &.resizing {
+      background: #1A3E68;
+      width: 4px;
+    }
+  }
 }
 .expand-btn { vertical-align: middle; }
 .result-cell { display: flex; align-items: center; gap: 4px; }
 a { color: #1A3E68; text-decoration: underline; }
+td.inchikey-col, th.inchikey-col { white-space: nowrap; }

@@ -1,7 +1,9 @@
 package edu.ucdavis.fiehnlab.ctsrest.web.controllers
 
+import com.typesafe.scalalogging.LazyLogging
 import edu.ucdavis.fiehnlab.ctsrest.client.api.CtsService
 import edu.ucdavis.fiehnlab.ctsrest.client.types._
+import edu.ucdavis.fiehnlab.ctsrest.web.services.SmilesConversionService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
 import org.springframework.web.bind.annotation._
@@ -14,15 +16,63 @@ import org.springframework.web.bind.annotation._
 @RestController
 @CrossOrigin(origins = Array("*"))
 @RequestMapping(path = Array("/rest"))
-class CtsController {
+class CtsController extends LazyLogging {
 
   @Autowired
   val client: CtsService = null
 
+  @Autowired
+  val smilesConversionService: SmilesConversionService = null
+
   @Cacheable(Array("simple_convert"))
   @GetMapping(path = Array("/convert/{from}/{to}/{searchTerm}"))
   def convertSimple(@PathVariable from: String, @PathVariable to: String, @PathVariable searchTerm: String): Seq[ConversionResult] = {
-    client.convert(from, to, searchTerm)
+    if (to.equalsIgnoreCase("SMILES")) {
+      convertToSmiles(from, searchTerm)
+    } else {
+      client.convert(from, to, searchTerm)
+    }
+  }
+
+  private def convertToSmiles(from: String, searchTerm: String): Seq[ConversionResult] = {
+    try {
+      if (from.equalsIgnoreCase("InChIKey")) {
+        val smiles = smilesConversionService.inchikeyToSmiles(searchTerm)
+        Seq(ConversionResult("InChIKey", "SMILES", searchTerm, Seq(smiles)))
+      } else {
+        // Chain: from -> InChIKey -> MOL -> SMILES
+        val inchikeyResults = client.convert(from, "InChIKey", searchTerm)
+        val smilesResults = inchikeyResults.flatMap { result =>
+          result.results.flatMap { inchikey =>
+            try {
+              Some(smilesConversionService.inchikeyToSmiles(inchikey))
+            } catch {
+              case e: Exception =>
+                logger.warn(s"CDK conversion failed for InChIKey $inchikey: ${e.getMessage}")
+                None
+            }
+          }
+        }.distinct
+
+        if (smilesResults.nonEmpty) {
+          Seq(ConversionResult(from, "SMILES", searchTerm, smilesResults))
+        } else {
+          // Fall back to old CTS API
+          client.convert(from, "SMILES", searchTerm)
+        }
+      }
+    } catch {
+      case e: Exception =>
+        logger.warn(s"CDK SMILES conversion failed, falling back to CTS API: ${e.getMessage}")
+        client.convert(from, "SMILES", searchTerm)
+    }
+  }
+
+  @Cacheable(Array("inchikey_to_smiles"))
+  @GetMapping(path = Array("/inchikeytosmiles/{inchikey}"))
+  def inchikeyToSmiles(@PathVariable("inchikey") inchikey: String): ConversionResult = {
+    val smiles = smilesConversionService.inchikeyToSmiles(inchikey)
+    ConversionResult("InChIKey", "SMILES", inchikey, Seq(smiles))
   }
 
   @Cacheable(Array("expand_formula"))

@@ -2,11 +2,20 @@
   <table class="result-table" aria-label="Conversion results">
     <thead>
       <tr>
-        <th scope="col">{{ sourceColumn() }}</th>
+        <th scope="col">
+          {{ sourceColumn() }}
+          <span class="resize-handle" (mousedown)="onResizeStart($event)"></span>
+        </th>
         @for (col of columns(); track col) {
-          <th scope="col">{{ col }}</th>
+          <th scope="col" [class.inchikey-col]="col === 'InChIKey'">
+            {{ col }}
+            <span class="resize-handle" (mousedown)="onResizeStart($event)"></span>
+          </th>
           @if (col === 'InChIKey') {
-            <th scope="col">Score</th>
+            <th scope="col">
+              Score
+              <span class="resize-handle" (mousedown)="onResizeStart($event)"></span>
+            </th>
           }
         }
       </tr>
@@ -16,7 +25,7 @@
         <tr>
           <td>{{ term }}</td>
           @for (col of columns(); track col) {
-            <td>
+            <td [class.inchikey-col]="col === 'InChIKey'">
               @if (getResults(term, col); as results) {
                 @if (results.length > 1) {
                   @if (!isExpanded(term, col)) {
