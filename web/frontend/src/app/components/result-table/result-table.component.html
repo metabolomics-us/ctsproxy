@@ -1,100 +1,124 @@
 <div class="result-table-container">
-  <table class="result-table" aria-label="Conversion results">
-    <thead>
-      <tr>
-        <th scope="col">
-          {{ sourceColumn() }}
-          <span class="resize-handle" (mousedown)="onResizeStart($event)"></span>
-        </th>
-        @for (col of columns(); track col) {
-          <th scope="col" [class.inchikey-col]="col === 'InChIKey'">
-            {{ col }}
-            <span class="resize-handle" (mousedown)="onResizeStart($event)"></span>
-          </th>
-          @if (col === 'InChIKey') {
-            <th scope="col">
-              Score
-              <span class="resize-handle" (mousedown)="onResizeStart($event)"></span>
-            </th>
-          }
-        }
-      </tr>
-    </thead>
-    <tbody>
-      @for (term of pagedTerms(); track term) {
+    <table class="result-table">
+        <caption class="visually-hidden">Conversion results</caption>
+        <thead>
         <tr>
-          <td>{{ term }}</td>
-          @for (col of columns(); track col) {
-            <td [class.inchikey-col]="col === 'InChIKey'">
-              @if (getResults(term, col); as results) {
-                @if (results.length > 1) {
-                  @if (!isExpanded(term, col)) {
-                    <span class="result-cell">
+            <th scope="col">
+                {{ sourceColumn() }}
+                <span class="resize-handle"
+                      role="separator"
+                      aria-orientation="vertical"
+                      aria-label="Resize column"
+                      aria-valuenow="1"
+                      tabindex="0"
+                      (mousedown)="onResizeStart($event)"
+                      (keydown)="onResizeKeydown($event)"></span>
+            </th>
+            @for (col of columns(); track col) {
+                <th scope="col" [class.inchikey-col]="col === 'InChIKey'">
+                    {{ col }}
+                    <span class="resize-handle"
+                          role="separator"
+                          aria-orientation="vertical"
+                          aria-label="Resize column"
+                          aria-valuenow="2"
+                          tabindex="0"
+                          (mousedown)="onResizeStart($event)"
+                          (keydown)="onResizeKeydown($event)"></span>
+                </th>
+                @if (col === 'InChIKey') {
+                    <th scope="col">
+                        Score
+                        <span class="resize-handle"
+                              role="separator"
+                              aria-orientation="vertical"
+                              aria-label="Resize column"
+                              aria-valuenow="3"
+                              tabindex="0"
+                              (mousedown)="onResizeStart($event)"
+                              (keydown)="onResizeKeydown($event)"></span>
+                    </th>
+                }
+            }
+        </tr>
+        </thead>
+        <tbody>
+            @for (term of pagedTerms(); track term) {
+                <tr>
+                    <td>{{ term }}</td>
+                    @for (col of columns(); track col) {
+                        <td [class.inchikey-col]="col === 'InChIKey'">
+                            @if (getResults(term, col); as results) {
+                                @if (results.length > 1) {
+                                    @if (!isExpanded(term, col)) {
+                                        <span class="result-cell">
                       @if (col === 'InChIKey' && results[0].value !== 'No result') {
-                        <a [href]="'https://pubchem.ncbi.nlm.nih.gov/compound/' + results[0].value" target="_blank" rel="noopener">
+                          <a [href]="'https://pubchem.ncbi.nlm.nih.gov/compound/' + results[0].value" target="_blank" rel="noopener">
                           {{ results[0].value }}<span class="visually-hidden"> (opens in new tab)</span>
                         </a>
                       } @else {
-                        {{ results[0].value }}
+                          {{ results[0].value }}
                       }
-                      <button mat-icon-button
-                              (click)="toggleExpand(term, col)"
-                              class="expand-btn"
-                              [attr.aria-expanded]="false"
-                              [attr.aria-label]="'Show all ' + results.length + ' results for ' + term">
+                                            <button mat-icon-button
+                                                    (click)="toggleExpand(term, col)"
+                                                    class="expand-btn"
+                                                    [attr.aria-expanded]="false"
+                                                    [attr.aria-label]="'Show all ' + results.length + ' results for ' + term">
                         <mat-icon>chevron_right</mat-icon>
                       </button>
                     </span>
-                  } @else {
-                    <div>
-                      <button mat-icon-button
-                              (click)="toggleExpand(term, col)"
-                              class="expand-btn"
-                              [attr.aria-expanded]="true"
-                              [attr.aria-label]="'Collapse results for ' + term">
-                        <mat-icon>expand_more</mat-icon>
-                      </button>
-                      @for (r of results; track $index) {
-                        <div>{{ r.value }}</div>
-                      }
-                    </div>
-                  }
-                } @else {
-                  @if (col === 'InChIKey' && results[0]?.value !== 'No result') {
-                    <a [href]="'https://pubchem.ncbi.nlm.nih.gov/compound/' + results[0]?.value" target="_blank" rel="noopener">
-                      {{ results[0]?.value }}<span class="visually-hidden"> (opens in new tab)</span>
-                    </a>
-                  } @else {
-                    {{ results[0]?.value }}
-                  }
-                }
-              }
-            </td>
-            @if (col === 'InChIKey') {
-              <td>
-                @if (getResults(term, col); as results) {
-                  @if (!isExpanded(term, col)) {
-                    {{ results[0]?.score }}
-                  } @else {
-                    @for (r of results; track $index) {
-                      <div>{{ r.score }}</div>
+                                    } @else {
+                                        <div>
+                                            <button mat-icon-button
+                                                    (click)="toggleExpand(term, col)"
+                                                    class="expand-btn"
+                                                    [attr.aria-expanded]="true"
+                                                    [attr.aria-label]="'Collapse results for ' + term">
+                                                <mat-icon>expand_more</mat-icon>
+                                            </button>
+                                            @for (r of results; track $index) {
+                                                <div>{{ r.value }}</div>
+                                            }
+                                        </div>
+                                    }
+                                } @else {
+                                    @if (col === 'InChIKey' && results[0]?.value !== 'No result') {
+                                        <a [href]="'https://pubchem.ncbi.nlm.nih.gov/compound/' + results[0]?.value" target="_blank" rel="noopener">
+                                            {{ results[0]?.value }}
+                                            <span class="visually-hidden"> (opens in new tab)</span>
+                                        </a>
+                                    } @else {
+                                        {{ results[0]?.value }}
+                                    }
+                                }
+                            }
+                        </td>
+                        @if (col === 'InChIKey') {
+                            <td>
+                                @if (getResults(term, col); as results) {
+                                    @if (!isExpanded(term, col)) {
+                                        {{ results[0]?.score }}
+                                    } @else {
+                                        @for (r of results; track $index) {
+                                            <div>{{ r.score }}</div>
+                                        }
+                                    }
+                                }
+                            </td>
+                        }
                     }
-                  }
-                }
-              </td>
+                </tr>
             }
-          }
-        </tr>
-      }
-    </tbody>
-  </table>
+        </tbody>
+    </table>
 
-  @if (ordering().length > pageSize) {
-    <mat-paginator
-      [length]="ordering().length"
-      [pageSize]="pageSize"
-      [pageSizeOptions]="[10, 25, 50]"
-      (page)="onPage($event)"
-    ></mat-paginator>
-  }
+    @if (ordering().length > pageSize) {
+        <mat-paginator
+              [length]="ordering().length"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="[10, 25, 50]"
+              (page)="onPage($event)"
+              aria-label="Results pagination"
+        ></mat-paginator>
+    }
 </div>

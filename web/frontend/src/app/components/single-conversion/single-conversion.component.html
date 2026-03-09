@@ -39,11 +39,8 @@
         <input matInput [(ngModel)]="queryString" name="query" [disabled]="loading()" (ngModelChange)="onQueryStringChange()" />
       </mat-form-field>
 
-      <button
-        mat-raised-button
-        type="submit"
+      <button mat-raised-button type="submit"
         [disabled]="loading() || !queryString || inputError()"
-        class="convert-btn"
         [attr.aria-label]="loading() ? 'Converting, please wait' : 'Convert identifier'"
       >
         @if (loading()) {

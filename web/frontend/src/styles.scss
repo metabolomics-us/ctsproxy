@@ -1,12 +1,5 @@
 @use '@angular/material' as mat;
-
-// Fiehn Lab color palette
-$navy: #1A3E68;
-$gold: #FFCD00;
-$sec-gold: #DFC166;
-$lighter-blue: #335379;
-$cream: #f9f4e5;
-$dark-text: #333;
+@use 'variables' as *;
 
 html {
   height: 100%;
@@ -40,9 +33,7 @@ html {
 
 body {
   color-scheme: light;
-  background-color: $cream;
   color: $dark-text;
-  font-family: 'Garamond', Georgia, 'Times New Roman', serif;
   font-size: 16px;
   line-height: 1.6;
   margin: 0;

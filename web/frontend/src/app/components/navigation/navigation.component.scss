@@ -1,32 +1,54 @@
+@use 'variables' as theme;
+
 .navbar {
-  background: #1A3E68;
-  border-bottom: 5px solid #DFC166;
-  color: #fff;
-  justify-content: unset;
+    background: theme.$navy;
+    border-bottom: 5px solid theme.$sec-gold;
+    color: #fff;
+    justify-content: unset;
 }
-.brand { font-weight: 500; }
+
+.brand {
+    font-weight: 500;
+}
+
 .brand-link {
-  color: #FFCD00;
-  text-decoration: none;
-  font-family: 'Garamond', Georgia, serif;
-  font-size: 1.3em;
-  font-weight: 700;
+    color: theme.$gold;
+    text-decoration: none;
+    font-family: 'Garamond', Georgia, serif;
+    font-size: 1.3em;
+    font-weight: 700;
 }
-.brand-link:hover { color: #fff; }
-.brand-full { font-weight: 400; color: #fff; }
-//.spacer { flex: 1 1 auto; }
-nav { display: flex; gap: 4px; }
+
+.brand-link:hover {
+    color: #fff;
+}
+
+.brand-full {
+    font-weight: 400;
+    color: #fff;
+}
+
+nav {
+    display: flex;
+    gap: 4px;
+}
+
 .nav-link {
-  color: #fff !important;
-  text-decoration: none;
+    color: #fff !important;
+    text-decoration: none;
 }
+
 .nav-link:hover {
-  background: rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.1);
 }
+
 .active {
-  background: #335379 !important;
-  color: #FFCD00 !important;
+    background: theme.$lighter-blue !important;
+    color: theme.$gold !important;
 }
+
 @media (max-width: 600px) {
-  .brand-full { display: none; }
+    .brand-full {
+        display: none;
+    }
 }

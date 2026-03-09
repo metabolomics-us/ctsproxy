@@ -49,6 +49,15 @@ export class ResultTableComponent {
     this.pageSize = event.pageSize;
   }
 
+  onResizeKeydown(event: KeyboardEvent): void {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+    event.preventDefault();
+    const handle = event.target as HTMLElement;
+    const th = handle.parentElement as HTMLTableCellElement;
+    const delta = event.key === 'ArrowRight' ? 10 : -10;
+    th.style.width = `${Math.max(50, th.offsetWidth + delta)}px`;
+  }
+
   onResizeStart(event: MouseEvent): void {
     event.preventDefault();
     const handle = event.target as HTMLElement;
