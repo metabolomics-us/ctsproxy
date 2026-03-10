@@ -27,7 +27,7 @@
     <div class="form-row">
       <mat-form-field class="form-field">
         <mat-label>From</mat-label>
-        <mat-select [(ngModel)]="queryFrom" name="from" (selectionChange)="onFromChange()">
+        <mat-select [(ngModel)]="queryFrom" name="from" (selectionChange)="onFromChange()" aria-label="Source identifier type">
           @for (val of fromValues(); track val) {
             <mat-option [value]="val">{{ val }}</mat-option>
           }
@@ -36,7 +36,7 @@
 
       <mat-form-field class="form-field input-field">
         <mat-label>Enter ID for conversion</mat-label>
-        <input matInput [(ngModel)]="queryString" name="query" [disabled]="loading()" (ngModelChange)="onQueryStringChange()" />
+        <input matInput [(ngModel)]="queryString" name="query" [disabled]="loading()" (ngModelChange)="onQueryStringChange()" aria-label="Enter ID for conversion" />
       </mat-form-field>
 
       <button mat-raised-button type="submit"
@@ -53,7 +53,7 @@
 
       <mat-form-field class="form-field">
         <mat-label>To</mat-label>
-        <mat-select [(ngModel)]="queryTo" name="to">
+        <mat-select [(ngModel)]="queryTo" name="to" aria-label="Target identifier type">
           @for (val of singleToValues(); track val) {
             <mat-option [value]="val">{{ val }}</mat-option>
           }

@@ -51,7 +51,7 @@
         <div class="form-right">
             <mat-form-field class="full-width">
                 <mat-label>From</mat-label>
-                <mat-select name="from" [(ngModel)]="queryFrom" (selectionChange)="onFromChange()">
+                <mat-select name="from" [(ngModel)]="queryFrom" (selectionChange)="onFromChange()" aria-label="Source identifier type">
                     @for (val of fromValues(); track val) {
                         <mat-option [value]="val">{{ val }}</mat-option>
                     }
@@ -65,19 +65,20 @@
                 >
                     @if (loading()) {
                         <mat-spinner diameter="20"></mat-spinner>
+                    } @else {
+                        <mat-icon aria-hidden="true">arrow_downward</mat-icon>
+                    }
+                    @if (loading()) {
                         <span>{{ loadingCounter() }} of {{ loadingTotal() }}</span>
                     } @else {
-                        <ng-content class="d-flex align-content-center">
-                            <mat-icon aria-hidden="true">arrow_downward</mat-icon>
-                            <span class="ms-2">Convert</span>
-                        </ng-content>
+                        <span>Convert</span>
                     }
                 </button>
             </div>
 
             <mat-form-field class="full-width">
                 <mat-label>To (multiple)</mat-label>
-                <mat-select name="to" [(ngModel)]="queryTo" multiple>
+                <mat-select name="to" [(ngModel)]="queryTo" multiple aria-label="Target identifier types">
                     @for (val of batchToValues(); track val) {
                         <mat-option [value]="val">{{ val }}</mat-option>
                     }

@@ -64,6 +64,16 @@ body {
   outline-offset: 2px;
 }
 
+// mat-form-field clips outlines via overflow:hidden — use box-shadow instead
+mat-form-field:focus-within {
+  border-radius: 4px;
+  box-shadow: 0 0 0 3px $gold;
+}
+
+mat-form-field .mat-mdc-select:focus-visible {
+  outline: none;
+}
+
 // Visually hidden utility (screen-reader only)
 .visually-hidden {
   position: absolute;

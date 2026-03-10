@@ -64,15 +64,12 @@
 
 .convert-btn-container {
     text-align: center;
-    margin: 0 0 6px 0;
-    vertical-align: top;
+    margin: 0 0 12px 0;
 }
 
-.convert-button {
+.convert-button:enabled {
     background-color: theme.$navy;
     color: theme.$gold;
-    margin-bottom: 12px;
-    font-size: 20px;
 }
 
 .clear-button {
