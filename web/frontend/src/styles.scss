@@ -27,14 +27,16 @@ html {
       on-surface: $dark-text,
       surface-container: #fff,
       on-surface-variant: $dark-text,
+          outline: #6b6b6b,
+          outline-variant: #6b6b6b,
     )
   );
 }
 
 body {
-  color-scheme: light;
-  color: $dark-text;
-  font-size: 16px;
+    //color-scheme: light;
+    color: #000;
+    font-size: 18px;
   line-height: 1.6;
   margin: 0;
   height: 100%;
@@ -67,7 +69,7 @@ body {
 // mat-form-field clips outlines via overflow:hidden — use box-shadow instead
 mat-form-field:focus-within {
   border-radius: 4px;
-  box-shadow: 0 0 0 3px $gold;
+    box-shadow: 0 0 0 3px #777;
 }
 
 mat-form-field .mat-mdc-select:focus-visible {
@@ -85,6 +87,26 @@ mat-form-field .mat-mdc-select:focus-visible {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border: 0;
+}
+
+// Form control contrast overrides (WCAG 1.4.3, 1.4.11)
+mat-form-field {
+    --mdc-outlined-text-field-outline-color: #777;
+    --mdc-outlined-text-field-hover-outline-color: #{$navy};
+    --mdc-outlined-text-field-disabled-outline-color: #949494;
+    --mdc-outlined-text-field-disabled-input-text-color: #595959;
+    --mdc-outlined-text-field-disabled-label-text-color: #595959;
+    --mdc-outlined-text-field-container-color: #eee;
+}
+
+mat-radio-button {
+    --mdc-radio-unselected-icon-color: #6b6b6b;
+    --mdc-radio-disabled-unselected-icon-color: #949494;
+}
+
+mat-checkbox {
+    --mdc-checkbox-unselected-icon-color: #6b6b6b;
+    --mdc-checkbox-disabled-unselected-icon-color: #949494;
 }
 
 // Global link styles — underline for non-color distinction

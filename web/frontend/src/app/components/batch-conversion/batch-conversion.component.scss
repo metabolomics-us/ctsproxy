@@ -104,3 +104,7 @@
     margin-bottom: 4px;
     color: theme.$dark-text;
 }
+
+input:focus-visible {
+    outline: 3px solid #777;
+}
