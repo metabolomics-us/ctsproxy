@@ -97,7 +97,14 @@ mat-form-field {
     --mdc-outlined-text-field-disabled-input-text-color: #595959;
     --mdc-outlined-text-field-disabled-label-text-color: #595959;
     --mdc-outlined-text-field-container-color: #eee;
+
+    .mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--filled {
+        background-color: #eee;
+    }
+
 }
+
+
 
 mat-radio-button {
     --mdc-radio-unselected-icon-color: #6b6b6b;
