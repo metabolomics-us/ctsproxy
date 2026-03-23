@@ -99,7 +99,8 @@ mat-form-field {
     --mdc-outlined-text-field-container-color: #eee;
 
     .mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--filled {
-        background-color: #eee;
+        background-color: #f6f6f6;
+        border: 1px solid black;
     }
 
 }
