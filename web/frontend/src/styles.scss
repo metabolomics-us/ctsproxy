@@ -98,9 +98,16 @@ mat-form-field {
     --mdc-outlined-text-field-disabled-label-text-color: #595959;
     --mdc-outlined-text-field-container-color: #eee;
 
+    // Explicit label colors so automated scanners (Siteimprove) can detect contrast
+    // #333 on #f6f6f6 background = ~9.7:1 contrast ratio (AA compliant)
+    --mdc-filled-text-field-label-text-color: #{$dark-text};
+    --mdc-filled-text-field-hover-label-text-color: #{$dark-text};
+    --mdc-filled-text-field-focus-label-text-color: #{$navy};
+    --mdc-filled-text-field-disabled-label-text-color: #595959;
+    --mdc-filled-text-field-input-text-color: #{$dark-text};
+
     .mat-mdc-text-field-wrapper.mdc-text-field.mdc-text-field--filled {
         background-color: #f6f6f6;
-        border: 1px solid black;
     }
 
 }

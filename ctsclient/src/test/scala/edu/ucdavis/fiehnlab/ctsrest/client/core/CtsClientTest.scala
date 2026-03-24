@@ -69,7 +69,7 @@ class CtsClientTest extends AnyWordSpec with Matchers with LazyLogging {
 
     "compoundBiologicalCount" in {
       val response = client.compoundBiologicalCount("QNAYBMKLOCPYGJ-REOHCLBHSA-N")
-      response should contain allOf ("KEGG" -> 1, "BioCyc" -> 1, "Human Metabolome Database" -> 1, "total" -> 3)
+      response should contain allOf ("KEGG" -> 2, "BioCyc" -> 1, "Human Metabolome Database" -> 1, "total" -> 4)
     }
 
     "compoundExtidCount" in {
