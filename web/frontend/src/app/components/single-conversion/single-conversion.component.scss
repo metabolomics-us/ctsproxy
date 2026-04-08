@@ -55,6 +55,10 @@
 .form-field {
     flex: 1;
     min-width: 180px;
+
+    mat-form-field {
+        width: 100%;
+    }
 }
 
 .input-field {

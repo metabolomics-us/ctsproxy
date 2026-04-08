@@ -27,8 +27,8 @@
 
     <form class="batch-form" [attr.aria-busy]="loading()" (ngSubmit)="convertBatch()">
         <div class="form-left">
+            <mat-label id="query-label">Enter IDs for conversion</mat-label>
             <mat-form-field class="full-width">
-                <mat-label>Enter IDs for conversion</mat-label>
                 <textarea
                       matInput
                       name="query"
@@ -36,6 +36,7 @@
                       (ngModelChange)="onQueryStringChange()"
                       rows="6"
                       [disabled]="loading()"
+                      aria-labelledby="query-label"
                 ></textarea>
             </mat-form-field>
 
@@ -49,8 +50,8 @@
         </div>
 
         <div class="form-right">
-            <mat-form-field class="full-width">
-                <mat-label>From</mat-label>
+            <mat-label id="from-label">From</mat-label>
+            <mat-form-field class="full-width" aria-labelledby="from-label">
                 <mat-select name="from" [(ngModel)]="queryFrom" (selectionChange)="onFromChange()" aria-label="Source identifier type">
                     @for (val of fromValues(); track val) {
                         <mat-option [value]="val">{{ val }}</mat-option>
@@ -76,8 +77,8 @@
                 </button>
             </div>
 
-            <mat-form-field class="full-width">
-                <mat-label>To (multiple)</mat-label>
+            <mat-label id="to-label">To (multiple)</mat-label>
+            <mat-form-field class="full-width" aria-labelledby="to-label">
                 <mat-select name="to" [(ngModel)]="queryTo" multiple aria-label="Target identifier types">
                     @for (val of batchToValues(); track val) {
                         <mat-option [value]="val">{{ val }}</mat-option>
