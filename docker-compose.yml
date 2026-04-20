@@ -1,0 +1,12 @@
+services:
+  ctscore:
+    image: eros.fiehnlab.ucdavis.edu/cts:3.0.0
+    ports:
+      - "8081:8080"
+
+  ctsproxy:
+    image: eros.fiehnlab.ucdavis.edu/ctsproxy:2.0-SNAPSHOT
+    ports:
+      - "8080:8080"
+    depends_on:
+      - ctscore

@@ -2,7 +2,7 @@ import { ApplicationConfig, Injectable, provideBrowserGlobalErrorListeners } fro
 import { provideRouter, RouterStateSnapshot, TitleStrategy } from '@angular/router';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { Title } from '@angular/platform-browser';
+import { Title, provideClientHydration, withEventReplay } from '@angular/platform-browser';
 
 import { routes } from './app.routes';
 
@@ -25,5 +25,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(),
     provideAnimationsAsync(),
     { provide: TitleStrategy, useClass: CtsPageTitleStrategy },
+    provideClientHydration(withEventReplay()),
   ],
 };
