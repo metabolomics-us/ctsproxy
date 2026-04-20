@@ -1,0 +1,243 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1776698376867,
+  "projectRoot": "/home/diego/development/idea_projects/ctsproxy",
+  "techStack": {
+    "languages": [
+      {
+        "name": "Java",
+        "version": null,
+        "confidence": "high",
+        "markers": [
+          "pom.xml"
+        ]
+      }
+    ],
+    "frameworks": [],
+    "packageManager": "maven",
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": {
+      "defaultBranch": "master",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {
+    "casetojson": {
+      "path": "casetojson",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1776698376859,
+      "keyFiles": [
+        "pom.xml"
+      ]
+    },
+    "ctsclient": {
+      "path": "ctsclient",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1776698376865,
+      "keyFiles": [
+        "pom.xml"
+      ]
+    },
+    "target": {
+      "path": "target",
+      "purpose": null,
+      "fileCount": 1,
+      "lastAccessed": 1776698376865,
+      "keyFiles": [
+        "wait-for-it.sh"
+      ]
+    },
+    "web": {
+      "path": "web",
+      "purpose": null,
+      "fileCount": 2,
+      "lastAccessed": 1776698376865,
+      "keyFiles": [
+        "pom.xml"
+      ]
+    },
+    "casetojson/src": {
+      "path": "casetojson/src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1776698376865,
+      "keyFiles": []
+    },
+    "ctsclient/src": {
+      "path": "ctsclient/src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1776698376866,
+      "keyFiles": []
+    },
+    "web/src": {
+      "path": "web/src",
+      "purpose": "Source code",
+      "fileCount": 0,
+      "lastAccessed": 1776698376867,
+      "keyFiles": []
+    }
+  },
+  "hotPaths": [
+    {
+      "path": "web/frontend/src/index.html",
+      "accessCount": 6,
+      "lastAccessed": 1776719071990,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend/src/app/components/services-info/services-info.component.html",
+      "accessCount": 5,
+      "lastAccessed": 1776716712002,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend/src/app/app.html",
+      "accessCount": 4,
+      "lastAccessed": 1776718986562,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend/angular.json",
+      "accessCount": 4,
+      "lastAccessed": 1776719366409,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend/src/app/app.routes.ts",
+      "accessCount": 3,
+      "lastAccessed": 1776718990382,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend/src/app/components/services-info/services-info.component.scss",
+      "accessCount": 2,
+      "lastAccessed": 1776700478795,
+      "type": "directory"
+    },
+    {
+      "path": "web/frontend/src/app/app.config.ts",
+      "accessCount": 2,
+      "lastAccessed": 1776718986928,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend/src/styles.scss",
+      "accessCount": 2,
+      "lastAccessed": 1776718990855,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend/src/app/app.scss",
+      "accessCount": 1,
+      "lastAccessed": 1776698452705,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend/src/app/components/navigation/navigation.component.html",
+      "accessCount": 1,
+      "lastAccessed": 1776698453140,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend",
+      "accessCount": 1,
+      "lastAccessed": 1776698460581,
+      "type": "directory"
+    },
+    {
+      "path": "web/frontend/src/app/components/single-conversion/single-conversion.component.html",
+      "accessCount": 1,
+      "lastAccessed": 1776700364940,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend/src/app/components/batch-conversion/batch-conversion.component.html",
+      "accessCount": 1,
+      "lastAccessed": 1776700365470,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend/package.json",
+      "accessCount": 1,
+      "lastAccessed": 1776717026148,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend/src",
+      "accessCount": 1,
+      "lastAccessed": 1776717237969,
+      "type": "directory"
+    },
+    {
+      "path": "web/src",
+      "accessCount": 1,
+      "lastAccessed": 1776717264872,
+      "type": "directory"
+    },
+    {
+      "path": "web/src/main/scala/edu/ucdavis/fiehnlab/ctsrest/web/controllers/ViewController.scala",
+      "accessCount": 1,
+      "lastAccessed": 1776717273421,
+      "type": "file"
+    },
+    {
+      "path": "",
+      "accessCount": 1,
+      "lastAccessed": 1776718318993,
+      "type": "directory"
+    },
+    {
+      "path": "web/frontend/src/main.server.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776718714520,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend/src/app/app.config.server.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776718714901,
+      "type": "file"
+    },
+    {
+      "path": "web/frontend/src/app/app.routes.server.ts",
+      "accessCount": 1,
+      "lastAccessed": 1776718715403,
+      "type": "file"
+    },
+    {
+      "path": "web/pom.xml",
+      "accessCount": 1,
+      "lastAccessed": 1776719366019,
+      "type": "file"
+    },
+    {
+      "path": "web/target/classes/static",
+      "accessCount": 1,
+      "lastAccessed": 1776719420137,
+      "type": "directory"
+    }
+  ],
+  "userDirectives": []
+}

@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"tail -15 /tmp/claude-1000/-home-diego-development-idea-projects-ctsproxy/51db00ca-c655-4e9f-b951-7eb5456b342d/tasks/bd9muzja0.output; echo \\\"---STATIC---\\\"; ls /home/diego/development/idea...",
+  "error": "Exit code 2\n/bin/bash: line 1: ./mvnw: No such file or directory\n---STATIC---\nls: cannot access '/home/diego/development/idea_projects/ctsproxy/web/target/classes/static/services/': No such file or directory",
+  "timestamp": "2026-04-20T20:41:25.477Z",
+  "retry_count": 1
+}
